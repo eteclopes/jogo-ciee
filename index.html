@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0C1226">
+<meta name="description" content="Se Liga Moçada — jogo do CIEE sobre direitos no estágio, assédio e enfrentamento à violência contra a mulher.">
+<title>Se Liga Moçada — A Jornada</title>
+<style>
+/* ============================================================
+   SE LIGA MOÇADA — A JORNADA
+   Tokens de design
+   ============================================================ */
+:root{
+  --tinta:#0C1226;
+  --tinta-2:#141C38;
+  --azul:#1B4FD8;
+  --azul-claro:#4D8BFF;
+  --verde:#19B36B;
+  --verde-claro:#43E098;
+  --lilas:#A855F7;
+  --lilas-claro:#C99BFF;
+  --sol:#FFC53D;
+  --alerta:#FF5470;
+  --papel:#F2F5FF;
+  --papel-2:#C9D3F0;
+  --display:"Arial Black","Archivo Black",Impact,"Haettenschweiler",system-ui,sans-serif;
+  --corpo:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --raio:14px;
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-l:env(safe-area-inset-left,0px);
+  --safe-r:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--tinta);color:var(--papel);font-family:var(--corpo);overscroll-behavior:none;touch-action:none}
+body{position:fixed;inset:0;width:100%;height:100%}
+canvas{display:block;width:100%;height:100%;image-rendering:auto;touch-action:none}
+#palco{position:absolute;inset:0;overflow:hidden}
+
+/* ---------- Camadas ---------- */
+.camada{position:absolute;inset:0;display:none;z-index:20}
+.camada.on{display:flex}
+.camada.escura{background:linear-gradient(180deg,rgba(12,18,38,.94),rgba(12,18,38,.99));backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:calc(18px + var(--safe-t)) 18px calc(18px + var(--safe-b))}
+.rolar{max-height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;width:100%;display:flex;align-items:center;justify-content:center}
+
+/* ---------- Tipografia ---------- */
+.display{font-family:var(--display);letter-spacing:-.02em;line-height:.92;text-transform:uppercase}
+.olho{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--papel-2)}
+h1.titulo{font-family:var(--display);font-size:clamp(34px,8.5vw,72px);line-height:.88;margin:0;text-transform:uppercase;letter-spacing:-.03em}
+h1.titulo .lilas{color:var(--lilas-claro)}
+h2.sec{font-family:var(--display);font-size:clamp(20px,4.6vw,32px);margin:0 0 10px;text-transform:uppercase;letter-spacing:-.02em}
+p{line-height:1.55;margin:0 0 12px}
+
+/* ---------- Botões ---------- */
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.01em;font-size:clamp(15px,3.4vw,19px);
+  border:0;border-radius:12px;padding:15px 22px;cursor:pointer;color:#08122b;background:var(--sol);
+  box-shadow:0 5px 0 #b8862a;transition:transform .07s ease,box-shadow .07s ease,filter .15s;width:100%;display:block}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #b8862a}
+.btn:focus-visible{outline:3px solid var(--lilas-claro);outline-offset:3px}
+.btn.azul{background:var(--azul-claro);box-shadow:0 5px 0 #17439f;color:#04102c}
+.btn.azul:active{box-shadow:0 1px 0 #17439f}
+.btn.verde{background:var(--verde-claro);box-shadow:0 5px 0 #10784a;color:#042315}
+.btn.verde:active{box-shadow:0 1px 0 #10784a}
+.btn.roxo{background:var(--lilas-claro);box-shadow:0 5px 0 #6b28b0;color:#1b0733}
+.btn.roxo:active{box-shadow:0 1px 0 #6b28b0}
+.btn.vazio{background:transparent;color:var(--papel);box-shadow:inset 0 0 0 2px rgba(201,211,240,.4)}
+.btn.vazio:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px rgba(201,211,240,.7)}
+.btn.pequeno{padding:11px 14px;font-size:14px}
+.linha-btn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ---------- Menu ---------- */
+.menu-caixa{max-width:560px;width:100%;text-align:left}
+.marca{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.marca .selo{font-family:var(--display);font-size:13px;background:var(--azul);color:#fff;padding:6px 10px;border-radius:6px;letter-spacing:.04em}
+.marca .selo.verde{background:var(--verde)}
+.sub{color:var(--papel-2);font-size:clamp(13px,3.2vw,16px);margin:14px 0 22px;max-width:44ch}
+.menu-botoes{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.aviso{margin-top:18px;font-size:12.5px;color:var(--papel-2);border-left:3px solid var(--lilas);padding:8px 0 8px 12px;line-height:1.5}
+.aviso b{color:var(--lilas-claro)}
+
+/* ---------- Cartão de informação (assinatura visual) ---------- */
+.ficha{max-width:600px;width:100%;background:var(--papel);color:#0C1226;border-radius:var(--raio);
+  padding:26px 24px 22px;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.55);
+  border-top:9px solid var(--lilas);animation:entra .28s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes entra{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.ficha .carimbo{position:absolute;top:-16px;right:18px;background:var(--lilas);color:#fff;font-family:var(--display);
+  font-size:11px;letter-spacing:.14em;padding:7px 12px;border-radius:4px;transform:rotate(-3deg);text-transform:uppercase}
+.ficha h3{font-family:var(--display);font-size:clamp(21px,5vw,29px);margin:6px 0 12px;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+.ficha p{font-size:clamp(14px,3.5vw,16px);color:#1B2440}
+.ficha .fonte{font-family:var(--mono);font-size:11px;color:#5A6488;border-top:1px dashed #C3CCE8;padding-top:10px;margin:14px 0 16px;letter-spacing:.02em}
+.ficha .btn{margin-top:2px}
+
+/* ---------- Quiz ---------- */
+.quiz{max-width:620px;width:100%}
+.quiz .pergunta{font-family:var(--display);font-size:clamp(19px,4.6vw,27px);text-transform:none;line-height:1.15;margin:6px 0 18px;letter-spacing:-.01em}
+.opcoes{display:flex;flex-direction:column;gap:9px}
+.opcao{text-align:left;background:rgba(255,255,255,.06);border:2px solid rgba(201,211,240,.22);color:var(--papel);
+  padding:14px 16px;border-radius:11px;font-size:15px;font-family:var(--corpo);cursor:pointer;line-height:1.35;transition:.14s;width:100%}
+.opcao:hover{border-color:var(--azul-claro);background:rgba(77,139,255,.12)}
+.opcao:focus-visible{outline:3px solid var(--lilas-claro);outline-offset:2px}
+.opcao.certa{border-color:var(--verde-claro);background:rgba(67,224,152,.16)}
+.opcao.errada{border-color:var(--alerta);background:rgba(255,84,112,.14)}
+.opcao b{display:inline-block;font-family:var(--mono);margin-right:8px;color:var(--papel-2)}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:11px;font-size:14.5px;line-height:1.5;display:none}
+.feedback.on{display:block;animation:entra .2s ease}
+.feedback.ok{background:rgba(25,179,107,.16);border-left:4px solid var(--verde-claro)}
+.feedback.nao{background:rgba(255,84,112,.14);border-left:4px solid var(--alerta)}
+
+/* ---------- Cartilha ---------- */
+.cartilha{max-width:760px;width:100%}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:11px;margin:16px 0 20px}
+.verbete{background:rgba(255,255,255,.05);border:1px solid rgba(201,211,240,.16);border-radius:11px;padding:13px 14px;border-left:4px solid var(--lilas)}
+.verbete h4{font-family:var(--display);font-size:14px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.01em;line-height:1.1}
+.verbete p{font-size:12.8px;color:var(--papel-2);margin:0;line-height:1.45}
+.verbete.travado{border-left-color:rgba(201,211,240,.2);opacity:.42}
+.verbete.travado p{font-style:italic}
+
+/* ---------- Fim de fase / vitória ---------- */
+.painel{max-width:600px;width:100%}
+.placar{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}
+.placar div{background:rgba(255,255,255,.05);border-radius:11px;padding:13px 10px;text-align:center;border:1px solid rgba(201,211,240,.14)}
+.placar .n{font-family:var(--display);font-size:clamp(21px,5vw,30px);color:var(--sol);line-height:1}
+.placar .r{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--papel-2);margin-top:6px}
+.canais{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.4);border-radius:12px;padding:16px;margin:16px 0}
+.canais h4{font-family:var(--display);font-size:15px;margin:0 0 10px;text-transform:uppercase;color:var(--lilas-claro)}
+.canais ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.75;color:var(--papel)}
+.canais b{color:var(--sol);font-family:var(--mono)}
+
+/* ---------- Diálogo ---------- */
+#dialogo{position:absolute;left:50%;bottom:calc(16px + var(--safe-b));transform:translateX(-50%);width:min(680px,calc(100% - 24px));
+  background:rgba(12,18,38,.96);border:2px solid var(--azul-claro);border-radius:14px;padding:15px 17px;z-index:15;display:none;
+  box-shadow:0 14px 40px rgba(0,0,0,.5)}
+#dialogo.on{display:block;animation:entra .2s ease}
+#dialogo .quem{font-family:var(--display);font-size:12px;letter-spacing:.1em;color:var(--verde-claro);text-transform:uppercase;margin-bottom:6px}
+#dialogo .fala{font-size:14.5px;line-height:1.5}
+#dialogo .toque{font-family:var(--mono);font-size:10.5px;color:var(--papel-2);margin-top:9px;letter-spacing:.1em}
+
+/* ---------- Aviso volante ---------- */
+#faixa{position:absolute;top:calc(84px + var(--safe-t));left:50%;transform:translateX(-50%);z-index:14;
+  background:var(--lilas);color:#fff;font-family:var(--display);font-size:13px;letter-spacing:.04em;padding:10px 18px;
+  border-radius:10px;text-transform:uppercase;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;text-align:center;max-width:88vw}
+#faixa.on{opacity:1;transform:translateX(-50%) translateY(4px)}
+#faixa.verde{background:var(--verde)}
+#faixa.sol{background:var(--sol);color:#08122b}
+
+/* ---------- Controles de toque ---------- */
+#toques{position:absolute;inset:0;z-index:12;display:none;pointer-events:none}
+#toques.on{display:block}
+.tecla{position:absolute;pointer-events:auto;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:rgba(242,245,255,.13);border:2px solid rgba(242,245,255,.35);
+  color:var(--papel);font-family:var(--display);user-select:none;-webkit-user-select:none;backdrop-filter:blur(3px);transition:background .08s,transform .08s}
+.tecla.press{background:rgba(255,197,61,.55);border-color:var(--sol);transform:scale(.93)}
+.tecla svg{width:52%;height:52%;fill:currentColor;pointer-events:none}
+#t-esq,#t-dir{width:74px;height:74px;bottom:calc(20px + var(--safe-b))}
+#t-esq{left:calc(16px + var(--safe-l))}
+#t-dir{left:calc(102px + var(--safe-l))}
+#t-pulo{width:84px;height:84px;right:calc(16px + var(--safe-r));bottom:calc(24px + var(--safe-b));background:rgba(67,224,152,.22);border-color:rgba(67,224,152,.6)}
+#t-voz{width:70px;height:70px;right:calc(112px + var(--safe-r));bottom:calc(52px + var(--safe-b));background:rgba(168,85,247,.24);border-color:rgba(168,85,247,.65)}
+#t-corr{width:58px;height:58px;right:calc(24px + var(--safe-r));bottom:calc(122px + var(--safe-b));background:rgba(77,139,255,.22);border-color:rgba(77,139,255,.6);font-size:11px;letter-spacing:.04em}
+#t-corr.oculto,#t-voz.oculto{display:none}
+
+/* ---------- Botões de topo ---------- */
+#topo{position:absolute;top:calc(10px + var(--safe-t));right:calc(10px + var(--safe-r));z-index:13;display:none;gap:7px}
+#topo.on{display:flex}
+.mini{width:42px;height:42px;border-radius:11px;background:rgba(12,18,38,.75);border:1.5px solid rgba(201,211,240,.3);
+  color:var(--papel);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.mini svg{width:20px;height:20px;fill:currentColor}
+.mini:active{background:rgba(77,139,255,.45)}
+
+/* ---------- Girar celular ---------- */
+#girar{position:absolute;inset:0;z-index:30;background:rgba(12,18,38,.97);display:none;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:26px;gap:14px}
+#girar.on{display:flex}
+#girar .icone{font-size:52px;animation:gira 2.2s ease-in-out infinite}
+@keyframes gira{0%,40%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+
+/* ---------- Carregando ---------- */
+#abertura{position:absolute;inset:0;z-index:40;background:var(--tinta);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#abertura.sai{opacity:0;pointer-events:none;transition:opacity .5s}
+
+@media (max-height:430px){
+  .aviso{display:none}
+  .menu-botoes{display:grid;grid-template-columns:1fr 1fr}
+  h1.titulo{font-size:clamp(28px,7vw,44px)}
+  .sub{margin:8px 0 12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+<div id="palco">
+  <canvas id="tela"></canvas>
+
+  <!-- Controles de toque -->
+  <div id="toques">
+    <button class="tecla" id="t-esq" aria-label="Esquerda"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8z"/></svg></button>
+    <button class="tecla" id="t-dir" aria-label="Direita"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8z"/></svg></button>
+    <button class="tecla" id="t-pulo" aria-label="Pular"><svg viewBox="0 0 24 24"><path d="M12 3l7 8h-4v9H9v-9H5z"/></svg></button>
+    <button class="tecla" id="t-voz" aria-label="Usar a voz"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3c0-1.8-1-3.3-2.5-4v8c1.5-.7 2.5-2.2 2.5-4zM14 3.2v2.1c2.9.9 5 3.5 5 6.7s-2.1 5.8-5 6.7v2.1c4-1 7-4.6 7-8.8s-3-7.8-7-8.8z"/></svg></button>
+    <button class="tecla oculto" id="t-corr" aria-label="Correr">SAIR</button>
+  </div>
+
+  <!-- Botões de topo -->
+  <div id="topo">
+    <button class="mini" id="b-pausa" aria-label="Pausar"><svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+    <button class="mini" id="b-som" aria-label="Som"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3z"/></svg></button>
+    <button class="mini" id="b-tela" aria-label="Tela cheia"><svg viewBox="0 0 24 24"><path d="M3 3h7v2H5v5H3V3zm11 0h7v7h-2V5h-5V3zM3 14h2v5h5v2H3v-7zm16 0h2v7h-7v-2h5v-5z"/></svg></button>
+  </div>
+
+  <div id="faixa"></div>
+  <div id="dialogo"><div class="quem" id="d-quem"></div><div class="fala" id="d-fala"></div><div class="toque">Toque na tela ou pressione ESPAÇO para continuar</div></div>
+
+  <div id="girar"><div class="icone">📱</div><div class="display" style="font-size:20px">Vire o celular</div><p style="color:var(--papel-2);max-width:30ch;font-size:14px">O jogo fica bem melhor na horizontal. Dá pra jogar em pé também, é só continuar.</p><button class="btn vazio pequeno" id="b-girar-ok" style="max-width:220px">Jogar assim mesmo</button></div>
+
+  <!-- Camadas de interface -->
+  <div class="camada escura" id="c-menu"></div>
+  <div class="camada escura" id="c-ficha"></div>
+  <div class="camada escura" id="c-quiz"></div>
+  <div class="camada escura" id="c-pausa"></div>
+  <div class="camada escura" id="c-fim"></div>
+  <div class="camada escura" id="c-cartilha"></div>
+
+  <div id="abertura">
+    <div class="display" style="font-size:clamp(26px,7vw,46px);text-align:center;line-height:.9">SE LIGA<br><span style="color:var(--lilas-claro)">MOÇADA</span></div>
+    <div class="olho">Carregando a jornada…</div>
+  </div>
+</div>
+<script>
+/* ============================================================
+   SE LIGA MOÇADA — A JORNADA
+   Jogo de plataforma sobre direitos no estágio, assédio
+   e enfrentamento à violência contra a mulher.
+   Um único arquivo, sem dependências externas.
+   ============================================================ */
+(function(){
+'use strict';
+
+/* ---------- 1. Utilidades ---------- */
+const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
+const lerp=(a,b,t)=>a+(b-a)*t;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const rndi=(a,b)=>Math.floor(rnd(a,b+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const sign=v=>v<0?-1:(v>0?1:0);
+const aprox=(v,alvo,passo)=>v<alvo?Math.min(v+passo,alvo):Math.max(v-passo,alvo);
+function bate(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
+function dist(ax,ay,bx,by){const dx=ax-bx,dy=ay-by;return Math.sqrt(dx*dx+dy*dy);}
+const $=s=>document.querySelector(s);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* ---------- 2. Guardar progresso (com reserva em memória) ---------- */
+const Memoria={};
+const Guarda={
+  ler(chave,padrao){
+    try{const v=window.localStorage.getItem('slm_'+chave);if(v!==null)return JSON.parse(v);}catch(e){}
+    return (chave in Memoria)?Memoria[chave]:padrao;
+  },
+  gravar(chave,valor){
+    Memoria[chave]=valor;
+    try{window.localStorage.setItem('slm_'+chave,JSON.stringify(valor));}catch(e){}
+  }
+};
+
+/* ---------- 3. Som (sintetizado, sem arquivos) ---------- */
+const Som={
+  ctx:null,ligado:Guarda.ler('som',true),ganho:null,musicaAtiva:false,mTimer:0,mPasso:0,mEscala:[],
+  inicia(){
+    if(this.ctx)return;
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return;
+      this.ctx=new AC();
+      this.ganho=this.ctx.createGain();
+      this.ganho.gain.value=this.ligado?.5:0;
+      this.ganho.connect(this.ctx.destination);
+    }catch(e){this.ctx=null;}
+  },
+  acorda(){if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume();},
+  alterna(){
+    this.ligado=!this.ligado;
+    Guarda.gravar('som',this.ligado);
+    if(this.ganho)this.ganho.gain.value=this.ligado?.5:0;
+    return this.ligado;
+  },
+  nota(freq,dur,tipo='square',vol=.18,desafina=0){
+    if(!this.ctx||!this.ligado)return;
+    const t=this.ctx.currentTime;
+    const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type=tipo;o.frequency.setValueAtTime(freq,t);
+    if(desafina)o.frequency.exponentialRampToValueAtTime(Math.max(30,freq+desafina),t+dur);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+.008);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g);g.connect(this.ganho);o.start(t);o.stop(t+dur+.02);
+  },
+  ruido(dur,vol=.14,corte=900){
+    if(!this.ctx||!this.ligado)return;
+    const t=this.ctx.currentTime,n=Math.floor(this.ctx.sampleRate*dur);
+    const buf=this.ctx.createBuffer(1,n,this.ctx.sampleRate),d=buf.getChannelData(0);
+    for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+    const s=this.ctx.createBufferSource();s.buffer=buf;
+    const f=this.ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=corte;
+    const g=this.ctx.createGain();g.gain.value=vol;
+    s.connect(f);f.connect(g);g.connect(this.ganho);s.start(t);
+  },
+  pulo(){this.nota(340,.13,'square',.13,220);},
+  pulo2(){this.nota(500,.12,'triangle',.12,260);},
+  voz(){this.nota(720,.1,'sawtooth',.08,-300);},
+  acerto(){this.nota(200,.09,'square',.14,-110);this.ruido(.09,.1,1400);},
+  morte(){this.nota(150,.3,'sawtooth',.13,-110);},
+  moeda(){this.nota(880,.06,'square',.1);setTimeout(()=>this.nota(1320,.09,'square',.09),55);},
+  vida(){[523,659,784,1046].forEach((f,i)=>setTimeout(()=>this.nota(f,.13,'triangle',.11),i*70));},
+  dano(){this.nota(180,.22,'sawtooth',.16,-90);this.ruido(.14,.12,600);},
+  quiz(ok){
+    if(ok)[523,659,784,1046].forEach((f,i)=>setTimeout(()=>this.nota(f,.15,'square',.1),i*90));
+    else{this.nota(300,.18,'sawtooth',.12);setTimeout(()=>this.nota(200,.28,'sawtooth',.12),160);}
+  },
+  fase(){[392,523,659,784,1046,1318].forEach((f,i)=>setTimeout(()=>this.nota(f,.2,'triangle',.11),i*95));},
+  correr(){this.ruido(.15,.09,2200);},
+  chefe(){this.nota(90,.5,'sawtooth',.16,-30);},
+  /* trilha ambiente simples: arpejo lento que muda por fase */
+  tocaMusica(dt,escala,bpm){
+    if(!this.ctx||!this.ligado)return;
+    this.mTimer-=dt;
+    if(this.mTimer<=0){
+      this.mTimer=60/bpm;
+      const n=escala[this.mPasso%escala.length];
+      this.nota(n,.34,'triangle',.038);
+      if(this.mPasso%4===0)this.nota(n/2,.5,'sine',.05);
+      this.mPasso++;
+    }
+  }
+};
+
+/* ---------- 4. Entrada: teclado, toque e gamepad ---------- */
+const Ent={
+  esq:false,dir:false,cima:false,baixo:false,pulo:false,puloNovo:false,voz:false,vozNova:false,
+  corr:false,corrNova:false,qualquer:false,qualquerNova:false,
+  _mapa:{
+    'ArrowLeft':'esq','KeyA':'esq','ArrowRight':'dir','KeyD':'dir',
+    'ArrowUp':'cima','KeyW':'cima','ArrowDown':'baixo','KeyS':'baixo',
+    'Space':'pulo','KeyZ':'pulo','KeyJ':'pulo',
+    'KeyX':'voz','KeyK':'voz','KeyF':'voz','Enter':'voz',
+    'ShiftLeft':'corr','ShiftRight':'corr','KeyC':'corr','KeyL':'corr'
+  },
+  _antes:{},
+  inicia(){
+    addEventListener('keydown',e=>{
+      const a=this._mapa[e.code];
+      if(a){this[a]=true;e.preventDefault();}
+      this.qualquer=true;
+      if(e.code==='Escape'||e.code==='KeyP')Jogo.pedePausa();
+      if(e.code==='KeyM')Interface.alternaSom();
+      Som.inicia();Som.acorda();
+    },{passive:false});
+    addEventListener('keyup',e=>{
+      const a=this._mapa[e.code];
+      if(a){this[a]=false;e.preventDefault();}
+      this.qualquer=false;
+    },{passive:false});
+    addEventListener('blur',()=>{this.esq=this.dir=this.cima=this.baixo=this.pulo=this.voz=this.corr=false;});
+    this.iniciaToques();
+  },
+  iniciaToques(){
+    const liga=(id,acao)=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      const on=e=>{e.preventDefault();this[acao]=true;this.qualquer=true;el.classList.add('press');Som.inicia();Som.acorda();};
+      const off=e=>{e.preventDefault();this[acao]=false;this.qualquer=false;el.classList.remove('press');};
+      el.addEventListener('pointerdown',on);
+      el.addEventListener('pointerup',off);
+      el.addEventListener('pointercancel',off);
+      el.addEventListener('pointerleave',off);
+      el.addEventListener('contextmenu',e=>e.preventDefault());
+    };
+    liga('t-esq','esq');liga('t-dir','dir');liga('t-pulo','pulo');liga('t-voz','voz');liga('t-corr','corr');
+  },
+  gamepad(){
+    if(!navigator.getGamepads)return;
+    const gs=navigator.getGamepads();
+    for(const g of gs){
+      if(!g)continue;
+      const eixo=g.axes[0]||0;
+      if(eixo<-.35)this.esq=true;
+      if(eixo>.35)this.dir=true;
+      if(g.buttons[14]&&g.buttons[14].pressed)this.esq=true;
+      if(g.buttons[15]&&g.buttons[15].pressed)this.dir=true;
+      if(g.buttons[0]&&g.buttons[0].pressed)this.pulo=true;
+      if(g.buttons[2]&&g.buttons[2].pressed)this.voz=true;
+      if(g.buttons[1]&&g.buttons[1].pressed)this.corr=true;
+      break;
+    }
+  },
+  atualiza(){
+    this.gamepad();
+    this.puloNovo=this.pulo&&!this._antes.pulo;
+    this.vozNova=this.voz&&!this._antes.voz;
+    this.corrNova=this.corr&&!this._antes.corr;
+    this.qualquerNova=this.qualquer&&!this._antes.qualquer;
+    this._antes.pulo=this.pulo;this._antes.voz=this.voz;
+    this._antes.corr=this.corr;this._antes.qualquer=this.qualquer;
+  }
+};
+
+/* ---------- 5. Tela e câmera ---------- */
+const tela=document.getElementById('tela');
+const ctx=tela.getContext('2d',{alpha:false});
+const Vista={
+  larg:1024,alt:576,escala:1,dpr:1,cssL:0,cssA:0,retrato:false,
+  redimensiona(){
+    const l=window.innerWidth,a=window.innerHeight;
+    this.cssL=l;this.cssA=a;
+    this.retrato=a>l;
+    this.dpr=Math.min(window.devicePixelRatio||1,2);
+    tela.width=Math.floor(l*this.dpr);
+    tela.height=Math.floor(a*this.dpr);
+    tela.style.width=l+'px';tela.style.height=a+'px';
+    const minL=this.retrato?780:1060, minA=this.retrato?520:560;
+    this.escala=Math.min(l/minL,a/minA);
+    this.escala=Math.min(this.escala,2.4);
+    this.larg=l/this.escala;
+    this.alt=a/this.escala;
+    Interface.checaOrientacao();
+  }
+};
+const Cam={
+  x:0,y:0,alvoX:0,alvoY:0,tremor:0,tremorX:0,tremorY:0,
+  segue(p,mundo,dt,instantaneo){
+    const olhar=clamp(p.vx*.45,-140,140);
+    this.alvoX=p.x+p.w/2-Vista.larg/2+olhar;
+    this.alvoY=p.y+p.h/2-Vista.alt*.56;
+    const maxX=Math.max(0,mundo.larg-Vista.larg);
+    const maxY=Math.max(0,mundo.alt-Vista.alt);
+    this.alvoX=clamp(this.alvoX,0,maxX);
+    this.alvoY=Vista.alt>=mundo.alt?(mundo.alt-Vista.alt)/2:clamp(this.alvoY,0,maxY);
+    if(instantaneo){this.x=this.alvoX;this.y=this.alvoY;}
+    else{
+      const k=1-Math.pow(.0006,dt);
+      this.x=lerp(this.x,this.alvoX,k);
+      this.y=lerp(this.y,this.alvoY,k);
+    }
+    if(this.tremor>0){
+      this.tremor=Math.max(0,this.tremor-dt*2.6);
+      const f=this.tremor*this.tremor*16;
+      this.tremorX=rnd(-f,f);this.tremorY=rnd(-f,f);
+    }else{this.tremorX=this.tremorY=0;}
+  },
+  sacode(f){this.tremor=Math.max(this.tremor,f);},
+  get ox(){return this.x+this.tremorX;},
+  get oy(){return this.y+this.tremorY;}
+};
+
+/* ---------- 6. Partículas ---------- */
+const Part={
+  lista:[],
+  solta(x,y,n,cor,op={}){
+    const vel=op.vel||160,vida=op.vida||.6,tam=op.tam||4,grav=op.grav===undefined?900:op.grav;
+    for(let i=0;i<n;i++){
+      const a=op.ang!==undefined?op.ang+rnd(-.7,.7):rnd(0,Math.PI*2);
+      const v=rnd(vel*.35,vel);
+      this.lista.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-(op.sobe||0),
+        vida:rnd(vida*.6,vida),max:vida,cor:Array.isArray(cor)?pick(cor):cor,
+        tam:rnd(tam*.5,tam),grav,quad:op.quad!==false});
+    }
+    if(this.lista.length>460)this.lista.splice(0,this.lista.length-460);
+  },
+  texto(x,y,txt,cor){
+    this.lista.push({x,y,vx:0,vy:-58,vida:1.05,max:1.05,cor,tam:0,grav:0,txt});
+  },
+  atualiza(dt){
+    for(let i=this.lista.length-1;i>=0;i--){
+      const p=this.lista[i];
+      p.vida-=dt;
+      if(p.vida<=0){this.lista.splice(i,1);continue;}
+      p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.grav*dt;
+      if(p.grav>0)p.vx*=.985;
+    }
+  },
+  desenha(g){
+    for(const p of this.lista){
+      const a=clamp(p.vida/p.max,0,1);
+      g.globalAlpha=a;
+      if(p.txt){
+        g.fillStyle=p.cor;
+        g.font='700 17px '+'system-ui,sans-serif';
+        g.textAlign='center';
+        g.fillText(p.txt,p.x,p.y);
+        g.textAlign='left';
+      }else{
+        g.fillStyle=p.cor;
+        const t=p.tam*(.4+a*.6);
+        g.fillRect(p.x-t/2,p.y-t/2,t,t);
+      }
+    }
+    g.globalAlpha=1;
+  },
+  limpa(){this.lista.length=0;}
+};
+/* ============================================================
+   7. CONTEÚDO — Cartilha, quizzes e falas
+   Toda a informação educativa do jogo está aqui.
+   Para editar o texto do jogo, mexa só neste bloco.
+   ============================================================ */
+
+const FICHAS={
+  /* --- Fase 1: exploração e direitos de quem começa --- */
+  jornada:{tema:'Exploração',titulo:'Sua jornada tem limite',
+    txt:'Estágio: no máximo <b>6 horas por dia e 30 por semana</b>. Em cursos de EJA e nos anos finais do fundamental, o teto cai para 4 horas por dia e 20 por semana. Jovem Aprendiz: <b>6 horas</b>, contando o tempo das aulas teóricas — só chega a 8 horas quem já concluiu o ensino médio.',
+    fonte:'Lei 11.788/2008, art. 10 · CLT, art. 432'},
+  horaExtra:{tema:'Exploração',titulo:'Estagiário não faz hora extra',
+    txt:'A lei do estágio simplesmente não prevê hora extra. Se pedem que você fique além do combinado "porque hoje está corrido", isso desvirtua o estágio — e um estágio desvirtuado <b>vira vínculo de emprego</b>, com todos os direitos de um trabalhador CLT.',
+    fonte:'Lei 11.788/2008, art. 3º, §2º'},
+  plano:{tema:'Exploração',titulo:'Sem plano de atividades, não é estágio',
+    txt:'Você, a empresa e a instituição de ensino assinam um <b>termo de compromisso</b> com um plano de atividades ligado ao seu curso. Buscar café, limpar a sala e fazer o serviço que ninguém quer o dia inteiro não é aprendizado: é desvio de função.',
+    fonte:'Lei 11.788/2008, arts. 3º e 7º'},
+  recesso:{tema:'Exploração',titulo:'30 dias de recesso são seus',
+    txt:'A cada 12 meses de estágio você tem <b>30 dias de recesso</b> — remunerado, se você recebe bolsa. De preferência tirados junto com as férias escolares. Estágio de menos de um ano dá direito ao recesso proporcional.',
+    fonte:'Lei 11.788/2008, art. 13'},
+  aprendiz:{tema:'Exploração',titulo:'Aprendiz tem carteira assinada',
+    txt:'O Jovem Aprendiz (<b>14 a 24 anos</b>, sem limite de idade para pessoa com deficiência) tem CTPS assinada, salário, 13º, férias que coincidem com as escolares, FGTS e vale-transporte. O contrato dura no máximo 2 anos.',
+    fonte:'Lei 10.097/2000 · CLT, arts. 428 a 433'},
+  supervisor:{tema:'Exploração',titulo:'Alguém tem que te orientar',
+    txt:'A empresa é obrigada a indicar um <b>supervisor</b> — e cada supervisor pode acompanhar no máximo 10 estagiários. A escola indica um professor orientador. A cada 6 meses sai um relatório de atividades. Se ninguém te orienta, algo está errado.',
+    fonte:'Lei 11.788/2008, arts. 7º e 9º'},
+
+  /* --- Fase 2: assédio moral --- */
+  moralOQue:{tema:'Assédio moral',titulo:'O que é assédio moral',
+    txt:'É a conduta abusiva <b>repetida</b> que humilha e constrange alguém no trabalho. Gritos e apelidos, metas impossíveis de propósito, isolar a pessoa, espalhar boatos, tirar todas as tarefas de alguém para que se sinta inútil. O alvo é a dignidade.',
+    fonte:'Cartilha de prevenção ao assédio — Ministério Público do Trabalho'},
+  moralNaoE:{tema:'Assédio moral',titulo:'Cobrar não é humilhar',
+    txt:'Chefe pode cobrar prazo, corrigir erro e dar retorno duro. Isso é gestão. Vira assédio quando a correção deixa de ser sobre o trabalho e passa a ser sobre a pessoa — <b>com plateia, com repetição e com intenção de rebaixar</b>.',
+    fonte:'Distinção usada pela Justiça do Trabalho'},
+  moralProva:{tema:'Assédio moral',titulo:'Anote tudo',
+    txt:'Registre <b>data, hora, local, o que foi dito e quem estava perto</b>. Guarde prints, e-mails e áudios. Um caderno simples já vale. Provas transformam "foi só implicância" em um caso que se sustenta.',
+    fonte:'Orientação do MPT para vítimas'},
+  moralCipa:{tema:'Assédio moral',titulo:'A empresa é obrigada a agir',
+    txt:'Desde 2022 as empresas com CIPA precisam manter <b>canal de denúncia</b>, procedimentos de apuração com proteção ao denunciante e treinamentos sobre assédio a cada 12 meses. Não é favor: é lei.',
+    fonte:'Lei 14.457/2022, art. 23'},
+  moralSaida:{tema:'Assédio moral',titulo:'Sair sem perder seus direitos',
+    txt:'Quem é empregado e sofre assédio pode pedir a <b>rescisão indireta</b> — sair recebendo como se tivesse sido demitido sem justa causa — e ainda buscar indenização por dano moral. É a "justa causa do patrão".',
+    fonte:'CLT, art. 483'},
+
+  /* --- Fase 3: assédio sexual e importunação --- */
+  sexualCrime:{tema:'Assédio sexual',titulo:'Assédio sexual é crime',
+    txt:'Constranger alguém para obter vantagem sexual <b>se aproveitando de ser chefe ou superior</b> é crime, com pena de 1 a 2 anos de detenção. A hierarquia é o que dá força ao assédio — e é exatamente o que a lei pune.',
+    fonte:'Código Penal, art. 216-A'},
+  sexualImport:{tema:'Assédio sexual',titulo:'Importunação sexual',
+    txt:'Praticar ato libidinoso na presença de alguém <b>sem o consentimento dessa pessoa</b> — encoxar no busão, agarrar, beijar à força, se exibir — dá de 1 a 5 anos de reclusão. Não precisa haver chefia nenhuma envolvida.',
+    fonte:'Código Penal, art. 215-A (Lei 13.718/2018)'},
+  sexualCantada:{tema:'Assédio sexual',titulo:'Cantada não é elogio',
+    txt:'O que define não é a intenção de quem fala, é <b>como a outra pessoa recebe</b>. Paquera tem reciprocidade e para quando o outro não quer. Assédio insiste, constrange e usa a desculpa de que "foi brincadeira".',
+    fonte:'Campanha Se Liga Moçada — respeito e consentimento'},
+  sexualStalk:{tema:'Assédio sexual',titulo:'Perseguir também é crime',
+    txt:'Ficar atrás de alguém, mandar mensagem sem parar, vigiar a rotina, aparecer nos lugares "por acaso": é o crime de <b>perseguição</b>, de 6 meses a 2 anos. Vale igual no mundo digital, e a pena aumenta quando a vítima é mulher.',
+    fonte:'Código Penal, art. 147-A (Lei 14.132/2021)'},
+  sexualApoio:{tema:'Assédio sexual',titulo:'Não guarde isso sozinha(o)',
+    txt:'Conte para alguém de confiança. Procure o RH, o seu agente de integração, o sindicato, o <b>Ministério Público do Trabalho</b> ou a polícia. Silêncio é o que o assédio precisa para continuar existindo.',
+    fonte:'Ligue 180 · 190 · mpt.mp.br'},
+
+  /* --- Fase 4: Lei Maria da Penha --- */
+  mpLei:{tema:'Maria da Penha',titulo:'De onde vem a lei',
+    txt:'Maria da Penha Maia Fernandes sobreviveu a duas tentativas de assassinato do próprio marido e ficou paraplégica. Levou <b>quase 20 anos</b> para o caso ser julgado. A denúncia chegou à Comissão Interamericana de Direitos Humanos e o Brasil foi responsabilizado por omissão. Daí nasceu a lei, em 7 de agosto de 2006.',
+    fonte:'Lei 11.340/2006'},
+  mpTipos:{tema:'Maria da Penha',titulo:'Cinco formas de violência',
+    txt:'<b>Física</b> — qualquer agressão ao corpo. <b>Psicológica</b> — humilhar, controlar, isolar, ameaçar. <b>Sexual</b> — forçar ato sexual ou impedir contracepção. <b>Patrimonial</b> — destruir, esconder ou reter bens, documentos e dinheiro. <b>Moral</b> — caluniar, difamar, injuriar. Nem toda violência deixa marca no corpo.',
+    fonte:'Lei 11.340/2006, art. 7º'},
+  mpMedidas:{tema:'Maria da Penha',titulo:'Medidas protetivas de urgência',
+    txt:'Podem ser pedidas <b>na delegacia, sem advogado e sem custo</b>. O juiz pode afastar o agressor de casa, proibir que ele se aproxime ou entre em contato, e determinar que ele fique longe do seu trabalho e da sua escola. Descumprir é crime, com prisão de 3 meses a 2 anos.',
+    fonte:'Lei 11.340/2006, arts. 18 a 24-A'},
+  mpPsico:{tema:'Maria da Penha',titulo:'Violência psicológica é crime',
+    txt:'Causar dano emocional à mulher — controlando a rotina, vigiando, humilhando, chantageando, ridicularizando ou isolando — tem pena de <b>6 meses a 2 anos</b> de reclusão, além de multa. Não precisa ter encostado um dedo.',
+    fonte:'Código Penal, art. 147-B (Lei 14.188/2021)'},
+  mpSinal:{tema:'Maria da Penha',titulo:'Sinal vermelho na palma da mão',
+    txt:'Um <b>X vermelho desenhado na palma</b> é um pedido de socorro silencioso. Ao ver, não exponha a pessoa: acione o <b>190</b> discretamente. Farmácias e comércios de todo o país participam da campanha e podem chamar a polícia por ela.',
+    fonte:'Campanha Sinal Vermelho · Lei 14.188/2021'},
+  mpCanais:{tema:'Maria da Penha',titulo:'Ligue 180',
+    txt:'Central de Atendimento à Mulher: <b>gratuita, 24 horas, funciona em todo o país e aceita denúncia anônima</b>. Orienta, encaminha e registra. Em situação de perigo imediato, ligue <b>190</b>. Qualquer pessoa pode denunciar, não só a vítima.',
+    fonte:'Ligue 180 · Polícia Militar 190'},
+  mpCiclo:{tema:'Maria da Penha',titulo:'O ciclo da violência',
+    txt:'Costuma girar em três fases: <b>tensão</b> (clima pesado, agressões verbais), <b>explosão</b> (a agressão em si) e <b>lua de mel</b> (arrependimento, presentes, promessas). A terceira fase é a mais perigosa, porque faz parecer que passou. Sem ajuda, o ciclo recomeça — e costuma ficar mais curto e mais grave.',
+    fonte:'Modelo de Lenore Walker, usado pelas redes de atendimento'},
+
+  /* --- Fase 5: rede de apoio --- */
+  redeQuem:{tema:'Rede de apoio',titulo:'Você não precisa dar conta sozinha',
+    txt:'Rede de apoio é quem te escuta e quem te encaminha: família, amigos, escola, <b>CRAS e CREAS</b>, posto de saúde, sindicato, o agente de integração do seu estágio. O primeiro passo quase nunca é a denúncia — é contar para alguém.',
+    fonte:'Sistema Único de Assistência Social'},
+  redeCanais:{tema:'Rede de apoio',titulo:'Os números que resolvem',
+    txt:'<b>180</b> — Central de Atendimento à Mulher. <b>190</b> — emergência policial. <b>100</b> — Disque Direitos Humanos, para criança, adolescente e idoso. <b>Conselho Tutelar</b> — quando a vítima tem menos de 18 anos. <b>mpt.mp.br</b> — denúncia trabalhista online, pode ser anônima.',
+    fonte:'Canais oficiais gratuitos'},
+  redeCiee:{tema:'Rede de apoio',titulo:'O agente de integração está do seu lado',
+    txt:'O CIEE não é a empresa: ele acompanha o seu estágio. Se as suas atividades fogem do plano, se a jornada estourou ou se alguém te constrange, <b>fale com seu orientador</b>. Ele pode intermediar, remanejar e acionar quem precisa ser acionado.',
+    fonte:'Lei 11.788/2008, art. 5º — papel do agente de integração'},
+  redeTestemunha:{tema:'Rede de apoio',titulo:'Se você viu, você pode agir',
+    txt:'Não vire plateia. Interrompa a situação se for seguro, procure a pessoa depois e diga que viu, <b>anote o que presenciou</b> e ofereça acompanhar até um canal de ajuda. Quem assiste calado protege quem agride.',
+    fonte:'Papel do espectador — campanhas de prevenção'},
+  redeDenuncia:{tema:'Rede de apoio',titulo:'Denunciar não é exagero',
+    txt:'Você não precisa ter certeza jurídica de nada para procurar ajuda. Não precisa de advogado, não precisa de prova perfeita e não precisa esperar piorar. <b>Quem avalia é o serviço; a você cabe só chegar lá.</b>',
+    fonte:'Orientação das redes de atendimento'}
+};
+
+const ORDEM_CARTILHA=Object.keys(FICHAS);
+
+/* --- Quizzes por fase --- */
+const QUIZZES={
+  1:[
+    {p:'Qual é a jornada máxima de um estagiário do ensino superior?',
+     o:['4 horas por dia e 20 por semana','6 horas por dia e 30 por semana','8 horas por dia e 44 por semana','Não existe limite, depende do contrato'],c:1,
+     e:'São 6 horas por dia e 30 por semana. O limite de 4h/20h vale para EJA e anos finais do fundamental.'},
+    {p:'A empresa pediu para você ficar 2 horas a mais "para compensar o movimento". O que essa situação configura?',
+     o:['Hora extra normal, é só receber','Desvirtuamento do estágio, que pode gerar vínculo de emprego','Nada demais, faz parte do aprendizado','Só é problema se acontecer todo dia'],c:1,
+     e:'Estágio não tem hora extra. Quando a empresa trata o estagiário como empregado, o vínculo CLT pode ser reconhecido na Justiça.'},
+    {p:'Depois de 12 meses de estágio, você tem direito a quantos dias de recesso?',
+     o:['15 dias','20 dias','30 dias','Nenhum, estágio não tem férias'],c:2,
+     e:'São 30 dias, remunerados se você recebe bolsa, e de preferência junto das férias escolares.'}
+  ],
+  2:[
+    {p:'O que caracteriza o assédio moral no trabalho?',
+     o:['Qualquer cobrança de prazo feita pelo chefe','Humilhação repetida que atinge a dignidade da pessoa','Só quando há agressão física','Discordar do chefe em uma reunião'],c:1,
+     e:'O que define é a repetição e o ataque à dignidade. Cobrar resultado com respeito é gestão, não assédio.'},
+    {p:'Você está sofrendo assédio moral. Qual é a atitude mais útil desde o primeiro dia?',
+     o:['Revidar na mesma moeda','Fingir que não é com você','Registrar data, local, falas e testemunhas','Pedir demissão imediatamente'],c:2,
+     e:'O registro é o que sustenta a denúncia depois. Anote tudo e guarde prints e e-mails.'},
+    {p:'Empresas que têm CIPA são obrigadas a manter canal de denúncia e treinamento sobre assédio?',
+     o:['Sim, é exigência legal desde 2022','Não, é só uma recomendação','Só empresas com mais de 500 pessoas','Só órgãos públicos'],c:0,
+     e:'A Lei 14.457/2022 tornou obrigatórios o canal de denúncia, a apuração com proteção ao denunciante e treinamentos a cada 12 meses.'}
+  ],
+  3:[
+    {p:'Um supervisor insinua que a sua efetivação depende de você sair com ele. Isso é:',
+     o:['Uma proposta constrangedora, mas legal','Crime de assédio sexual','Só um mal-entendido','Assédio apenas se ele encostar em você'],c:1,
+     e:'É exatamente o art. 216-A do Código Penal: constranger para obter vantagem sexual usando a condição de superior hierárquico.'},
+    {p:'O que diferencia uma paquera de um assédio?',
+     o:['O lugar onde acontece','A idade das pessoas','O consentimento e a insistência','Se a pessoa é bonita ou não'],c:2,
+     e:'Paquera tem reciprocidade e para quando o outro não quer. Assédio insiste depois do não e constrange.'},
+    {p:'Um colega manda mensagens sem parar, aparece nos lugares que você frequenta e monitora suas redes. Isso é:',
+     o:['Só carência','Crime de perseguição','Assédio apenas se ele ameaçar você','Problema seu por ter aceitado seguir'],c:1,
+     e:'Perseguição é crime (art. 147-A). Vale também no ambiente digital, e a pena aumenta quando a vítima é mulher.'}
+  ],
+  4:[
+    {p:'Quantas formas de violência doméstica a Lei Maria da Penha reconhece?',
+     o:['Duas: física e sexual','Três: física, sexual e moral','Cinco: física, psicológica, sexual, patrimonial e moral','Uma só, a agressão física'],c:2,
+     e:'São cinco. Esconder documentos, controlar o dinheiro ou destruir objetos da vítima também é violência — a patrimonial.'},
+    {p:'Para pedir uma medida protetiva de urgência, a mulher precisa:',
+     o:['Contratar um advogado','Apenas ir à delegacia e registrar o pedido','Ter provas periciais da agressão','Esperar o processo terminar'],c:1,
+     e:'O pedido é feito na delegacia, sem advogado e sem custo. O juiz tem prazo para decidir e pode afastar o agressor imediatamente.'},
+    {p:'Uma mulher mostra a palma da mão com um X vermelho. O que fazer?',
+     o:['Perguntar em voz alta o que aconteceu','Ignorar, pode ser tinta','Acionar o 190 discretamente','Tirar foto e postar'],c:2,
+     e:'É o Sinal Vermelho, um pedido de socorro silencioso. Expor a pessoa pode aumentar o risco. Acione o 190 sem chamar atenção.'},
+    {p:'Depois de uma agressão o companheiro chora, pede desculpas e dá presentes. Isso significa que:',
+     o:['Ele mudou de verdade','É a fase de "lua de mel" do ciclo da violência','O caso está resolvido','Ela deve retirar a denúncia'],c:1,
+     e:'É a terceira fase do ciclo. Sem ajuda externa, o ciclo recomeça — geralmente mais curto e mais grave.'}
+  ],
+  5:[
+    {p:'Qual número é a Central de Atendimento à Mulher?',
+     o:['100','180','190','192'],c:1,
+     e:'180 é a Central da Mulher: gratuita, 24h, em todo o país e aceita denúncia anônima. 190 é para emergência e 100 para direitos humanos.'},
+    {p:'Você presencia um colega sendo humilhado repetidamente pelo gestor. A melhor atitude é:',
+     o:['Não se meter, é problema dele','Rir junto para não sobrar para você','Procurar o colega, dizer que viu e se oferecer como testemunha','Gravar e postar nas redes'],c:2,
+     e:'Testemunha muda um caso de lugar. Apoie a pessoa, registre o que viu e ofereça acompanhá-la até um canal de denúncia.'},
+    {p:'Denunciar uma irregularidade no seu estágio pode começar por onde?',
+     o:['Pelo agente de integração que acompanha o seu contrato','Só na Justiça do Trabalho','Só depois de sair da empresa','Não existe canal para estagiário'],c:0,
+     e:'O agente de integração acompanha o estágio e pode intermediar, remanejar e acionar os órgãos competentes. O MPT também recebe denúncia anônima.'}
+  ]
+};
+
+/* --- Falas dos personagens de apoio --- */
+const FALAS={
+  n1a:{quem:'Dona Célia · recepção',t:['Primeiro dia, né? Vou te falar uma coisa que ninguém fala: você tem contrato, tem plano de atividades e tem horário pra sair.','Se pedirem pra você virar a noite "só hoje", esse "só hoje" vira todo dia. Junta os selos de direito pelo caminho, eles te protegem.']},
+  n1b:{quem:'Rafa · estagiário veterano',t:['Aqueles montes de tarefa não te machucam se você usar a voz. Sério.','Aperta o botão de voz e fala. É assim que a pressão perde a força aqui dentro.']},
+  n2a:{quem:'Marcos · do sindicato',t:['Assédio moral não é um dia ruim do chefe. É repetição, é humilhação, é gente vendo.','Anota tudo: dia, hora, o que ele disse, quem estava perto. Papel guardado vale mais que memória.']},
+  n3a:{quem:'Bia · sua colega',t:['Ele disse que era brincadeira. Mas eu pedi pra parar três vezes.','Quando alguém pede pra parar e a pessoa insiste, acabou a brincadeira. Vira assédio.']},
+  n4a:{quem:'Dra. Helena · delegacia da mulher',t:['Você não precisa de advogado, nem de prova pericial, nem de coragem sobrando.','Precisa só chegar até aqui. A medida protetiva sai rápido e pode afastar o agressor hoje mesmo.']},
+  n4b:{quem:'Vizinha do 12',t:['Escuto tudo pela parede. Já pensei em não me meter... mas isso é ser plateia.','Qualquer pessoa pode ligar 180. Não precisa ser a vítima. Guarda isso.']},
+  n5a:{quem:'Seu orientador do CIEE',t:['Chegou até aqui carregando informação, e informação é o que quebra ciclo.','Lá na frente tem o que segura tudo isso: o silêncio. Use tudo que você aprendeu.']}
+};
+
+/* --- Descrição dos inimigos, para os avisos ao derrotar --- */
+const AVISOS_INIMIGO={
+  sobrecarga:['Fora do plano de atividades','Isso não é aprendizado','Desvio de função'],
+  relogio:['Estágio não tem hora extra','6h por dia, e olhe lá','Seu horário é seu'],
+  grito:['Humilhar não é gerir','Isso tem nome: assédio moral','Anota e denuncia'],
+  sombra:['Insistiu depois do não','Não era brincadeira','Isso é assédio'],
+  drone:['Vigiar não é cuidar','Ciúme não é amor','Controle é violência'],
+  corrente:['Isolar é violência','Dinheiro dela é dela','Violência patrimonial'],
+  chefe:['O ciclo se rompe','Você quebrou o silêncio','Falar salva']
+};
+
+/* --- Configuração de cada fase --- */
+const FASES=[
+  {n:1,nome:'Primeiro dia',tema:'Exploração no trabalho',cor:'#4D8BFF',
+   resumo:'Você começou o estágio hoje. Aprenda até onde vai o combinado — e onde começa o abuso.',
+   ceu:['#16213F','#1E3466','#2C4E8F'],chao:'#25406E',detalhe:'#4D8BFF',
+   poder:'Você já sabe: mover, pular e usar a voz.',
+   escala:[392,440,494,587,494,440],bpm:96},
+  {n:2,nome:'Corredores',tema:'Assédio moral',cor:'#FFC53D',
+   resumo:'O clima mudou. Aqui a agressão vem em forma de grito, apelido e plateia.',
+   ceu:['#2A1A20','#4A2A25','#7A452C'],chao:'#5C3626',detalhe:'#FFC53D',
+   poder:'Novo: PULO DUPLO. Pule outra vez no ar para alcançar o que parecia longe.',
+   escala:[330,392,440,330,294,392],bpm:104},
+  {n:3,nome:'Volta pra casa',tema:'Assédio sexual e importunação',cor:'#C99BFF',
+   resumo:'Rua escura, ponto de ônibus, mensagens que não param. Ninguém deveria ter medo do caminho de casa.',
+   ceu:['#160E2E','#2B1A54','#4B2A7A'],chao:'#331E5C',detalhe:'#C99BFF',
+   poder:'Novo: SAIR DA SITUAÇÃO. Toque em SAIR para escapar rápido — e sem levar dano.',
+   escala:[294,349,392,466,392,349],bpm:112},
+  {n:4,nome:'Dentro de casa',tema:'Lei Maria da Penha',cor:'#43E098',
+   resumo:'A violência doméstica se esconde atrás da porta. A lei entra mesmo assim.',
+   ceu:['#0C2A2A','#124545','#1A6B5C'],chao:'#14493F',detalhe:'#43E098',
+   poder:'Novo: VOZ CARREGADA. Segure o botão de voz para soltar um grito que atravessa tudo.',
+   escala:[262,311,349,415,349,311],bpm:100},
+  {n:5,nome:'Rede de apoio',tema:'Romper o ciclo',cor:'#A855F7',
+   resumo:'Você chegou até onde tem gente. Agora é enfrentar o que segura todo o resto: o silêncio.',
+   ceu:['#0E1B3C','#1B3A7A','#2E6BC4'],chao:'#1E3E78',detalhe:'#A855F7',
+   poder:'Tudo liberado. Use tudo o que aprendeu.',
+   escala:[349,415,523,622,523,415],bpm:120}
+];
+/* ============================================================
+   8. MUNDO E FÍSICA
+   ============================================================ */
+/* Gravidade assimétrica: sobe leve, desce pesado. É o truque que faz o
+   pulo "responder" bem em jogos de plataforma. */
+const GRAV=2250, GRAV_MAX=1250;
+const GRAV_SOBE=2000, GRAV_DESCE=2750, VEL_PULO=790, VEL_PULO2=700;
+
+const Mundo={
+  larg:4000,alt:1100,solidos:[],inimigos:[],itens:[],projeteis:[],perigos:[],
+  enfeites:[],npcs:[],checkpoints:[],saida:null,nascer:{x:120,y:400},chefe:null,
+  limpa(){
+    this.solidos=[];this.inimigos=[];this.itens=[];this.projeteis=[];this.perigos=[];
+    this.enfeites=[];this.npcs=[];this.checkpoints=[];this.saida=null;this.chefe=null;
+  }
+};
+
+/* Existe chão sólido logo abaixo deste ponto? (evita que inimigos caiam nos buracos) */
+function chaoEm(x,y,alcance){
+  alcance=alcance||46;
+  const sonda={x:x-3,y:y,w:6,h:alcance};
+  for(const s of Mundo.solidos){
+    if(s.tipo==='passagem'&&s.y<y)continue;
+    if(s.quebrando&&s.sumiu)continue;
+    if(bate(sonda,s))return true;
+  }
+  return false;
+}
+/* Existe parede na frente? */
+function paredeEm(x,y,h){
+  const sonda={x:x-4,y:y-h+6,w:8,h:h-10};
+  for(const s of Mundo.solidos){
+    if(s.tipo==='passagem')continue;
+    if(s.quebrando&&s.sumiu)continue;
+    if(bate(sonda,s))return true;
+  }
+  return false;
+}
+
+/* Colisão de um corpo com os sólidos, eixo a eixo */
+function moveCorpo(e,dt){
+  e.noChao=false;e.encostouParede=false;e.plataforma=null;
+  const passos=Math.max(1,Math.ceil(Math.max(Math.abs(e.vx*dt),Math.abs(e.vy*dt))/12));
+  const sdt=dt/passos;
+  for(let p=0;p<passos;p++){
+    /* horizontal */
+    e.x+=e.vx*sdt;
+    for(const s of Mundo.solidos){
+      if(s.tipo==='passagem')continue;
+      if(s.quebrando&&s.sumiu)continue;
+      if(!bate(e,s))continue;
+      if(e.vx>0){e.x=s.x-e.w;e.encostouParede=true;}
+      else if(e.vx<0){e.x=s.x+s.w;e.encostouParede=true;}
+      e.vx=0;
+    }
+    /* vertical */
+    const antesBaixo=e.y+e.h;
+    e.y+=e.vy*sdt;
+    for(const s of Mundo.solidos){
+      if(s.quebrando&&s.sumiu)continue;
+      if(s.tipo==='passagem'){
+        if(e.vy<0)continue;
+        if(e.descendo)continue;
+        if(antesBaixo>s.y+8)continue;
+      }
+      if(!bate(e,s))continue;
+      if(e.vy>0){
+        e.y=s.y-e.h;e.vy=0;e.noChao=true;e.plataforma=s;
+        if(s.quebrando&&!s.caindo){s.caindo=true;s.timer=.45;}
+      }else if(e.vy<0){e.y=s.y+s.h;e.vy=0;}
+    }
+  }
+  /* carregado pela plataforma móvel */
+  if(e.plataforma&&e.plataforma.movel){
+    e.x+=e.plataforma.dx;
+    e.y+=e.plataforma.dy;
+  }
+}
+
+/* ============================================================
+   9. JOGADOR
+   ============================================================ */
+const Jog={
+  x:0,y:0,w:32,h:52,vx:0,vy:0,dir:1,noChao:false,plataforma:null,
+  vida:3,vidaMax:5,invul:0,piscar:0,
+  coyote:0,bufferPulo:0,pulosUsados:0,pulosMax:1,
+  vozRecarga:0,vozCarga:0,podeCarregar:false,
+  correndo:0,corrRecarga:0,podeCorrer:false,podePuloDuplo:false,
+  animPasso:0,animCaminho:0,esticaX:1,esticaY:1,descendo:false,
+  vivo:true,morrendoTimer:0,noPortal:false,falandoCom:null,
+  selos:0,pontos:0,mortes:0,
+
+  reinicia(nasce){
+    this.x=nasce.x;this.y=nasce.y;this.vx=0;this.vy=0;
+    this.invul=1.1;this.vivo=true;this.morrendoTimer=0;
+    this.vozCarga=0;this.correndo=0;this.pulosUsados=0;
+  },
+  novaFase(fase){
+    this.podePuloDuplo=fase>=2;
+    this.pulosMax=fase>=2?2:1;
+    this.podeCorrer=fase>=3;
+    this.podeCarregar=fase>=4;
+    this.vida=Math.max(this.vida,3);
+  },
+
+  atualiza(dt){
+    if(!this.vivo){
+      this.morrendoTimer-=dt;
+      this.vy+=GRAV*dt*.6;
+      this.y+=this.vy*dt;
+      if(this.morrendoTimer<=0)Jogo.reviveJogador();
+      return;
+    }
+    if(this.invul>0){this.invul-=dt;this.piscar+=dt*22;}
+    this.descendo=Ent.baixo;
+
+    /* --- correr / sair da situação --- */
+    if(this.corrRecarga>0)this.corrRecarga-=dt;
+    if(this.correndo>0){
+      this.correndo-=dt;
+      this.vx=this.dir*760;
+      this.vy=0;
+      this.invul=Math.max(this.invul,.06);
+      if(Math.random()<.7)Part.solta(this.x+this.w/2,this.y+this.h*.6,1,['#4D8BFF','#C9D3F0'],{vel:60,vida:.35,tam:5,grav:120});
+      moveCorpo(this,dt);
+      if(this.encostouParede)this.correndo=0;
+      this.limites();
+      return;
+    }
+    if(this.podeCorrer&&Ent.corrNova&&this.corrRecarga<=0){
+      this.correndo=.16;this.corrRecarga=.85;
+      Som.correr();
+      Part.solta(this.x+this.w/2,this.y+this.h/2,10,['#4D8BFF','#FFFFFF'],{vel:200,vida:.4,tam:5,grav:200});
+    }
+
+    /* --- movimento horizontal --- */
+    const vMax=340, acel=this.noChao?2600:1700, atrito=this.noChao?2900:900;
+    let alvo=0;
+    if(Ent.esq)alvo-=1;
+    if(Ent.dir)alvo+=1;
+    if(alvo!==0){
+      this.vx=aprox(this.vx,alvo*vMax,acel*dt);
+      this.dir=alvo;
+      this.animCaminho+=dt;
+    }else{
+      this.vx=aprox(this.vx,0,atrito*dt);
+      this.animCaminho=0;
+    }
+
+    /* --- pulo com coyote time e buffer --- */
+    if(this.noChao){this.coyote=.11;this.pulosUsados=0;}
+    else if(this.coyote>0)this.coyote-=dt;
+    if(Ent.puloNovo)this.bufferPulo=.13;
+    else if(this.bufferPulo>0)this.bufferPulo-=dt;
+
+    const podePular=this.coyote>0||this.pulosUsados<this.pulosMax-(this.coyote>0?0:1);
+    if(this.bufferPulo>0){
+      if(this.coyote>0){
+        this.vy=-VEL_PULO;this.coyote=0;this.bufferPulo=0;this.pulosUsados=1;
+        this.esticaX=.78;this.esticaY=1.25;
+        Som.pulo();
+        Part.solta(this.x+this.w/2,this.y+this.h,7,['#C9D3F0','#4D8BFF'],{vel:130,vida:.35,tam:4,ang:-Math.PI/2});
+      }else if(this.podePuloDuplo&&this.pulosUsados<this.pulosMax){
+        this.vy=-VEL_PULO2;this.bufferPulo=0;this.pulosUsados++;
+        this.esticaX=.8;this.esticaY=1.2;
+        Som.pulo2();
+        for(let i=0;i<10;i++){
+          const a=(i/10)*Math.PI*2;
+          Part.solta(this.x+this.w/2+Math.cos(a)*16,this.y+this.h*.8+Math.sin(a)*6,1,['#43E098','#FFFFFF'],{vel:90,vida:.4,tam:4,grav:280});
+        }
+      }
+    }
+    /* pulo variável: soltar cedo encurta */
+    if(!Ent.pulo&&this.vy<-300)this.vy=-300;
+
+    /* --- voz --- */
+    if(this.vozRecarga>0)this.vozRecarga-=dt;
+    if(this.podeCarregar&&Ent.voz&&this.vozRecarga<=0){
+      this.vozCarga=Math.min(this.vozCarga+dt,.62);
+      if(this.vozCarga>=.62&&Math.random()<.4)
+        Part.solta(this.x+this.w/2+this.dir*20,this.y+18,1,['#A855F7','#FFC53D'],{vel:70,vida:.3,tam:4,grav:-40});
+    }
+    const soltouVoz=this.podeCarregar?(!Ent.voz&&this.vozCarga>0):Ent.vozNova;
+    if(soltouVoz&&this.vozRecarga<=0){
+      const forte=this.vozCarga>=.5;
+      this.disparaVoz(forte);
+      this.vozCarga=0;
+      this.vozRecarga=forte?.55:.3;
+    }
+
+    /* --- física --- */
+    const gr=this.vy<0?GRAV_SOBE:GRAV_DESCE;
+    this.vy=Math.min(this.vy+gr*dt,GRAV_MAX);
+    moveCorpo(this,dt);
+
+    /* elasticidade visual */
+    this.esticaX=aprox(this.esticaX,1,dt*4.2);
+    this.esticaY=aprox(this.esticaY,1,dt*4.2);
+    if(this.noChao&&this.vy===0&&this.esticaY>1.05){this.esticaX=1.2;this.esticaY=.82;}
+
+    this.limites();
+  },
+
+  limites(){
+    this.x=clamp(this.x,0,Mundo.larg-this.w);
+    if(this.y>Mundo.alt+120)this.cai();
+  },
+
+  disparaVoz(forte){
+    Som.voz();
+    const px=this.x+this.w/2+this.dir*22, py=this.y+20;
+    Mundo.projeteis.push({
+      x:px-10,y:py-10,w:20,h:20,vx:this.dir*(forte?720:560),vy:0,
+      dono:'jogador',dano:forte?2:1,vida:forte?1.4:1.05,
+      atravessa:forte,forte:forte,raio:forte?18:12,anim:0
+    });
+    this.esticaX=1.15;this.esticaY=.9;
+    Part.solta(px,py,forte?12:5,forte?['#A855F7','#FFC53D','#FFFFFF']:['#C99BFF','#FFFFFF'],
+      {vel:forte?200:110,vida:.35,tam:forte?6:4,grav:0,ang:this.dir>0?0:Math.PI});
+    if(forte)Cam.sacode(.22);
+  },
+
+  leva(dano,deX){
+    if(this.invul>0||!this.vivo)return;
+    this.vida-=dano;
+    this.invul=1.25;
+    Som.dano();
+    Cam.sacode(.45);
+    const d=deX!==undefined?sign(this.x+this.w/2-deX):-this.dir;
+    this.vx=d*300;this.vy=-340;
+    Part.solta(this.x+this.w/2,this.y+this.h/2,14,['#FF5470','#FFC53D'],{vel:230,vida:.55,tam:5});
+    Part.texto(this.x+this.w/2,this.y-6,'-'+dano,'#FF5470');
+    if(this.vida<=0)this.morre();
+  },
+  cai(){
+    if(!this.vivo)return;
+    this.vida-=1;
+    Som.morte();
+    if(this.vida<=0){this.morre();return;}
+    Interface.faixa('Cuidado com os buracos!','sol');
+    Jogo.reviveJogador();
+  },
+  morre(){
+    this.vivo=false;this.vida=0;this.morrendoTimer=1.15;
+    this.vy=-480;this.vx=0;this.mortes++;
+    Som.morte();Cam.sacode(.7);
+    Part.solta(this.x+this.w/2,this.y+this.h/2,26,['#FF5470','#FFC53D','#C9D3F0'],{vel:300,vida:.9,tam:6});
+  },
+  cura(n){
+    if(this.vida>=this.vidaMax)return false;
+    this.vida=Math.min(this.vidaMax,this.vida+n);
+    Som.vida();
+    Part.texto(this.x+this.w/2,this.y-6,'+'+n,'#43E098');
+    return true;
+  },
+  ganha(p){this.pontos+=p;}
+};
+
+/* ============================================================
+   10. INIMIGOS — cada tipo tem comportamento e ataque próprios
+   ============================================================ */
+const TIPOS={
+  sobrecarga:{nome:'Pilha de Tarefas',w:40,h:42,vida:2,vel:62,cor:'#8C6A44',cor2:'#C79A5F',
+    pisavel:true,voa:false,pontos:60},
+  relogio:{nome:'Hora Extra',w:38,h:38,vida:2,vel:0,cor:'#E0A63A',cor2:'#FFE9AE',
+    pisavel:true,voa:false,pontos:80},
+  grito:{nome:'O Grito',w:44,h:46,vida:3,vel:40,cor:'#C7452F',cor2:'#FF9B7A',
+    pisavel:false,voa:false,pontos:120,recado:'Contra o grito, pisar não resolve. Use a voz.'},
+  sombra:{nome:'A Insistência',w:36,h:54,vida:3,vel:96,cor:'#3B2A5E',cor2:'#8C6BD1',
+    pisavel:false,voa:false,pontos:140,recado:'Você não vence isso no braço. Use a voz.'},
+  drone:{nome:'O Controle',w:42,h:34,vida:2,vel:120,cor:'#2B6DB5',cor2:'#7FC4FF',
+    pisavel:false,voa:true,pontos:130,recado:'Vigilância não se resolve fugindo. Use a voz.'},
+  corrente:{nome:'O Isolamento',w:46,h:60,vida:4,vel:0,cor:'#4A4F63',cor2:'#9AA3BF',
+    pisavel:false,voa:false,pontos:180,recado:'Correntes só quebram quando alguém fala.'}
+};
+
+function criaInimigo(tipo,x,y,op){
+  op=op||{};
+  const t=TIPOS[tipo];
+  const e={
+    tipo,x,y:y-t.h,w:t.w,h:t.h,vx:0,vy:0,dir:op.dir||-1,
+    vida:op.vida||t.vida,vidaMax:op.vida||t.vida,
+    noChao:false,timer:rnd(0,1.4),estado:'anda',piscar:0,
+    origemX:x,origemY:y,alcance:op.alcance||320,anim:rnd(0,6),
+    vivo:true,morte:0,pontos:t.pontos,def:t
+  };
+  if(tipo==='drone'){e.baseY=y-t.h-(op.altura||0);e.y=e.baseY;}
+  return e;
+}
+
+function atualizaInimigo(e,dt){
+  if(!e.vivo){
+    e.morte-=dt;
+    e.y+=90*dt;
+    return;
+  }
+  if(e.piscar>0)e.piscar-=dt;
+  e.anim+=dt;
+  const jx=Jog.x+Jog.w/2, jy=Jog.y+Jog.h/2;
+  const cx=e.x+e.w/2, cy=e.y+e.h/2;
+  const d=dist(cx,cy,jx,jy);
+  const t=e.def;
+
+  switch(e.tipo){
+    /* --- anda e vira na beirada e na parede --- */
+    case 'sobrecarga':{
+      e.vx=e.dir*t.vel;
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      moveCorpo(e,dt);
+      if(e.encostouParede)e.dir*=-1;
+      if(e.noChao&&!chaoEm(e.x+e.w/2+e.dir*(e.w/2+8),e.y+e.h+2,40))e.dir*=-1;
+      break;
+    }
+    /* --- pula em direção ao jogador, mas nunca para dentro de um buraco --- */
+    case 'relogio':{
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      if(e.noChao){
+        e.vx=aprox(e.vx,0,1800*dt);
+        e.timer-=dt;
+        if(e.timer<=0){
+          e.timer=rnd(1.15,1.6);
+          const alvoDir=d<400?sign(jx-cx)||1:e.dir;
+          const destinoX=e.x+e.w/2+alvoDir*150;
+          if(chaoEm(destinoX,e.y+e.h+10,120)&&!paredeEm(e.x+e.w/2+alvoDir*(e.w/2+10),e.y+e.h,e.h)){
+            e.dir=alvoDir;e.vy=-560;e.vx=alvoDir*190;
+            Part.solta(cx,e.y+e.h,5,['#FFE9AE','#E0A63A'],{vel:100,vida:.3,tam:4,ang:-Math.PI/2});
+          }else{
+            e.dir*=-1;
+          }
+        }
+      }
+      moveCorpo(e,dt);
+      if(e.encostouParede)e.vx=0;
+      break;
+    }
+    /* --- fica na base, atira leque de gritos --- */
+    case 'grito':{
+      e.vx=e.dir*t.vel;
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      moveCorpo(e,dt);
+      if(e.encostouParede)e.dir*=-1;
+      if(e.noChao&&!chaoEm(e.x+e.w/2+e.dir*(e.w/2+8),e.y+e.h+2,40))e.dir*=-1;
+      if(Math.abs(jy-cy)<200&&d<430){
+        e.timer-=dt;
+        e.dir=sign(jx-cx)||e.dir;
+        if(e.timer<=0){
+          e.timer=2.1;
+          e.estado='grita';
+          for(let i=-1;i<=1;i++){
+            Mundo.projeteis.push({x:cx-9,y:cy-9,w:18,h:18,
+              vx:e.dir*300,vy:i*105,dono:'inimigo',dano:1,vida:2.6,raio:11,cor:'#FF9B7A',anim:0});
+          }
+          Som.nota(240,.22,'sawtooth',.09,-90);
+          Part.solta(cx+e.dir*18,cy,8,['#FF9B7A','#C7452F'],{vel:140,vida:.35,tam:5,grav:0,ang:e.dir>0?0:Math.PI});
+        }
+      }else e.timer=Math.max(e.timer,.7);
+      break;
+    }
+    /* --- persegue quando você chega perto, desiste depois de um tempo --- */
+    case 'sombra':{
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      if(e.estado==='anda'){
+        e.vx=e.dir*44;
+        if(d<300&&Math.abs(jy-cy)<160){
+          e.estado='persegue';e.timer=4.2;
+          Part.texto(cx,e.y-8,'!','#C99BFF');
+          Som.nota(140,.2,'sawtooth',.07);
+        }
+      }else{
+        e.timer-=dt;
+        e.dir=sign(jx-cx)||e.dir;
+        e.vx=e.dir*t.vel*(1+Math.sin(e.anim*7)*.12);
+        if(e.timer<=0||d>460){e.estado='anda';e.timer=0;}
+      }
+      moveCorpo(e,dt);
+      if(e.encostouParede)e.dir*=-1;
+      /* freia na beirada mesmo perseguindo */
+      if(e.noChao&&!chaoEm(e.x+e.w/2+e.dir*(e.w/2+8),e.y+e.h+2,40)){
+        e.x-=e.vx*dt;e.vx=0;
+        if(e.estado==='anda')e.dir*=-1;
+      }
+      break;
+    }
+    /* --- voa em onda e solta cargas --- */
+    case 'drone':{
+      const alvoX=jx-e.w/2;
+      if(d<560){
+        e.x=aprox(e.x,alvoX,t.vel*dt);
+        e.dir=sign(jx-cx)||e.dir;
+      }else{
+        e.x=aprox(e.x,e.origemX,60*dt);
+      }
+      e.y=e.baseY+Math.sin(e.anim*2.1)*26;
+      e.timer-=dt;
+      if(e.timer<=0&&d<430&&jy>cy){
+        e.timer=1.9;
+        Mundo.projeteis.push({x:cx-8,y:e.y+e.h,w:16,h:16,vx:0,vy:60,dono:'inimigo',
+          dano:1,vida:3.2,raio:10,cor:'#7FC4FF',cai:true,anim:0});
+        Som.nota(520,.12,'square',.06,-260);
+      }
+      break;
+    }
+    /* --- ancorado; estica correntes na horizontal --- */
+    case 'corrente':{
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      e.vx=0;
+      moveCorpo(e,dt);
+      e.timer-=dt;
+      if(Math.abs(jy-cy)<130&&d<340){
+        e.dir=sign(jx-cx)||e.dir;
+        if(e.timer<=0){
+          e.timer=2.4;e.estado='chicote';e.golpe=.5;
+          Som.nota(120,.3,'sawtooth',.11,-40);
+          Cam.sacode(.18);
+        }
+      }
+      if(e.estado==='chicote'){
+        e.golpe-=dt;
+        if(e.golpe>.2&&e.golpe<.42){
+          const braco={x:e.dir>0?e.x+e.w:e.x-140,y:e.y+14,w:140,h:22};
+          if(bate(Jog,braco)&&Jog.invul<=0)Jog.leva(1,cx);
+        }
+        if(e.golpe<=0)e.estado='parado';
+      }
+      break;
+    }
+  }
+
+  /* dano por contato */
+  if(e.vivo&&bate(Jog,e)&&Jog.vivo){
+    const pisando=Jog.vy>120&&(Jog.y+Jog.h)-e.y<26;
+    if(pisando&&t.pisavel){
+      machucaInimigo(e,2,true);
+      Jog.vy=-520;Jog.esticaX=1.25;Jog.esticaY=.78;
+      Som.acerto();
+    }else if(Jog.invul<=0){
+      if(pisando&&!t.pisavel&&t.recado&&!e.avisou){
+        e.avisou=true;
+        Interface.faixa(t.recado,'sol');
+      }
+      Jog.leva(1,e.x+e.w/2);
+    }
+  }
+}
+
+function machucaInimigo(e,dano,porPisao){
+  if(!e.vivo)return;
+  e.vida-=dano;e.piscar=.16;
+  Part.solta(e.x+e.w/2,e.y+e.h/2,7,['#FFFFFF',e.def.cor2],{vel:170,vida:.35,tam:4});
+  if(e.vida<=0){
+    e.vivo=false;e.morte=.5;
+    Jog.ganha(e.pontos);
+    Som.acerto();
+    Cam.sacode(.2);
+    Part.solta(e.x+e.w/2,e.y+e.h/2,20,[e.def.cor,e.def.cor2,'#FFFFFF'],{vel:260,vida:.75,tam:6});
+    const av=AVISOS_INIMIGO[e.tipo];
+    if(av)Part.texto(e.x+e.w/2,e.y-4,pick(av),'#43E098');
+    if(Math.random()<.16)criaItem('vida',e.x+e.w/2-13,e.y+6);
+    else if(Math.random()<.55)criaItem('selo',e.x+e.w/2-11,e.y+8);
+  }else{
+    Som.nota(300,.07,'square',.07,-80);
+    if(!porPisao)Part.texto(e.x+e.w/2,e.y-2,'-'+dano,'#FFC53D');
+  }
+}
+
+/* ============================================================
+   11. CHEFE — O CICLO (tensão · explosão · lua de mel)
+   ============================================================ */
+function criaChefe(x,y){
+  return {
+    x,y,w:130,h:160,vx:0,vy:0,dir:-1,vida:34,vidaMax:34,
+    fase:1,timer:2.2,estado:'entrada',anim:0,piscar:0,vivo:true,
+    baseY:y,invul:1.4,minions:0,texto:'',textoT:0
+  };
+}
+const ARENA={esq:4460,dir:5820};
+function atualizaChefe(b,dt){
+  if(!b.vivo)return;
+  b.anim+=dt;
+  if(b.piscar>0)b.piscar-=dt;
+  if(b.invul>0)b.invul-=dt;
+  if(b.textoT>0)b.textoT-=dt;
+  const jx=Jog.x+Jog.w/2, cx=b.x+b.w/2, cy=b.y+b.h/2;
+
+  const antesFase=b.fase;
+  if(b.vida<=11)b.fase=3;
+  else if(b.vida<=22)b.fase=2;
+  if(b.fase!==antesFase){
+    b.timer=1.5;b.invul=1.2;b.estado='troca';
+    Cam.sacode(.8);Som.chefe();
+    const nomes={2:'FASE 2 — EXPLOSÃO',3:'FASE 3 — LUA DE MEL'};
+    const ditos={2:'"Agora você vai ver."',3:'"Eu mudei. Foi só dessa vez."'};
+    Interface.faixa(nomes[b.fase]+'  ·  '+ditos[b.fase],'roxo');
+    Part.solta(cx,cy,40,['#A855F7','#FF5470','#FFFFFF'],{vel:340,vida:.9,tam:8});
+  }
+
+  b.timer-=dt;
+
+  if(b.estado==='entrada'){
+    b.y=b.baseY+Math.sin(b.anim*1.5)*14;
+    if(b.timer<=0){b.estado='age';b.timer=1.4;}
+    return;
+  }
+  if(b.estado==='troca'){
+    b.y=b.baseY+Math.sin(b.anim*7)*10;
+    if(b.timer<=0){b.estado='age';b.timer=.9;}
+    return;
+  }
+
+  if(b.fase===1){
+    /* tensão: ronda mantendo distância e atira orbes em leque */
+    const lado=(b.x+b.w/2)>jx?1:-1;
+    const alvoX=clamp(jx+lado*300-b.w/2,ARENA.esq,ARENA.dir-b.w);
+    b.x=aprox(b.x,alvoX,110*dt);
+    b.y=b.baseY+Math.sin(b.anim*1.7)*20;
+    if(b.timer<=0){
+      b.timer=1.75;
+      for(let i=-2;i<=2;i++){
+        Mundo.projeteis.push({x:cx-10,y:cy,w:20,h:20,vx:i*88,vy:210,dono:'inimigo',
+          dano:1,vida:3.4,raio:12,cor:'#C99BFF',anim:0});
+      }
+      Som.nota(180,.25,'sawtooth',.1,-60);
+    }
+  }else if(b.fase===2){
+    /* explosão: avança e bate no chão gerando ondas */
+    if(b.estado==='age'){
+      b.y=aprox(b.y,b.baseY,120*dt);
+      b.x=clamp(aprox(b.x,jx-b.w/2,210*dt),ARENA.esq,ARENA.dir-b.w);
+      if(b.timer<=0){b.estado='sobe';b.timer=.55;}
+    }else if(b.estado==='sobe'){
+      b.y=aprox(b.y,b.baseY-110,420*dt);
+      if(b.timer<=0){b.estado='baque';b.timer=.4;}
+    }else if(b.estado==='baque'){
+      b.y+=1500*dt;
+      if(b.y>=b.baseY){
+        b.y=b.baseY;b.estado='age';b.timer=1.5;
+        Cam.sacode(.9);Som.nota(70,.4,'sawtooth',.18,-25);
+        Part.solta(cx,b.y+b.h,26,['#FF5470','#FFC53D'],{vel:330,vida:.7,tam:7,ang:-Math.PI/2});
+        for(const s of[-1,1]){
+          Mundo.projeteis.push({x:cx,y:b.y+b.h-26,w:26,h:26,vx:s*330,vy:0,dono:'inimigo',
+            dano:1,vida:2.6,raio:15,cor:'#FF5470',rasteira:true,anim:0});
+        }
+      }
+    }
+  }else{
+    /* lua de mel: "presentes" que machucam e cura falsa */
+    const lado3=(b.x+b.w/2)>jx?1:-1;
+    b.x=aprox(b.x,clamp(jx+lado3*240-b.w/2,ARENA.esq,ARENA.dir-b.w),140*dt);
+    b.y=b.baseY+Math.sin(b.anim*2.4)*24;
+    if(b.timer<=0){
+      b.timer=1.5;
+      for(let i=0;i<3;i++){
+        const a=-Math.PI/2+rnd(-.8,.8);
+        Mundo.projeteis.push({x:cx-11,y:cy,w:22,h:22,vx:Math.cos(a)*rnd(120,240),vy:Math.sin(a)*250,
+          dono:'inimigo',dano:1,vida:4,raio:13,cor:'#FF8FB0',presente:true,grav:420,anim:0});
+      }
+      if(b.vida<b.vidaMax&&Math.random()<.45){
+        b.vida=Math.min(b.vidaMax,b.vida+1);
+        Part.texto(cx,b.y-10,'+1','#FF8FB0');
+        Interface.faixa('Ele se recupera no arrependimento. Não pare.','roxo');
+      }
+      Som.nota(420,.2,'triangle',.08,-120);
+    }
+  }
+
+  if(bate(Jog,{x:b.x+14,y:b.y+14,w:b.w-28,h:b.h-20})&&Jog.invul<=0&&Jog.vivo)Jog.leva(1,b.x+b.w/2);
+}
+function machucaChefe(b,dano){
+  if(b.invul>0||!b.vivo)return;
+  b.vida-=dano;b.piscar=.16;
+  Som.nota(260,.09,'square',.09,-90);
+  Part.solta(b.x+b.w/2,b.y+b.h/2,10,['#FFFFFF','#A855F7'],{vel:220,vida:.4,tam:5});
+  if(b.vida<=0){
+    b.vivo=false;
+    Cam.sacode(1.2);
+    Part.solta(b.x+b.w/2,b.y+b.h/2,60,['#A855F7','#FFC53D','#FFFFFF','#43E098'],{vel:420,vida:1.3,tam:9});
+    Jog.ganha(2500);
+    Jogo.venceChefe();
+  }
+}
+/* ============================================================
+   12. ITENS
+   ============================================================ */
+function criaItem(tipo,x,y,id){
+  const tam={selo:{w:22,h:22},vida:{w:26,h:24},ficha:{w:30,h:34}}[tipo];
+  Mundo.itens.push({tipo,x,y,w:tam.w,h:tam.h,baseY:y,anim:rnd(0,6),pego:false,id:id||null});
+}
+
+function atualizaItens(dt){
+  for(let i=Mundo.itens.length-1;i>=0;i--){
+    const it=Mundo.itens[i];
+    it.anim+=dt;
+    it.y=it.baseY+Math.sin(it.anim*2.6)*5;
+    if(it.pego)continue;
+    if(!bate(Jog,it))continue;
+    if(it.tipo==='selo'){
+      it.pego=true;Jog.selos++;Jog.ganha(50);Som.moeda();
+      Part.solta(it.x+it.w/2,it.y+it.h/2,8,['#FFC53D','#FFFFFF'],{vel:150,vida:.45,tam:4});
+      Mundo.itens.splice(i,1);
+    }else if(it.tipo==='vida'){
+      if(Jog.cura(1)){
+        Part.solta(it.x+it.w/2,it.y+it.h/2,12,['#43E098','#FFFFFF'],{vel:170,vida:.5,tam:5});
+        Mundo.itens.splice(i,1);
+      }
+    }else if(it.tipo==='ficha'){
+      it.pego=true;
+      Mundo.itens.splice(i,1);
+      Jog.ganha(200);
+      Som.vida();
+      Part.solta(it.x+it.w/2,it.y+it.h/2,18,['#A855F7','#FFC53D','#FFFFFF'],{vel:200,vida:.6,tam:6});
+      Jogo.abreFicha(it.id);
+    }
+  }
+}
+
+/* ============================================================
+   13. CONSTRUÇÃO DAS FASES
+   ============================================================ */
+const L={
+  bloco(x,y,w,h,cor){Mundo.solidos.push({x,y,w,h,tipo:'bloco',cor:cor||null});},
+  passagem(x,y,w){Mundo.solidos.push({x,y,w,h:16,tipo:'passagem'});},
+  movel(x,y,w,h,dx,dy,alcance,vel){
+    Mundo.solidos.push({x,y,w,h,tipo:'bloco',movel:true,ox:x,oy:y,
+      ex:dx,ey:dy,alcance,vel:vel||60,t:0,dx:0,dy:0});
+  },
+  quebra(x,y,w){Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',quebrando:true,caindo:false,sumiu:false,timer:0,volta:0});},
+  mola(x,y){Mundo.enfeites.push({tipo:'mola',x,y:y-18,w:44,h:18,carga:0});},
+  espinho(x,y,w){Mundo.perigos.push({tipo:'espinho',x,y:y-18,w,h:18});},
+  selo(x,y){criaItem('selo',x,y);},
+  selos(x,y,n,passo,curva){
+    for(let i=0;i<n;i++){
+      const dy=curva?-Math.sin((i/(n-1||1))*Math.PI)*curva:0;
+      criaItem('selo',x+i*(passo||42),y+dy);
+    }
+  },
+  vida(x,y){criaItem('vida',x,y);},
+  ficha(x,y,id){criaItem('ficha',x,y,id);},
+  inim(tipo,x,y,op){Mundo.inimigos.push(criaInimigo(tipo,x,y,op));},
+  npc(x,y,id){Mundo.npcs.push({x,y:y-58,w:34,h:58,id,anim:rnd(0,6),falou:false});},
+  check(x,y){Mundo.checkpoints.push({x,y:y-70,w:26,h:70,ativo:false,anim:0});},
+  saida(x,y){Mundo.saida={x,y:y-96,w:64,h:96,anim:0};},
+  deco(tipo,x,y,w,h,cor){Mundo.enfeites.push({tipo,x,y,w,h,cor,anim:rnd(0,6)});},
+  /* piso contínuo com buracos: buracos = [[inicio,fim],...] */
+  piso(x0,x1,y,buracos,alt){
+    alt=alt||220;
+    const bs=(buracos||[]).slice().sort((a,b)=>a[0]-b[0]);
+    let cur=x0;
+    for(const b of bs){
+      if(b[0]>cur)this.bloco(cur,y,b[0]-cur,alt);
+      cur=Math.max(cur,b[1]);
+    }
+    if(cur<x1)this.bloco(cur,y,x1-cur,alt);
+  }
+};
+
+/* ------------------------------------------------------------
+   FASE 1 — Primeiro dia · Exploração no trabalho
+   ------------------------------------------------------------ */
+function fase1(){
+  Mundo.larg=5600;Mundo.alt=1020;Mundo.nascer={x:110,y:700};
+  const S=820;
+  L.piso(0,5600,S,[[900,1010],[1520,1660],[2260,2400],[2405,2520],[3180,3340],[3980,4130],[4560,4680]]);
+  for(let i=0;i<20;i++)L.deco('janela',180+i*280,470,120,150,'#3B5FA8');
+  for(let i=0;i<9;i++)L.deco('mesa',360+i*600,S-46,120,46,'#1B2E52');
+
+  L.npc(300,S,'n1a');
+  L.selos(360,730,5,44,0);
+  L.ficha(560,700,'jornada');
+
+  /* primeiro buraco com plataforma de apoio */
+  L.passagem(880,690,140);
+  L.selos(890,620,3,46,26);
+  L.inim('sobrecarga',1180,S,{dir:-1});
+  L.bloco(1180,690,150,26);
+  L.selos(1200,620,3,46,0);
+
+  L.check(1400,S);
+  L.inim('relogio',1760,S);
+  L.passagem(1500,700,160);
+  L.ficha(1560,650,'horaExtra');
+
+  /* escadinha */
+  L.bloco(1900,720,120,26);
+  L.bloco(2060,630,120,26);
+  L.bloco(2220,540,120,26);
+  L.selos(2240,480,3,42,0);
+  L.vida(2270,470);
+  L.inim('sobrecarga',2000,720,{dir:1});
+
+  /* trecho de buracos duplos com passagens */
+  L.passagem(2250,700,120);
+  L.passagem(2420,640,120);
+  L.selos(2270,640,2,50,0);
+  L.selos(2440,580,2,50,0);
+  L.inim('relogio',2700,S);
+  L.inim('sobrecarga',2860,S,{dir:-1});
+  L.npc(2560,S,'n1b');
+
+  L.check(2980,S);
+  L.ficha(3060,720,'plano');
+  L.bloco(3160,700,120,24);
+  L.passagem(3340,660,150);
+  L.selos(3180,640,2,48,0);
+  L.selos(3360,600,3,46,24);
+  L.mola(3560,S);
+  L.selos(3560,560,4,44,60);
+  L.bloco(3700,560,140,24);
+  L.ficha(3750,510,'recesso');
+
+  L.inim('sobrecarga',3900,S,{dir:-1});
+  L.inim('relogio',4300,S);
+  L.passagem(3960,690,180);
+  L.bloco(4200,650,140,24);
+  L.selos(4220,590,3,44,0);
+  L.vida(4380,760);
+
+  L.check(4460,S);
+  L.ficha(4600,700,'aprendiz');
+  L.passagem(4540,700,160);
+  L.bloco(4780,660,130,24);
+  L.bloco(4980,580,130,24);
+  L.selos(5000,520,3,42,0);
+  L.inim('sobrecarga',5150,S,{dir:-1});
+  L.ficha(5240,720,'supervisor');
+  L.selos(5300,720,4,44,0);
+  L.saida(5460,S);
+}
+
+/* ------------------------------------------------------------
+   FASE 2 — Corredores · Assédio moral  (pulo duplo)
+   ------------------------------------------------------------ */
+function fase2(){
+  Mundo.larg=6200;Mundo.alt=1060;Mundo.nascer={x:110,y:700};
+  const S=830;
+  L.piso(0,6200,S,[[820,1000],[1480,1700],[2120,2340],[2900,3120],[3160,3300],[3900,4160],[4800,5000],[5320,5460]]);
+  for(let i=0;i<16;i++)L.deco('armario',200+i*380,S-120,80,120,'#7A452C');
+
+  L.npc(300,S,'n2a');
+  L.selos(340,740,4,46,0);
+  L.ficha(560,700,'moralOQue');
+
+  /* aqui o pulo duplo é obrigatório */
+  L.bloco(820,700,120,22);
+  L.bloco(1060,620,120,22);
+  L.selos(840,630,2,48,0);
+  L.selos(1080,550,3,44,0);
+  L.inim('grito',1300,S,{dir:-1});
+  L.check(1360,S);
+
+  L.quebra(1480,700,110);
+  L.quebra(1660,660,110);
+  L.selos(1500,640,2,46,0);
+  L.ficha(1700,600,'moralNaoE');
+  L.inim('sobrecarga',1900,S,{dir:1});
+
+  L.movel(2120,700,150,22,1,0,220,74);
+  L.selos(2150,630,3,44,0);
+  L.inim('relogio',2500,S);
+  L.inim('grito',2700,S,{dir:-1});
+  L.bloco(2500,610,140,22);
+  L.ficha(2540,560,'moralProva');
+  L.vida(2760,770);
+  L.check(2820,S);
+
+  /* corredor de gritos: precisa desviar dos projéteis */
+  L.passagem(2900,690,150);
+  L.passagem(3120,620,150);
+  L.passagem(3320,690,150);
+  L.selos(2920,620,2,48,0);
+  L.selos(3140,550,2,48,0);
+  L.inim('grito',3560,S,{dir:-1});
+  L.inim('grito',3760,S,{dir:1});
+  L.bloco(3560,600,220,22);
+  L.ficha(3620,550,'moralCipa');
+
+  L.mola(3860,S);
+  L.selos(3900,540,5,46,70);
+  L.quebra(3960,600,110);
+  L.quebra(4140,560,110);
+  L.bloco(4320,620,150,22);
+  L.vida(4360,560);
+  L.check(4520,S);
+
+  L.movel(4800,720,150,22,0,1,180,66);
+  L.movel(5040,640,150,22,1,0,200,90);
+  L.selos(5060,560,3,44,0);
+  L.inim('grito',5220,S,{dir:-1});
+  L.inim('sobrecarga',5500,S,{dir:-1});
+  L.inim('relogio',5700,S);
+  L.ficha(5560,740,'moralSaida');
+  L.selos(5760,730,5,44,0);
+  L.bloco(5900,660,160,22);
+  L.saida(6060,S);
+}
+
+/* ------------------------------------------------------------
+   FASE 3 — Volta pra casa · Assédio sexual  (correr / sair)
+   ------------------------------------------------------------ */
+function fase3(){
+  Mundo.larg=6600;Mundo.alt=1080;Mundo.nascer={x:110,y:700};
+  const S=840;
+  L.piso(0,6600,S,[[980,1180],[1820,2060],[2560,2700],[2740,2900],[3520,3760],[4300,4460],[4520,4700],[5400,5620]]);
+  for(let i=0;i<18;i++)L.deco('predio',150+i*360,S-rnd(180,320),110,340,'#2B1A54');
+  for(let i=0;i<12;i++)L.deco('poste',260+i*540,S-160,12,160,'#4B2A7A');
+
+  L.selos(300,750,4,46,0);
+  L.ficha(520,700,'sexualCrime');
+  L.inim('sombra',760,S,{dir:-1});
+
+  L.passagem(980,700,170);
+  L.selos(1000,630,3,46,26);
+  L.inim('drone',1300,S,{altura:150});
+  L.bloco(1300,660,150,22);
+  L.check(1500,S);
+  L.ficha(1620,720,'sexualImport');
+
+  /* corredor de espinhos: use SAIR para atravessar */
+  L.espinho(1820,S+220,240);
+  L.bloco(1820,S,240,220,'#241141');
+  L.passagem(1900,690,120);
+  L.selos(1830,620,4,46,0);
+  L.inim('sombra',2200,S,{dir:-1});
+  L.inim('drone',2400,S,{altura:180});
+
+  L.bloco(2560,700,140,22);
+  L.bloco(2760,640,140,22);
+  L.selos(2580,630,2,48,0);
+  L.selos(2780,570,2,48,0);
+  L.vida(2960,760);
+  L.check(3020,S);
+  L.ficha(3120,700,'sexualCantada');
+
+  L.movel(3520,720,160,22,1,0,240,110);
+  L.espinho(3520,S+220,240);
+  L.bloco(3520,S,240,220,'#241141');
+  L.inim('drone',3900,S,{altura:210});
+  L.inim('sombra',4050,S,{dir:-1});
+  L.bloco(3900,620,160,22);
+  L.selos(3930,560,3,44,0);
+
+  L.passagem(4300,700,160);
+  L.passagem(4520,650,180);
+  L.selos(4320,630,2,48,0);
+  L.selos(4560,580,3,46,0);
+  L.ficha(4760,720,'sexualStalk');
+  L.check(4900,S);
+  L.inim('sombra',5000,S,{dir:-1});
+  L.inim('sombra',5200,S,{dir:1});
+
+  L.movel(5400,700,170,22,1,0,220,120);
+  L.selos(5420,630,3,44,0);
+  L.inim('drone',5800,S,{altura:170});
+  L.npc(5980,S,'n3a');
+  L.ficha(6120,700,'sexualApoio');
+  L.vida(6200,740);
+  L.bloco(6280,660,150,22);
+  L.selos(6300,600,4,42,0);
+  L.saida(6460,S);
+}
+
+/* ------------------------------------------------------------
+   FASE 4 — Dentro de casa · Lei Maria da Penha  (voz carregada)
+   ------------------------------------------------------------ */
+function fase4(){
+  Mundo.larg=6400;Mundo.alt=1120;Mundo.nascer={x:110,y:700};
+  const S=850;
+  L.piso(0,6400,S,[[900,1080],[1700,1900],[2480,2660],[3220,3460],[4100,4280],[4340,4520],[5200,5420]]);
+  for(let i=0;i<14;i++)L.deco('casa',180+i*440,S-260,180,260,'#124545');
+  for(let i=0;i<10;i++)L.deco('varal',420+i*620,S-300,160,4,'#43E098');
+
+  L.selos(300,760,4,46,0);
+  L.ficha(520,700,'mpLei');
+  L.inim('corrente',780,S);
+
+  L.passagem(900,700,160);
+  L.selos(920,630,3,46,24);
+  L.bloco(1140,660,150,22);
+  L.ficha(1200,610,'mpTipos');
+  L.inim('grito',1400,S,{dir:-1});
+  L.npc(1520,S,'n4a');
+  L.check(1620,S);
+
+  /* verticalidade: subir pela casa */
+  L.bloco(1700,720,130,22);
+  L.bloco(1880,630,130,22);
+  L.bloco(1700,540,130,22);
+  L.bloco(1880,450,130,22);
+  L.selos(1720,480,3,42,0);
+  L.vida(1910,400);
+  L.ficha(1740,380,'mpMedidas');
+  L.inim('drone',2100,S,{altura:260});
+
+  L.inim('corrente',2300,S);
+  L.movel(2480,700,160,22,1,0,180,84);
+  L.selos(2500,630,3,44,0);
+  L.inim('grito',2900,S,{dir:-1});
+  L.bloco(2900,620,180,22);
+  L.ficha(2950,570,'mpPsico');
+  L.check(3120,S);
+
+  L.mola(3220,S);
+  L.selos(3240,560,5,44,80);
+  L.quebra(3300,600,110);
+  L.quebra(3480,560,110);
+  L.bloco(3660,620,160,22);
+  L.vida(3700,560);
+  L.inim('sombra',3900,S,{dir:-1});
+  L.ficha(4000,720,'mpSinal');
+
+  /* fileira de inimigos: a voz carregada atravessa todos */
+  L.passagem(4100,700,160);
+  L.passagem(4340,700,160);
+  L.inim('sobrecarga',4600,S,{dir:-1});
+  L.inim('sobrecarga',4700,S,{dir:1});
+  L.inim('sobrecarga',4800,S,{dir:-1});
+  L.selos(4620,700,5,46,0);
+  L.check(4960,S);
+  L.ficha(5040,700,'mpCanais');
+  L.inim('corrente',5120,S);
+
+  L.movel(5200,720,170,22,0,1,200,72);
+  L.movel(5460,640,170,22,1,0,200,96);
+  L.selos(5480,570,3,44,0);
+  L.inim('drone',5760,S,{altura:200});
+  L.npc(5900,S,'n4b');
+  L.ficha(6020,700,'mpCiclo');
+  L.selos(6100,740,4,44,0);
+  L.bloco(6180,650,150,22);
+  L.saida(6280,S);
+}
+
+/* ------------------------------------------------------------
+   FASE 5 — Rede de apoio · O Ciclo
+   ------------------------------------------------------------ */
+function fase5(){
+  Mundo.larg=6000;Mundo.alt=1080;Mundo.nascer={x:110,y:700};
+  const S=840;
+  L.piso(0,4400,S,[[880,1040],[1620,1820],[2400,2560],[2620,2780],[3400,3600]]);
+  L.bloco(4400,S,1600,220);                 /* arena do chefe */
+  L.bloco(4360,S-420,40,440,'#132a56');     /* portal de entrada */
+  for(let i=0;i<12;i++)L.deco('bandeira',240+i*380,S-190,60,190,'#A855F7');
+
+  L.npc(280,S,'n5a');
+  L.selos(340,750,4,46,0);
+  L.ficha(560,700,'redeQuem');
+  L.inim('sombra',800,S,{dir:-1});
+
+  L.passagem(880,700,150);
+  L.selos(900,630,3,46,24);
+  L.bloco(1120,650,150,22);
+  L.ficha(1180,600,'redeCanais');
+  L.inim('grito',1340,S,{dir:-1});
+  L.inim('drone',1500,S,{altura:180});
+  L.check(1560,S);
+
+  L.movel(1620,700,170,22,1,0,190,100);
+  L.selos(1650,630,3,44,0);
+  L.inim('corrente',2000,S);
+  L.bloco(2000,620,170,22);
+  L.ficha(2050,570,'redeCiee');
+  L.vida(2240,760);
+
+  L.quebra(2400,700,120);
+  L.quebra(2620,660,120);
+  L.selos(2420,630,2,48,0);
+  L.selos(2640,590,2,48,0);
+  L.inim('sombra',2900,S,{dir:-1});
+  L.inim('grito',3060,S,{dir:1});
+  L.check(3180,S);
+  L.ficha(3260,700,'redeTestemunha');
+
+  L.mola(3400,S);
+  L.selos(3420,560,5,44,80);
+  L.movel(3620,660,170,22,1,0,200,110);
+  L.inim('drone',3900,S,{altura:200});
+  L.selos(3960,700,4,44,0);
+  L.ficha(4120,700,'redeDenuncia');
+  L.vida(4220,740);
+  L.check(4300,S);
+
+  /* arena */
+  L.bloco(4640,690,190,24);
+  L.bloco(5280,690,190,24);
+  L.bloco(4960,560,200,24);
+  L.bloco(5960,S-460,40,480,'#132a56');    /* parede do fundo da arena */
+  Mundo.chefe=criaChefe(5400,S-200);
+  Mundo.chefe.baseY=S-200;
+}
+
+const CONSTRUTORES=[fase1,fase2,fase3,fase4,fase5];
+
+function montaFase(n){
+  Mundo.limpa();
+  Part.limpa();
+  CONSTRUTORES[n-1]();
+  Jog.novaFase(n);
+  Jog.reinicia(Mundo.nascer);
+  Cam.segue(Jog,Mundo,0,true);
+}
+
+/* plataformas móveis e blocos que quebram */
+function atualizaSolidos(dt){
+  for(const s of Mundo.solidos){
+    if(s.movel){
+      s.t+=dt*(s.vel/Math.max(1,s.alcance));
+      const p=(Math.sin(s.t*Math.PI)+1)/2;
+      const nx=s.ox+s.ex*s.alcance*p;
+      const ny=s.oy+s.ey*s.alcance*p;
+      s.dx=nx-s.x;s.dy=ny-s.y;
+      s.x=nx;s.y=ny;
+    }
+    if(s.quebrando){
+      if(s.caindo&&!s.sumiu){
+        s.timer-=dt;
+        if(s.timer<=0){
+          s.sumiu=true;s.volta=3.2;
+          Part.solta(s.x+s.w/2,s.y,10,['#9AA3BF','#C9D3F0'],{vel:130,vida:.6,tam:5});
+        }
+      }else if(s.sumiu){
+        s.volta-=dt;
+        if(s.volta<=0){s.sumiu=false;s.caindo=false;s.timer=0;}
+      }
+    }
+  }
+}
+
+/* molas, espinhos, checkpoints, npcs e saída */
+function atualizaCenario(dt){
+  for(const d of Mundo.enfeites){
+    if(d.tipo==='mola'){
+      d.carga=Math.max(0,d.carga-dt*4);
+      const cx={x:d.x,y:d.y-6,w:d.w,h:d.h+10};
+      if(bate(Jog,cx)&&Jog.vy>0){
+        Jog.vy=-1080;Jog.pulosUsados=0;d.carga=1;
+        Jog.esticaX=.7;Jog.esticaY=1.4;
+        Som.nota(300,.2,'square',.13,420);
+        Part.solta(d.x+d.w/2,d.y,12,['#FFC53D','#FFFFFF'],{vel:200,vida:.45,tam:5,ang:-Math.PI/2});
+      }
+    }
+  }
+  for(const p of Mundo.perigos){
+    if(bate(Jog,{x:p.x+4,y:p.y+6,w:p.w-8,h:p.h-6})&&Jog.invul<=0&&Jog.vivo)
+      Jog.leva(1,Jog.x+Jog.w/2);
+  }
+  for(const c of Mundo.checkpoints){
+    c.anim+=dt;
+    if(!c.ativo&&bate(Jog,c)){
+      c.ativo=true;
+      Mundo.nascer={x:c.x-4,y:c.y+8};
+      Jogo.ultimoCheck={fase:Jogo.fase,x:c.x};
+      Som.vida();
+      Interface.faixa('Ponto de retorno salvo','verde');
+      Part.solta(c.x+13,c.y+20,16,['#43E098','#FFFFFF'],{vel:180,vida:.6,tam:5});
+    }
+  }
+  for(const n of Mundo.npcs){
+    n.anim+=dt;
+    if(n.falou)continue;
+    /* só puxa conversa com o jogador de pé no chão, para não travar no ar */
+    if(!Jog.noChao||!Jog.vivo)continue;
+    if(bate(Jog,{x:n.x-46,y:n.y-20,w:n.w+92,h:n.h+40})){
+      n.falou=true;
+      Jogo.abreDialogo(n.id);
+    }
+  }
+  if(Mundo.saida){
+    Mundo.saida.anim+=dt;
+    if(bate(Jog,Mundo.saida)&&Jog.vivo)Jogo.completaFase();
+  }
+}
+
+/* ============================================================
+   14. PROJÉTEIS
+   ============================================================ */
+function atualizaProjeteis(dt){
+  for(let i=Mundo.projeteis.length-1;i>=0;i--){
+    const p=Mundo.projeteis[i];
+    p.vida-=dt;p.anim+=dt;
+    if(p.vida<=0){Mundo.projeteis.splice(i,1);continue;}
+    if(p.grav)p.vy+=p.grav*dt;
+    if(p.cai)p.vy+=520*dt;
+    p.x+=p.vx*dt;p.y+=p.vy*dt;
+
+    /* bate na parede */
+    let parou=false;
+    if(!p.atravessa){
+      for(const s of Mundo.solidos){
+        if(s.tipo==='passagem'||(s.quebrando&&s.sumiu))continue;
+        if(bate(p,s)){parou=true;break;}
+      }
+    }
+    if(p.x<-60||p.x>Mundo.larg+60||p.y>Mundo.alt+80)parou=true;
+    if(parou){
+      Part.solta(p.x+p.w/2,p.y+p.h/2,5,[p.cor||'#C99BFF','#FFFFFF'],{vel:110,vida:.3,tam:4,grav:0});
+      Mundo.projeteis.splice(i,1);continue;
+    }
+
+    if(p.dono==='jogador'){
+      let acertou=false;
+      for(const e of Mundo.inimigos){
+        if(!e.vivo)continue;
+        if(bate(p,e)){
+          machucaInimigo(e,p.dano);
+          acertou=true;
+          if(!p.atravessa)break;
+        }
+      }
+      if(Mundo.chefe&&Mundo.chefe.vivo&&bate(p,Mundo.chefe)){
+        machucaChefe(Mundo.chefe,p.dano);
+        acertou=true;
+      }
+      /* a voz também derruba os projéteis do inimigo */
+      for(let j=Mundo.projeteis.length-1;j>=0;j--){
+        const o=Mundo.projeteis[j];
+        if(o.dono!=='inimigo')continue;
+        if(bate(p,o)){
+          Part.solta(o.x,o.y,6,['#FFFFFF','#FFC53D'],{vel:120,vida:.3,tam:4,grav:0});
+          Mundo.projeteis.splice(j,1);
+          if(j<i)i--;
+          acertou=true;
+        }
+      }
+      if(acertou&&!p.atravessa){Mundo.projeteis.splice(i,1);continue;}
+    }else{
+      if(bate(p,Jog)&&Jog.invul<=0&&Jog.vivo){
+        Jog.leva(p.dano,p.x+p.w/2);
+        Mundo.projeteis.splice(i,1);continue;
+      }
+    }
+  }
+}
+/* ============================================================
+   15. DESENHO
+   ============================================================ */
+const Arte={
+  faseAtual:FASES[0],
+
+  quadro(){
+    const g=ctx;
+    g.setTransform(Vista.dpr,0,0,Vista.dpr,0,0);
+    g.imageSmoothingEnabled=true;
+    this.fundo(g);
+    g.save();
+    g.scale(Vista.escala,Vista.escala);
+    g.translate(-Math.round(Cam.ox),-Math.round(Cam.oy));
+    this.paralaxe(g);
+    this.enfeites(g);
+    this.solidos(g);
+    this.perigos(g);
+    this.checkpoints(g);
+    this.saida(g);
+    this.itens(g);
+    this.npcs(g);
+    this.inimigos(g);
+    if(Mundo.chefe)this.chefe(g,Mundo.chefe);
+    this.projeteis(g);
+    this.jogador(g);
+    Part.desenha(g);
+    g.restore();
+    this.hud(g);
+  },
+
+  /* --- céu --- */
+  fundo(g){
+    const f=this.faseAtual;
+    const grad=g.createLinearGradient(0,0,0,Vista.cssA);
+    grad.addColorStop(0,f.ceu[0]);
+    grad.addColorStop(.55,f.ceu[1]);
+    grad.addColorStop(1,f.ceu[2]);
+    g.fillStyle=grad;
+    g.fillRect(0,0,Vista.cssL,Vista.cssA);
+  },
+
+  /* --- camadas de fundo --- */
+  paralaxe(g){
+    const f=this.faseAtual;
+    const t=Jogo.tempoTotal;
+    /* camada distante */
+    g.save();
+    g.globalAlpha=.28;
+    g.fillStyle=f.detalhe;
+    const off1=Cam.ox*.72, off2=Cam.oy*.82;
+    for(let i=0;i<26;i++){
+      const bx=(i*340-off1)%(Mundo.larg+400);
+      const alt=140+((i*97)%190);
+      g.fillRect(Cam.ox+bx-200,Cam.oy+Vista.alt-alt-60+off2*.06,150,alt);
+    }
+    g.restore();
+    /* camada média */
+    g.save();
+    g.globalAlpha=.42;
+    g.fillStyle=f.chao;
+    const offA=Cam.ox*.45;
+    for(let i=0;i<30;i++){
+      const bx=(i*250-offA)%(Mundo.larg+400);
+      const alt=200+((i*151)%240);
+      g.fillRect(Cam.ox+bx-200,Cam.oy+Vista.alt-alt-20,110,alt);
+    }
+    g.restore();
+    /* brilho ambiente */
+    if(f.n===3||f.n===5){
+      g.save();
+      g.globalAlpha=.10+Math.sin(t*1.5)*.02;
+      g.fillStyle=f.detalhe;
+      for(let i=0;i<10;i++){
+        const x=Cam.ox+((i*430-Cam.ox*.5)%(Vista.larg+500))-150;
+        g.beginPath();
+        g.arc(x,Cam.oy+180+((i*97)%160),120,0,Math.PI*2);
+        g.fill();
+      }
+      g.restore();
+    }
+  },
+
+  enfeites(g){
+    const f=this.faseAtual;
+    for(const d of Mundo.enfeites){
+      if(d.x+ (d.w||100) <Cam.ox-120||d.x>Cam.ox+Vista.larg+120)continue;
+      switch(d.tipo){
+        case 'mola':{
+          const c=d.carga;
+          const h=d.h*(1-c*.55);
+          g.fillStyle='#8C6A2A';
+          g.fillRect(d.x,d.y+d.h-h,d.w,h);
+          g.fillStyle='#FFC53D';
+          g.fillRect(d.x-3,d.y+d.h-h-8,d.w+6,10);
+          g.fillStyle='rgba(255,255,255,.35)';
+          g.fillRect(d.x-3,d.y+d.h-h-8,d.w+6,3);
+          break;
+        }
+        case 'janela':
+          g.fillStyle='rgba(255,255,255,.06)';
+          g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle='rgba(255,197,61,.14)';
+          g.fillRect(d.x+8,d.y+8,d.w-16,d.h/2-12);
+          break;
+        case 'mesa':
+          g.fillStyle=d.cor;g.fillRect(d.x,d.y,d.w,10);
+          g.fillRect(d.x+6,d.y+10,8,d.h-10);
+          g.fillRect(d.x+d.w-14,d.y+10,8,d.h-10);
+          g.fillStyle='rgba(255,255,255,.12)';g.fillRect(d.x+20,d.y-14,34,14);
+          break;
+        case 'armario':
+          g.fillStyle='rgba(0,0,0,.28)';g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle='rgba(255,255,255,.07)';g.fillRect(d.x+4,d.y+4,d.w-8,d.h/2-8);
+          g.fillRect(d.x+4,d.y+d.h/2+4,d.w-8,d.h/2-8);
+          break;
+        case 'predio':
+          g.fillStyle='rgba(0,0,0,.34)';g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle='rgba(255,197,61,.16)';
+          for(let r=0;r<5;r++)for(let c=0;c<3;c++)
+            if((r*3+c+Math.floor(d.x))%3!==0)g.fillRect(d.x+12+c*32,d.y+18+r*46,18,22);
+          break;
+        case 'poste':{
+          g.fillStyle='rgba(255,255,255,.18)';g.fillRect(d.x,d.y,d.w,d.h);
+          const grad=g.createRadialGradient(d.x+6,d.y,4,d.x+6,d.y,110);
+          grad.addColorStop(0,'rgba(255,214,120,.42)');
+          grad.addColorStop(1,'rgba(255,214,120,0)');
+          g.fillStyle=grad;g.beginPath();g.arc(d.x+6,d.y,110,0,Math.PI*2);g.fill();
+          break;
+        }
+        case 'casa':
+          g.fillStyle='rgba(0,0,0,.3)';g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle=f.detalhe;g.globalAlpha=.2;
+          g.beginPath();g.moveTo(d.x-10,d.y);g.lineTo(d.x+d.w/2,d.y-46);g.lineTo(d.x+d.w+10,d.y);g.closePath();g.fill();
+          g.globalAlpha=1;
+          g.fillStyle='rgba(255,197,61,.18)';g.fillRect(d.x+30,d.y+40,44,44);
+          g.fillRect(d.x+108,d.y+40,44,44);
+          break;
+        case 'varal':{
+          g.strokeStyle='rgba(255,255,255,.2)';g.lineWidth=2;
+          g.beginPath();g.moveTo(d.x,d.y);g.quadraticCurveTo(d.x+d.w/2,d.y+16,d.x+d.w,d.y);g.stroke();
+          const cores=['#43E098','#FFC53D','#C99BFF','#FF8FB0'];
+          for(let i=0;i<4;i++){
+            g.fillStyle=cores[i];g.globalAlpha=.5;
+            g.fillRect(d.x+22+i*34,d.y+8+Math.sin(Jogo.tempoTotal*2+i)*2,20,26);
+          }
+          g.globalAlpha=1;
+          break;
+        }
+        case 'bandeira':{
+          g.fillStyle='rgba(255,255,255,.2)';g.fillRect(d.x,d.y,4,d.h);
+          g.fillStyle=d.cor;g.globalAlpha=.55;
+          g.beginPath();g.moveTo(d.x+4,d.y);
+          g.lineTo(d.x+4+d.w,d.y+10+Math.sin(Jogo.tempoTotal*2+d.anim)*5);
+          g.lineTo(d.x+4,d.y+34);g.closePath();g.fill();
+          g.globalAlpha=1;
+          break;
+        }
+      }
+    }
+  },
+
+  solidos(g){
+    const f=this.faseAtual;
+    for(const s of Mundo.solidos){
+      if(s.x+s.w<Cam.ox-80||s.x>Cam.ox+Vista.larg+80)continue;
+      if(s.quebrando&&s.sumiu){
+        g.globalAlpha=.16;
+        g.fillStyle=f.detalhe;
+        g.fillRect(s.x,s.y,s.w,4);
+        g.globalAlpha=1;
+        continue;
+      }
+      if(s.tipo==='passagem'){
+        g.fillStyle=f.detalhe;
+        g.globalAlpha=.85;
+        g.fillRect(s.x,s.y,s.w,7);
+        g.globalAlpha=.3;
+        g.fillRect(s.x,s.y+7,s.w,4);
+        g.globalAlpha=1;
+        continue;
+      }
+      const cor=s.cor||f.chao;
+      g.fillStyle=cor;
+      g.fillRect(s.x,s.y,s.w,s.h);
+      /* topo iluminado */
+      g.fillStyle=f.detalhe;
+      g.globalAlpha=s.quebrando?(s.caindo?.5+Math.sin(Jogo.tempoTotal*30)*.3:.75):.85;
+      g.fillRect(s.x,s.y,s.w,5);
+      g.globalAlpha=.14;
+      g.fillRect(s.x,s.y+5,s.w,10);
+      g.globalAlpha=1;
+      if(s.movel){
+        g.fillStyle='rgba(255,255,255,.22)';
+        for(let i=8;i<s.w-8;i+=22)g.fillRect(s.x+i,s.y+9,10,3);
+      }
+      if(!s.movel&&!s.quebrando&&s.h>60){
+        g.fillStyle='rgba(0,0,0,.16)';
+        for(let i=0;i<s.w;i+=48)g.fillRect(s.x+i,s.y+22,44,3);
+      }
+    }
+  },
+
+  perigos(g){
+    for(const p of Mundo.perigos){
+      if(p.x+p.w<Cam.ox-60||p.x>Cam.ox+Vista.larg+60)continue;
+      g.fillStyle='#FF5470';
+      for(let i=0;i<p.w;i+=20){
+        g.beginPath();
+        g.moveTo(p.x+i,p.y+p.h);
+        g.lineTo(p.x+i+10,p.y);
+        g.lineTo(p.x+i+20,p.y+p.h);
+        g.closePath();g.fill();
+      }
+      g.fillStyle='rgba(255,255,255,.3)';
+      g.fillRect(p.x,p.y+p.h-3,p.w,3);
+    }
+  },
+
+  checkpoints(g){
+    for(const c of Mundo.checkpoints){
+      if(c.x<Cam.ox-80||c.x>Cam.ox+Vista.larg+80)continue;
+      g.fillStyle='rgba(255,255,255,.28)';
+      g.fillRect(c.x+10,c.y,6,c.h);
+      const on=c.ativo;
+      g.fillStyle=on?'#43E098':'rgba(201,211,240,.35)';
+      const ond=on?Math.sin(c.anim*3)*4:0;
+      g.beginPath();
+      g.moveTo(c.x+16,c.y+6);
+      g.lineTo(c.x+62+ond,c.y+18);
+      g.lineTo(c.x+16,c.y+34);
+      g.closePath();g.fill();
+      if(on){
+        g.fillStyle='rgba(67,224,152,.18)';
+        g.beginPath();g.arc(c.x+13,c.y+20,26+Math.sin(c.anim*2)*4,0,Math.PI*2);g.fill();
+      }
+    }
+  },
+
+  saida(g){
+    const s=Mundo.saida;
+    if(!s)return;
+    if(s.x<Cam.ox-160||s.x>Cam.ox+Vista.larg+160)return;
+    const pulso=Math.sin(s.anim*2.6)*.5+.5;
+    const grad=g.createLinearGradient(s.x,s.y,s.x,s.y+s.h);
+    grad.addColorStop(0,'#43E098');
+    grad.addColorStop(1,'#1B4FD8');
+    g.globalAlpha=.24+pulso*.16;
+    g.fillStyle='#43E098';
+    g.beginPath();g.arc(s.x+s.w/2,s.y+s.h/2,72+pulso*10,0,Math.PI*2);g.fill();
+    g.globalAlpha=1;
+    g.fillStyle=grad;
+    g.fillRect(s.x,s.y,s.w,s.h);
+    g.fillStyle='rgba(255,255,255,.8)';
+    g.fillRect(s.x,s.y,s.w,5);
+    g.fillStyle='#0C1226';
+    g.font='700 13px system-ui,sans-serif';
+    g.textAlign='center';
+    g.fillText('SAÍDA',s.x+s.w/2,s.y+s.h/2+5);
+    g.textAlign='left';
+    for(let i=0;i<3;i++){
+      const py=s.y+s.h-((s.anim*40+i*32)%s.h);
+      g.fillStyle='rgba(255,255,255,.35)';
+      g.fillRect(s.x+10+i*18,py,5,12);
+    }
+  },
+
+  itens(g){
+    for(const it of Mundo.itens){
+      if(it.x<Cam.ox-60||it.x>Cam.ox+Vista.larg+60)continue;
+      const cx=it.x+it.w/2, cy=it.y+it.h/2;
+      if(it.tipo==='selo'){
+        const gir=Math.abs(Math.cos(it.anim*2.4));
+        g.fillStyle='#FFC53D';
+        g.beginPath();g.ellipse(cx,cy,it.w/2*(.35+gir*.65),it.h/2,0,0,Math.PI*2);g.fill();
+        g.fillStyle='#FFE9AE';
+        g.beginPath();g.ellipse(cx-1,cy-2,it.w/5*(.35+gir*.65),it.h/5,0,0,Math.PI*2);g.fill();
+      }else if(it.tipo==='vida'){
+        g.fillStyle='#43E098';
+        this.coracao(g,cx,cy,12);
+        g.fillStyle='rgba(255,255,255,.5)';
+        g.beginPath();g.arc(cx-4,cy-4,2.6,0,Math.PI*2);g.fill();
+      }else{
+        const pulso=Math.sin(it.anim*3)*.5+.5;
+        g.globalAlpha=.2+pulso*.2;
+        g.fillStyle='#A855F7';
+        g.beginPath();g.arc(cx,cy,28+pulso*5,0,Math.PI*2);g.fill();
+        g.globalAlpha=1;
+        g.fillStyle='#F2F5FF';
+        g.fillRect(it.x,it.y,it.w,it.h);
+        g.fillStyle='#A855F7';
+        g.fillRect(it.x,it.y,it.w,7);
+        g.fillStyle='#8C97BE';
+        for(let i=0;i<4;i++)g.fillRect(it.x+5,it.y+13+i*5,it.w-10-(i===3?9:0),2.4);
+      }
+    }
+  },
+
+  coracao(g,x,y,r){
+    g.beginPath();
+    g.moveTo(x,y+r*.75);
+    g.bezierCurveTo(x-r*1.3,y-r*.35,x-r*.42,y-r*1.15,x,y-r*.4);
+    g.bezierCurveTo(x+r*.42,y-r*1.15,x+r*1.3,y-r*.35,x,y+r*.75);
+    g.closePath();g.fill();
+  },
+
+  npcs(g){
+    for(const n of Mundo.npcs){
+      if(n.x<Cam.ox-100||n.x>Cam.ox+Vista.larg+100)continue;
+      const bob=Math.sin(n.anim*2)*2.5;
+      g.fillStyle='rgba(0,0,0,.25)';
+      g.beginPath();g.ellipse(n.x+n.w/2,n.y+n.h+3,20,6,0,0,Math.PI*2);g.fill();
+      g.fillStyle='#43E098';
+      g.fillRect(n.x+4,n.y+20+bob,n.w-8,n.h-24);
+      g.fillStyle='#F0C39A';
+      g.beginPath();g.arc(n.x+n.w/2,n.y+13+bob,12,0,Math.PI*2);g.fill();
+      g.fillStyle='#2A1A12';
+      g.beginPath();g.arc(n.x+n.w/2,n.y+8+bob,12,Math.PI,Math.PI*2);g.fill();
+      g.fillStyle='#0C1226';
+      g.fillRect(n.x+n.w/2-5,n.y+12+bob,2.6,3);
+      g.fillRect(n.x+n.w/2+2,n.y+12+bob,2.6,3);
+      /* balão de conversa */
+      const pulso=Math.sin(n.anim*3)*.5+.5;
+      g.globalAlpha=.55+pulso*.4;
+      g.fillStyle='#FFC53D';
+      g.beginPath();
+      g.roundRect?g.roundRect(n.x+n.w/2-13,n.y-26+bob,26,18,5):g.rect(n.x+n.w/2-13,n.y-26+bob,26,18);
+      g.fill();
+      g.fillStyle='#0C1226';
+      for(let i=0;i<3;i++)g.fillRect(n.x+n.w/2-8+i*6,n.y-18+bob,3,3);
+      g.globalAlpha=1;
+    }
+  },
+
+  inimigos(g){
+    for(const e of Mundo.inimigos){
+      if(e.x+e.w<Cam.ox-120||e.x>Cam.ox+Vista.larg+120)continue;
+      g.save();
+      if(!e.vivo){
+        g.globalAlpha=Math.max(0,e.morte/.5);
+        g.translate(0,(1-e.morte/.5)*24);
+      }
+      const pisca=e.piscar>0&&Math.floor(e.piscar*40)%2===0;
+      const c1=pisca?'#FFFFFF':e.def.cor;
+      const c2=pisca?'#FFFFFF':e.def.cor2;
+      const x=e.x,y=e.y,w=e.w,h=e.h,cx=x+w/2,cy=y+h/2;
+      g.fillStyle='rgba(0,0,0,.24)';
+      if(!e.def.voa){g.beginPath();g.ellipse(cx,y+h+3,w*.45,5,0,0,Math.PI*2);g.fill();}
+
+      switch(e.tipo){
+        case 'sobrecarga':{
+          const bal=Math.sin(e.anim*7)*2;
+          for(let i=0;i<3;i++){
+            g.fillStyle=i%2?c2:c1;
+            g.fillRect(x+2+((i%2)?2:0),y+h-14-i*13+bal*(i/2),w-6,13);
+            g.fillStyle='rgba(0,0,0,.18)';
+            g.fillRect(x+2,y+h-14-i*13+bal*(i/2),w-6,3);
+          }
+          g.fillStyle='#0C1226';
+          g.fillRect(cx-9,y+8+bal,4,5);g.fillRect(cx+5,y+8+bal,4,5);
+          g.fillStyle='#FF5470';
+          g.fillRect(cx-7,y+18+bal,14,2.6);
+          break;
+        }
+        case 'relogio':{
+          const esm=e.noChao?1:.86;
+          g.fillStyle=c1;
+          g.beginPath();g.arc(cx,cy,w/2*esm,0,Math.PI*2);g.fill();
+          g.fillStyle=c2;
+          g.beginPath();g.arc(cx,cy,w/2*esm-4,0,Math.PI*2);g.fill();
+          g.strokeStyle='#5C3A10';g.lineWidth=3;g.lineCap='round';
+          const a=e.anim*4;
+          g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a)*10,cy+Math.sin(a)*10);g.stroke();
+          g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a*.4)*7,cy+Math.sin(a*.4)*7);g.stroke();
+          g.fillStyle='#0C1226';
+          g.fillRect(cx-8,cy-11,3.4,4);g.fillRect(cx+5,cy-11,3.4,4);
+          break;
+        }
+        case 'grito':{
+          const abre=e.timer<.45?1:0;
+          g.fillStyle=c1;
+          g.beginPath();
+          g.moveTo(x,y+h);g.lineTo(x+w*.3,y);g.lineTo(x+w,y+h*.35);g.lineTo(x+w*.75,y+h);
+          g.closePath();g.fill();
+          g.fillStyle=c2;
+          g.beginPath();g.arc(x+w*(e.dir>0?.72:.28),y+h*.42,10+abre*4,0,Math.PI*2);g.fill();
+          g.fillStyle='#0C1226';
+          g.beginPath();g.arc(x+w*(e.dir>0?.74:.26),y+h*.44,4.5+abre*3,0,Math.PI*2);g.fill();
+          if(abre){
+            g.strokeStyle='rgba(255,155,122,.75)';g.lineWidth=2.6;
+            for(let i=1;i<=3;i++){
+              g.beginPath();
+              g.arc(x+w*(e.dir>0?.72:.28),y+h*.42,12+i*9,e.dir>0?-.7:Math.PI-.7,e.dir>0?.7:Math.PI+.7);
+              g.stroke();
+            }
+          }
+          break;
+        }
+        case 'sombra':{
+          const persegue=e.estado==='persegue';
+          const ond=Math.sin(e.anim*(persegue?10:4))*3;
+          g.fillStyle=persegue?c2:c1;
+          g.globalAlpha=.92;
+          g.beginPath();
+          g.moveTo(cx,y);
+          g.bezierCurveTo(x+w,y+h*.3,x+w,y+h*.8,cx+ond,y+h);
+          g.bezierCurveTo(x,y+h*.8,x,y+h*.3,cx,y);
+          g.closePath();g.fill();
+          g.globalAlpha=1;
+          g.fillStyle=persegue?'#FF5470':'#C99BFF';
+          g.beginPath();g.arc(cx-6+e.dir*3,y+18,4,0,Math.PI*2);g.fill();
+          g.beginPath();g.arc(cx+6+e.dir*3,y+18,4,0,Math.PI*2);g.fill();
+          if(persegue){
+            g.globalAlpha=.22;g.fillStyle='#FF5470';
+            g.beginPath();g.arc(cx,cy,34+Math.sin(e.anim*9)*5,0,Math.PI*2);g.fill();
+            g.globalAlpha=1;
+          }
+          break;
+        }
+        case 'drone':{
+          const gira=e.anim*16;
+          g.strokeStyle='rgba(127,196,255,.6)';g.lineWidth=2;
+          for(const s of[-1,1]){
+            g.beginPath();
+            g.ellipse(cx+s*(w/2-3),y+4,10,3+Math.abs(Math.sin(gira))*3,0,0,Math.PI*2);
+            g.stroke();
+          }
+          g.fillStyle=c1;
+          g.beginPath();
+          g.roundRect?g.roundRect(x+4,y+8,w-8,h-12,7):g.rect(x+4,y+8,w-8,h-12);
+          g.fill();
+          g.fillStyle=c2;
+          g.beginPath();g.arc(cx+e.dir*5,cy+2,9,0,Math.PI*2);g.fill();
+          g.fillStyle='#0C1226';
+          g.beginPath();g.arc(cx+e.dir*7,cy+2,4.4,0,Math.PI*2);g.fill();
+          g.fillStyle='rgba(255,84,112,.9)';
+          if(Math.sin(e.anim*8)>0)g.fillRect(x+w-9,y+10,4,4);
+          break;
+        }
+        case 'corrente':{
+          g.fillStyle=c1;
+          g.fillRect(x+6,y+10,w-12,h-10);
+          g.fillStyle=c2;
+          g.fillRect(x+6,y+10,w-12,5);
+          for(let i=0;i<3;i++){
+            g.fillStyle='rgba(0,0,0,.3)';
+            g.fillRect(x+10,y+24+i*13,w-20,6);
+          }
+          g.fillStyle='#0C1226';
+          g.fillRect(cx-11,y+16,5,7);g.fillRect(cx+6,y+16,5,7);
+          if(e.estado==='chicote'&&e.golpe>.2){
+            const alc=(1-Math.abs(e.golpe-.31)/.11)*140;
+            g.strokeStyle=c2;g.lineWidth=7;g.lineCap='round';
+            g.beginPath();
+            g.moveTo(e.dir>0?x+w:x,y+22);
+            g.lineTo((e.dir>0?x+w:x)+e.dir*Math.max(0,alc),y+26);
+            g.stroke();
+            g.fillStyle=c2;
+            g.beginPath();g.arc((e.dir>0?x+w:x)+e.dir*Math.max(0,alc),y+26,8,0,Math.PI*2);g.fill();
+          }
+          break;
+        }
+      }
+      /* barra de vida quando levou dano */
+      if(e.vivo&&e.vida<e.vidaMax){
+        g.fillStyle='rgba(0,0,0,.5)';
+        g.fillRect(x,y-10,w,4);
+        g.fillStyle='#FF5470';
+        g.fillRect(x,y-10,w*(e.vida/e.vidaMax),4);
+      }
+      g.restore();
+    }
+  },
+
+  chefe(g,b){
+    if(!b.vivo)return;
+    const cores={1:['#5B3A8C','#C99BFF'],2:['#8C2A3E','#FF5470'],3:['#8C4A6B','#FF8FB0']};
+    const [c1,c2]=cores[b.fase];
+    const pisca=b.piscar>0&&Math.floor(b.piscar*40)%2===0;
+    const cx=b.x+b.w/2, cy=b.y+b.h/2;
+    g.save();
+    /* aura */
+    g.globalAlpha=.22+Math.sin(b.anim*3)*.06;
+    g.fillStyle=c2;
+    g.beginPath();g.arc(cx,cy,b.w*.85,0,Math.PI*2);g.fill();
+    g.globalAlpha=1;
+    /* máscara */
+    g.fillStyle=pisca?'#FFFFFF':c1;
+    g.beginPath();
+    g.moveTo(cx,b.y);
+    g.bezierCurveTo(b.x+b.w,b.y+10,b.x+b.w,b.y+b.h*.72,cx,b.y+b.h);
+    g.bezierCurveTo(b.x,b.y+b.h*.72,b.x,b.y+10,cx,b.y);
+    g.closePath();g.fill();
+    /* olhos */
+    g.fillStyle=pisca?'#0C1226':c2;
+    const olhoY=b.y+b.h*.36;
+    for(const s of[-1,1]){
+      g.beginPath();
+      g.moveTo(cx+s*14,olhoY-8);
+      g.lineTo(cx+s*38,olhoY+2);
+      g.lineTo(cx+s*14,olhoY+12);
+      g.closePath();g.fill();
+    }
+    /* boca conforme a fase */
+    g.strokeStyle=c2;g.lineWidth=5;g.lineCap='round';
+    g.beginPath();
+    if(b.fase===1){g.moveTo(cx-26,b.y+b.h*.68);g.lineTo(cx+26,b.y+b.h*.68);}
+    else if(b.fase===2){g.arc(cx,b.y+b.h*.62,26,.25,Math.PI-.25);}
+    else{g.arc(cx,b.y+b.h*.78,26,Math.PI+.3,-.3);}
+    g.stroke();
+    /* rachaduras conforme perde vida */
+    const dano=1-b.vida/b.vidaMax;
+    if(dano>.15){
+      g.strokeStyle='rgba(255,255,255,.4)';g.lineWidth=2;
+      for(let i=0;i<Math.floor(dano*7);i++){
+        g.beginPath();
+        g.moveTo(cx-30+i*13,b.y+14);
+        g.lineTo(cx-22+i*13,b.y+40+((i*17)%30));
+        g.stroke();
+      }
+    }
+    g.restore();
+
+    /* barra do chefe fixa no topo */
+    const lg=Math.min(Vista.larg*.62,560);
+    const bx=Cam.ox+(Vista.larg-lg)/2, by=Cam.oy+24;
+    g.fillStyle='rgba(12,18,38,.8)';
+    g.fillRect(bx-4,by-4,lg+8,26);
+    g.fillStyle='rgba(255,255,255,.14)';
+    g.fillRect(bx,by,lg,18);
+    g.fillStyle=c2;
+    g.fillRect(bx,by,lg*Math.max(0,b.vida/b.vidaMax),18);
+    for(let i=1;i<3;i++){
+      g.fillStyle='rgba(12,18,38,.85)';
+      g.fillRect(bx+lg*(i/3)-2,by,4,18);
+    }
+    g.fillStyle='#F2F5FF';
+    g.font='700 12px system-ui,sans-serif';
+    g.textAlign='center';
+    g.fillText('O CICLO — '+['','TENSÃO','EXPLOSÃO','LUA DE MEL'][b.fase],bx+lg/2,by+13);
+    g.textAlign='left';
+  },
+
+  projeteis(g){
+    for(const p of Mundo.projeteis){
+      if(p.x<Cam.ox-80||p.x>Cam.ox+Vista.larg+80)continue;
+      const cx=p.x+p.w/2, cy=p.y+p.h/2;
+      if(p.dono==='jogador'){
+        const r=p.raio*(1+Math.sin(p.anim*22)*.12);
+        g.globalAlpha=.3;
+        g.fillStyle=p.forte?'#A855F7':'#C99BFF';
+        g.beginPath();g.arc(cx,cy,r*1.7,0,Math.PI*2);g.fill();
+        g.globalAlpha=1;
+        g.strokeStyle=p.forte?'#FFC53D':'#F2F5FF';
+        g.lineWidth=p.forte?4:3;
+        const dir=p.vx>0?1:-1;
+        for(let i=1;i<=(p.forte?4:3);i++){
+          g.beginPath();
+          g.arc(cx-dir*i*5,cy,r*(i/2.4),dir>0?-.85:Math.PI-.85,dir>0?.85:Math.PI+.85);
+          g.stroke();
+        }
+      }else{
+        g.globalAlpha=.28;
+        g.fillStyle=p.cor||'#FF9B7A';
+        g.beginPath();g.arc(cx,cy,p.raio*1.8,0,Math.PI*2);g.fill();
+        g.globalAlpha=1;
+        g.fillStyle=p.cor||'#FF9B7A';
+        if(p.presente){
+          g.fillRect(cx-p.raio,cy-p.raio,p.raio*2,p.raio*2);
+          g.fillStyle='#FFC53D';
+          g.fillRect(cx-2.5,cy-p.raio,5,p.raio*2);
+          g.fillRect(cx-p.raio,cy-2.5,p.raio*2,5);
+        }else if(p.rasteira){
+          g.beginPath();
+          g.moveTo(cx-p.raio,cy+p.raio);
+          g.lineTo(cx,cy-p.raio);
+          g.lineTo(cx+p.raio,cy+p.raio);
+          g.closePath();g.fill();
+        }else{
+          g.beginPath();g.arc(cx,cy,p.raio,0,Math.PI*2);g.fill();
+          g.fillStyle='rgba(255,255,255,.5)';
+          g.beginPath();g.arc(cx-p.raio*.3,cy-p.raio*.3,p.raio*.34,0,Math.PI*2);g.fill();
+        }
+      }
+    }
+    g.globalAlpha=1;
+  },
+
+  jogador(g){
+    const p=Jog;
+    if(!p.vivo&&p.morrendoTimer<=0)return;
+    if(p.invul>0&&p.vivo&&Math.floor(p.piscar)%2===0)return;
+    const cx=p.x+p.w/2, base=p.y+p.h;
+    const ex=p.esticaX, ey=p.esticaY;
+    const anda=Math.abs(p.vx)>30&&p.noChao;
+    const passo=anda?Math.sin(p.animCaminho*15):0;
+
+    g.save();
+    g.translate(cx,base);
+    g.scale(ex,ey);
+    g.translate(-cx,-base);
+
+    /* sombra */
+    if(p.vivo){
+      g.fillStyle='rgba(0,0,0,.28)';
+      g.beginPath();g.ellipse(cx,base+3,16,5,0,0,Math.PI*2);g.fill();
+    }
+    /* pernas */
+    g.fillStyle='#1B2E52';
+    if(p.noChao){
+      g.fillRect(cx-11+passo*4,base-20,9,20);
+      g.fillRect(cx+2-passo*4,base-20,9,20);
+    }else{
+      g.fillRect(cx-12,base-20,9,18);
+      g.fillRect(cx+3,base-22,9,20);
+    }
+    /* corpo com camiseta */
+    g.fillStyle='#F2F5FF';
+    g.fillRect(cx-13,base-42,26,24);
+    g.fillStyle='#1B4FD8';
+    g.fillRect(cx-13,base-42,26,7);
+    /* crachá do CIEE */
+    g.fillStyle='#C9D3F0';
+    g.fillRect(cx-1,base-38,2,9);
+    g.fillStyle='#FFC53D';
+    g.fillRect(cx-5,base-30,10,8);
+    /* braços */
+    g.fillStyle='#F0C39A';
+    const braco=anda?passo*5:0;
+    g.fillRect(cx-18,base-40+braco,6,17);
+    g.fillRect(cx+12,base-40-braco,6,17);
+    /* cabeça */
+    g.fillStyle='#F0C39A';
+    g.beginPath();g.arc(cx,base-52,12,0,Math.PI*2);g.fill();
+    g.fillStyle='#2A1A12';
+    g.beginPath();g.arc(cx,base-56,12,Math.PI,Math.PI*2);g.fill();
+    g.fillRect(cx-12,base-57,24,4);
+    /* rosto */
+    g.fillStyle='#0C1226';
+    const olhoX=p.dir>0?2:-6;
+    g.fillRect(cx+olhoX-4,base-54,3,4);
+    g.fillRect(cx+olhoX+3,base-54,3,4);
+    if(p.vozCarga>0||p.vozRecarga>.16){
+      g.fillStyle='#0C1226';
+      g.beginPath();g.arc(cx+p.dir*5,base-46,4,0,Math.PI*2);g.fill();
+    }else{
+      g.fillStyle='#0C1226';
+      g.fillRect(cx+olhoX,base-47,6,2);
+    }
+    g.restore();
+
+    /* medidor de carga da voz */
+    if(p.vozCarga>0){
+      const f=p.vozCarga/.62;
+      g.fillStyle='rgba(12,18,38,.6)';
+      g.fillRect(p.x-4,p.y-16,p.w+8,6);
+      g.fillStyle=f>=1?'#FFC53D':'#A855F7';
+      g.fillRect(p.x-4,p.y-16,(p.w+8)*Math.min(1,f),6);
+      if(f>=1){
+        g.globalAlpha=.35+Math.sin(Jogo.tempoTotal*18)*.2;
+        g.fillStyle='#FFC53D';
+        g.beginPath();g.arc(cx,p.y+22,30,0,Math.PI*2);g.fill();
+        g.globalAlpha=1;
+      }
+    }
+    /* recarga da fuga */
+    if(p.podeCorrer&&p.corrRecarga>0){
+      g.fillStyle='rgba(77,139,255,.5)';
+      g.fillRect(p.x,p.y+p.h+6,p.w*(1-p.corrRecarga/.85),3);
+    }
+  },
+
+  /* --- HUD em forma de crachá --- */
+  _margemTopo:null,
+  hud(g){
+    if(this._margemTopo===null){
+      const v=getComputedStyle(document.documentElement).getPropertyValue('--safe-t');
+      this._margemTopo=parseFloat(v)||0;
+    }
+    const e=Math.min(1.25,Math.max(.78,Vista.escala*.72));
+    g.save();
+    g.scale(e,e);
+    const L0=14, T0=14+(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-t'))||0)/e;
+    /* cordão */
+    g.strokeStyle='rgba(168,85,247,.75)';g.lineWidth=5;
+    g.beginPath();g.moveTo(L0+26,T0);g.lineTo(L0+54,T0+16);g.moveTo(L0+82,T0);g.lineTo(L0+54,T0+16);g.stroke();
+    /* corpo do crachá */
+    const cw=192, ch=68, cy=T0+18;
+    g.fillStyle='rgba(12,18,38,.86)';
+    g.beginPath();
+    g.roundRect?g.roundRect(L0,cy,cw,ch,10):g.rect(L0,cy,cw,ch);
+    g.fill();
+    g.strokeStyle='rgba(201,211,240,.28)';g.lineWidth=1.5;g.stroke();
+    g.fillStyle=this.faseAtual.detalhe;
+    g.fillRect(L0,cy,cw,4);
+    /* corações */
+    for(let i=0;i<Jog.vidaMax;i++){
+      const hx=L0+18+i*23, hy=cy+22;
+      if(i<Jog.vida){
+        g.fillStyle='#FF5470';
+        this.coracao(g,hx,hy,9.5);
+        g.fillStyle='rgba(255,255,255,.45)';
+        g.beginPath();g.arc(hx-3,hy-3,2,0,Math.PI*2);g.fill();
+      }else{
+        g.fillStyle='rgba(201,211,240,.2)';
+        this.coracao(g,hx,hy,9.5);
+      }
+    }
+    /* selos e fase */
+    g.fillStyle='#FFC53D';
+    g.beginPath();g.ellipse(L0+20,cy+48,7,7,0,0,Math.PI*2);g.fill();
+    g.fillStyle='#F2F5FF';
+    g.font='700 15px system-ui,sans-serif';
+    g.fillText(String(Jog.selos),L0+32,cy+53);
+    g.font='700 10px ui-monospace,monospace';
+    g.fillStyle='#C9D3F0';
+    g.fillText('FASE '+this.faseAtual.n+' · '+this.faseAtual.tema.toUpperCase().slice(0,17),L0+66,cy+53);
+    /* pontuação */
+    g.font='700 13px ui-monospace,monospace';
+    g.fillStyle='#C9D3F0';
+    g.textAlign='right';
+    const dirX=(Vista.cssL/e)-14;
+    g.fillText(String(Jog.pontos).padStart(6,'0'),dirX,cy+ch+18);
+    g.textAlign='left';
+    /* fichas coletadas */
+    const total=ORDEM_CARTILHA.length;
+    g.fillStyle='rgba(168,85,247,.9)';
+    g.font='700 10px ui-monospace,monospace';
+    g.textAlign='right';
+    g.fillText('CARTILHA '+Jogo.fichas.size+'/'+total,dirX,cy+ch+34);
+    g.textAlign='left';
+    g.restore();
+  }
+};
+/* ============================================================
+   16. INTERFACE (telas em HTML sobre o canvas)
+   ============================================================ */
+const Interface={
+  faixaTimer:0,
+  faixa(txt,tipo){
+    const el=$('#faixa');
+    el.textContent=txt;
+    el.className='on'+(tipo==='verde'?' verde':(tipo==='sol'?' sol':''));
+    this.faixaTimer=3.2;
+  },
+  atualizaFaixa(dt){
+    if(this.faixaTimer>0){
+      this.faixaTimer-=dt;
+      if(this.faixaTimer<=0)$('#faixa').className='';
+    }
+  },
+  mostra(id){
+    document.querySelectorAll('.camada').forEach(c=>c.classList.remove('on'));
+    if(id)$(id).classList.add('on');
+    const jogando=!id&&Jogo.estado==='jogando';
+    $('#topo').classList.toggle('on',jogando);
+    $('#toques').classList.toggle('on',jogando&&Jogo.toqueLigado);
+  },
+  alternaSom(){
+    const on=Som.alterna();
+    this.faixa(on?'Som ligado':'Som desligado',on?'verde':'sol');
+    $('#b-som').style.opacity=on?'1':'.42';
+  },
+  telaCheia(){
+    const el=document.documentElement;
+    if(!document.fullscreenElement&&!document.webkitFullscreenElement){
+      (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);
+      if(screen.orientation&&screen.orientation.lock)
+        screen.orientation.lock('landscape').catch(()=>{});
+    }else{
+      (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);
+    }
+  },
+  checaOrientacao(){
+    const precisa=Vista.retrato&&Vista.cssL<560&&Jogo.estado==='jogando'&&!Jogo.girarDispensado;
+    $('#girar').classList.toggle('on',precisa);
+  },
+
+  /* ---------- Menu ---------- */
+  menu(){
+    const temSalvo=Jogo.faseMax>1;
+    $('#c-menu').innerHTML=`
+      <div class="rolar"><div class="menu-caixa">
+        <div class="marca"><span class="selo">CIEE</span><span class="selo verde">Agosto Lilás</span></div>
+        <h1 class="titulo">Se Liga<br><span class="lilas">Moçada</span></h1>
+        <div class="olho" style="margin-top:12px">A jornada · jogo de plataforma</div>
+        <p class="sub">Cinco fases sobre o que ninguém te conta no primeiro dia: até onde vai o combinado, onde começa o abuso e quem você chama quando precisa.</p>
+        <div class="menu-botoes">
+          <button class="btn" id="m-jogar">${temSalvo?'Continuar da fase '+Jogo.faseMax:'Começar a jornada'}</button>
+          ${temSalvo?'<button class="btn azul" id="m-novo">Começar do início</button>':''}
+          <button class="btn roxo" id="m-cartilha">Abrir a cartilha</button>
+          <button class="btn vazio" id="m-ajuda">Como se joga</button>
+        </div>
+        <div class="aviso"><b>Antes de começar:</b> o jogo trata de assédio e de violência contra a mulher. Se algum tema te tocar de perto, o <b>Ligue 180</b> atende de graça, 24 horas, e aceita denúncia anônima. Emergência: <b>190</b>.</div>
+      </div></div>`;
+    this.mostra('#c-menu');
+    $('#m-jogar').onclick=()=>Jogo.iniciaFase(Jogo.faseMax);
+    if(temSalvo)$('#m-novo').onclick=()=>{Jogo.zera();Jogo.iniciaFase(1);};
+    $('#m-cartilha').onclick=()=>this.cartilha('#c-menu');
+    $('#m-ajuda').onclick=()=>this.ajuda();
+  },
+
+  ajuda(){
+    $('#c-pausa').innerHTML=`
+      <div class="rolar"><div class="painel">
+        <div class="olho">Controles</div>
+        <h2 class="sec">Como se joga</h2>
+        <div class="grade">
+          <div class="verbete"><h4>Andar</h4><p>Setas ou A / D — no celular, os botões redondos da esquerda.</p></div>
+          <div class="verbete"><h4>Pular</h4><p>Espaço, W ou Z — no celular, o botão verde. A partir da fase 2, pule outra vez no ar.</p></div>
+          <div class="verbete"><h4>Usar a voz</h4><p>X, F ou Enter — no celular, o botão roxo. É a sua arma: o que não se resolve no braço se resolve falando.</p></div>
+          <div class="verbete"><h4>Sair da situação</h4><p>Shift ou C — no celular, o botão SAIR. Libera na fase 3 e te tira do lugar sem levar dano.</p></div>
+          <div class="verbete"><h4>Descer</h4><p>Segure a seta para baixo em cima de uma plataforma fina para atravessá-la.</p></div>
+          <div class="verbete"><h4>Pausar</h4><p>ESC ou P. M liga e desliga o som.</p></div>
+        </div>
+        <p style="font-size:13.5px;color:var(--papel-2)">Pisar em cima resolve tarefa acumulada e hora extra. Contra grito, insistência, vigilância e isolamento, só a voz funciona — e isso é de propósito.</p>
+        <button class="btn" id="a-volta">Voltar</button>
+      </div></div>`;
+    this.mostra('#c-pausa');
+    $('#a-volta').onclick=()=>this.menu();
+  },
+
+  /* ---------- Cartilha ---------- */
+  cartilha(voltarPara){
+    const itens=ORDEM_CARTILHA.map(id=>{
+      const f=FICHAS[id];
+      const tem=Jogo.fichas.has(id);
+      return `<div class="verbete${tem?'':' travado'}">
+        <h4>${tem?esc(f.titulo):'Ainda não encontrada'}</h4>
+        <p>${tem?f.txt.replace(/<b>/g,'<b>'):'Colete a ficha roxa na fase de <b>'+esc(f.tema)+'</b>.'}</p>
+      </div>`;
+    }).join('');
+    $('#c-cartilha').innerHTML=`
+      <div class="rolar"><div class="cartilha">
+        <div class="olho">Coletadas ${Jogo.fichas.size} de ${ORDEM_CARTILHA.length}</div>
+        <h2 class="sec">Cartilha de direitos</h2>
+        <div class="grade">${itens}</div>
+        <div class="canais">
+          <h4>Se precisar de ajuda agora</h4>
+          <ul>
+            <li><b>180</b> — Central de Atendimento à Mulher. Gratuita, 24h, aceita denúncia anônima.</li>
+            <li><b>190</b> — Polícia Militar, para emergência.</li>
+            <li><b>100</b> — Disque Direitos Humanos: criança, adolescente e pessoa idosa.</li>
+            <li><b>mpt.mp.br</b> — denúncia trabalhista ao Ministério Público do Trabalho.</li>
+            <li><b>Agente de integração</b> — para qualquer irregularidade no seu estágio.</li>
+          </ul>
+        </div>
+        <button class="btn" id="ct-volta">Voltar</button>
+      </div></div>`;
+    this.mostra('#c-cartilha');
+    $('#ct-volta').onclick=()=>{
+      if(voltarPara==='#c-menu')this.menu();
+      else Jogo.abrePausa();
+    };
+  },
+
+  /* ---------- Ficha de informação ---------- */
+  ficha(id,aoFechar){
+    const f=FICHAS[id];
+    $('#c-ficha').innerHTML=`
+      <div class="rolar"><div class="ficha">
+        <div class="carimbo">${esc(f.tema)}</div>
+        <div class="olho" style="color:#5A6488">Ficha da cartilha</div>
+        <h3>${esc(f.titulo)}</h3>
+        <p>${f.txt}</p>
+        <div class="fonte">${esc(f.fonte)}</div>
+        <button class="btn roxo" id="f-ok">Guardar na cartilha e continuar</button>
+      </div></div>`;
+    this.mostra('#c-ficha');
+    const fechar=()=>{document.removeEventListener('keydown',tecla);aoFechar();};
+    const tecla=ev=>{if(ev.code==='Space'||ev.code==='Enter'||ev.code==='Escape'){ev.preventDefault();fechar();}};
+    $('#f-ok').onclick=fechar;
+    document.addEventListener('keydown',tecla);
+  },
+
+  /* ---------- Quiz ---------- */
+  quiz(fase,aoFim){
+    const perguntas=QUIZZES[fase]||[];
+    let i=0, acertos=0;
+    const mostra=()=>{
+      if(i>=perguntas.length){aoFim(acertos,perguntas.length);return;}
+      const q=perguntas[i];
+      const letras=['A','B','C','D'];
+      $('#c-quiz').innerHTML=`
+        <div class="rolar"><div class="quiz">
+          <div class="olho">Checagem rápida · ${i+1} de ${perguntas.length}</div>
+          <div class="pergunta">${esc(q.p)}</div>
+          <div class="opcoes">${q.o.map((o,k)=>`<button class="opcao" data-k="${k}"><b>${letras[k]}</b>${esc(o)}</button>`).join('')}</div>
+          <div class="feedback" id="q-fb"></div>
+          <button class="btn" id="q-prox" style="display:none;margin-top:14px">${i+1<perguntas.length?'Próxima pergunta':'Ver resultado'}</button>
+        </div></div>`;
+      this.mostra('#c-quiz');
+      const botoes=[...document.querySelectorAll('#c-quiz .opcao')];
+      botoes.forEach(b=>{
+        b.onclick=()=>{
+          const k=+b.dataset.k;
+          const ok=k===q.c;
+          botoes.forEach(x=>{x.disabled=true;x.style.cursor='default';});
+          botoes[q.c].classList.add('certa');
+          if(!ok)b.classList.add('errada');
+          if(ok)acertos++;
+          Som.quiz(ok);
+          const fb=$('#q-fb');
+          fb.className='feedback on '+(ok?'ok':'nao');
+          fb.innerHTML=(ok?'<b>Isso.</b> ':'<b>Quase.</b> ')+esc(q.e);
+          $('#q-prox').style.display='block';
+          $('#q-prox').onclick=()=>{i++;mostra();};
+        };
+      });
+    };
+    mostra();
+  },
+
+  /* ---------- Fim de fase ---------- */
+  fimDeFase(fase,acertos,total){
+    const bonus=acertos*300;
+    Jog.ganha(bonus);
+    const prox=FASES[fase]; /* índice = próxima fase */
+    $('#c-fim').innerHTML=`
+      <div class="rolar"><div class="painel">
+        <div class="olho">Fase ${fase} concluída</div>
+        <h2 class="sec">${esc(FASES[fase-1].nome)}</h2>
+        <p style="color:var(--papel-2);font-size:14.5px">${esc(FASES[fase-1].resumo)}</p>
+        <div class="placar">
+          <div><div class="n">${acertos}/${total}</div><div class="r">no quiz</div></div>
+          <div><div class="n">${Jog.selos}</div><div class="r">selos</div></div>
+          <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
+        </div>
+        ${bonus?`<p style="color:var(--verde-claro);font-size:14px">Bônus de conhecimento: +${bonus} pontos.</p>`:''}
+        ${prox?`<div class="canais" style="background:rgba(77,139,255,.1);border-color:rgba(77,139,255,.4)">
+          <h4 style="color:var(--azul-claro)">A seguir · ${esc(prox.nome)}</h4>
+          <p style="margin:0;font-size:13.5px">${esc(prox.resumo)}</p>
+          <p style="margin:10px 0 0;font-size:13.5px;color:var(--sol)">${esc(prox.poder)}</p>
+        </div>`:''}
+        <div class="linha-btn" style="margin-top:6px">
+          <button class="btn vazio" id="fim-cart">Cartilha</button>
+          <button class="btn verde" id="fim-prox">${prox?'Ir para a fase '+prox.n:'Ver o final'}</button>
+        </div>
+      </div></div>`;
+    this.mostra('#c-fim');
+    $('#fim-cart').onclick=()=>{
+      this.cartilha();
+      $('#ct-volta').onclick=()=>this.fimDeFase(fase,acertos,total);
+    };
+    $('#fim-prox').onclick=()=>{
+      if(prox)Jogo.iniciaFase(prox.n);
+      else Jogo.final();
+    };
+  },
+
+  /* ---------- Final ---------- */
+  final(){
+    const total=ORDEM_CARTILHA.length;
+    const pct=Math.round(Jogo.fichas.size/total*100);
+    $('#c-fim').innerHTML=`
+      <div class="rolar"><div class="painel">
+        <div class="olho">Fim da jornada</div>
+        <h1 class="titulo" style="font-size:clamp(28px,7vw,52px)">O ciclo<br><span class="lilas">se rompeu</span></h1>
+        <p style="color:var(--papel-2);margin-top:16px;font-size:14.5px">O silêncio era o que segurava tudo de pé. Você atravessou cinco fases usando a mesma arma o tempo inteiro: informação e voz. Fora do jogo funciona igual.</p>
+        <div class="placar">
+          <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
+          <div><div class="n">${pct}%</div><div class="r">da cartilha</div></div>
+          <div><div class="n">${Jog.mortes}</div><div class="r">quedas</div></div>
+        </div>
+        <div class="canais">
+          <h4>Guarde estes números</h4>
+          <ul>
+            <li><b>180</b> — Central de Atendimento à Mulher. Gratuita, 24h, anônima, em todo o país.</li>
+            <li><b>190</b> — emergência policial.</li>
+            <li><b>100</b> — Disque Direitos Humanos.</li>
+            <li><b>mpt.mp.br</b> — denúncia trabalhista, também anônima.</li>
+            <li><b>Seu agente de integração</b> — irregularidade no estágio começa a se resolver por aqui.</li>
+          </ul>
+        </div>
+        <div class="linha-btn">
+          <button class="btn roxo" id="v-cart">Ver a cartilha</button>
+          <button class="btn vazio" id="v-menu">Voltar ao início</button>
+        </div>
+      </div></div>`;
+    this.mostra('#c-fim');
+    $('#v-cart').onclick=()=>{this.cartilha();$('#ct-volta').onclick=()=>this.final();};
+    $('#v-menu').onclick=()=>{Jogo.estado='menu';this.menu();};
+  },
+
+  /* ---------- Fim de jogo ---------- */
+  gameOver(){
+    $('#c-fim').innerHTML=`
+      <div class="rolar"><div class="painel">
+        <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].tema)}</div>
+        <h2 class="sec">Dessa vez não deu</h2>
+        <p style="color:var(--papel-2);font-size:14.5px">Você volta no último ponto de retorno com a vida cheia. A cartilha continua com você — o que já foi aprendido não se perde.</p>
+        <div class="linha-btn" style="margin-top:18px">
+          <button class="btn verde" id="go-tenta">Tentar de novo</button>
+          <button class="btn vazio" id="go-menu">Início</button>
+        </div>
+      </div></div>`;
+    this.mostra('#c-fim');
+    $('#go-tenta').onclick=()=>Jogo.iniciaFase(Jogo.fase);
+    $('#go-menu').onclick=()=>{Jogo.estado='menu';this.menu();};
+  },
+
+  /* ---------- Pausa ---------- */
+  pausa(){
+    $('#c-pausa').innerHTML=`
+      <div class="rolar"><div class="painel">
+        <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].tema)}</div>
+        <h2 class="sec">Pausa</h2>
+        <div class="placar">
+          <div><div class="n">${Jog.selos}</div><div class="r">selos</div></div>
+          <div><div class="n">${Jogo.fichas.size}</div><div class="r">fichas</div></div>
+          <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
+        </div>
+        <div class="menu-botoes">
+          <button class="btn verde" id="p-volta">Continuar jogando</button>
+          <button class="btn roxo" id="p-cart">Abrir a cartilha</button>
+          <div class="linha-btn">
+            <button class="btn vazio" id="p-toque">${Jogo.toqueLigado?'Ocultar controles':'Mostrar controles'}</button>
+            <button class="btn vazio" id="p-som">${Som.ligado?'Desligar som':'Ligar som'}</button>
+          </div>
+          <button class="btn vazio" id="p-menu">Sair para o início</button>
+        </div>
+      </div></div>`;
+    this.mostra('#c-pausa');
+    $('#p-volta').onclick=()=>Jogo.fechaPausa();
+    $('#p-cart').onclick=()=>this.cartilha();
+    $('#p-toque').onclick=()=>{Jogo.alternaToque();this.pausa();};
+    $('#p-som').onclick=()=>{this.alternaSom();this.pausa();};
+    $('#p-menu').onclick=()=>{Jogo.estado='menu';this.menu();};
+  },
+
+  /* ---------- Diálogo ---------- */
+  dialogo(id,aoFim){
+    const f=FALAS[id];
+    if(!f){aoFim();return;}
+    let i=0;
+    const el=$('#dialogo');
+    const passa=()=>{
+      if(i>=f.t.length){el.classList.remove('on');aoFim();return;}
+      $('#d-quem').textContent=f.quem;
+      $('#d-fala').textContent=f.t[i];
+      el.classList.add('on');
+      i++;
+    };
+    passa();
+    return passa;
+  }
+};
+
+/* ============================================================
+   17. JOGO — estados e laço principal
+   ============================================================ */
+const Jogo={
+  estado:'abertura',           /* abertura | menu | jogando | pausado | ficha | quiz | dialogo | fim */
+  fase:1,faseMax:1,
+  fichas:new Set(),
+  tempoTotal:0,
+  toqueLigado:false,
+  girarDispensado:false,
+  dialogoPassa:null,
+  ultimoCheck:null,
+  transicao:0,
+  travaEntrada:0,
+
+  inicia(){
+    this.faseMax=clamp(Guarda.ler('faseMax',1),1,5);
+    const salvas=Guarda.ler('fichas',[]);
+    if(Array.isArray(salvas))salvas.forEach(f=>{if(FICHAS[f])this.fichas.add(f);});
+    Jog.pontos=Guarda.ler('pontos',0)||0;
+    /* controles de toque ligados por padrão em telas sensíveis ao toque */
+    const toque=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+    this.toqueLigado=Guarda.ler('toque',toque);
+    $('#b-som').style.opacity=Som.ligado?'1':'.42';
+    this.estado='menu';
+    Interface.menu();
+  },
+  zera(){
+    this.fichas.clear();this.faseMax=1;
+    Jog.pontos=0;Jog.selos=0;Jog.mortes=0;Jog.vida=3;
+    Guarda.gravar('faseMax',1);Guarda.gravar('fichas',[]);Guarda.gravar('pontos',0);
+  },
+  salva(){
+    Guarda.gravar('faseMax',this.faseMax);
+    Guarda.gravar('fichas',[...this.fichas]);
+    Guarda.gravar('pontos',Jog.pontos);
+  },
+  alternaToque(){
+    this.toqueLigado=!this.toqueLigado;
+    Guarda.gravar('toque',this.toqueLigado);
+  },
+
+  iniciaFase(n){
+    this.fase=clamp(n,1,5);
+    this.faseMax=Math.max(this.faseMax,this.fase);
+    Arte.faseAtual=FASES[this.fase-1];
+    Som.mPasso=0;Som.mTimer=0;
+    montaFase(this.fase);
+    /* volta ao último ponto de retorno se estiver repetindo a mesma fase */
+    if(this.ultimoCheck&&this.ultimoCheck.fase===this.fase){
+      const c=Mundo.checkpoints.find(k=>Math.abs(k.x-this.ultimoCheck.x)<6);
+      if(c){
+        c.ativo=true;
+        Mundo.nascer={x:c.x-4,y:c.y+8};
+        Jog.reinicia(Mundo.nascer);
+        Cam.segue(Jog,Mundo,0,true);
+      }
+    }
+    Jog.vida=Math.max(3,Jog.vida);
+    Jog.selos=0;
+    this.estado='jogando';
+    this.transicao=.55;
+    this.travaEntrada=.25;
+    Interface.mostra(null);
+    Interface.checaOrientacao();
+    Interface.faixa('Fase '+this.fase+' · '+Arte.faseAtual.tema,'roxo');
+    setTimeout(()=>{
+      if(this.estado==='jogando')Interface.faixa(Arte.faseAtual.poder,'verde');
+    },3400);
+    this.salva();
+    Som.inicia();Som.acorda();
+    /* atualiza os botões de toque conforme os poderes liberados */
+    $('#t-corr').classList.toggle('oculto',this.fase<3);
+  },
+
+  reviveJogador(){
+    Jog.reinicia(Mundo.nascer);
+    if(Jog.vida<=0){
+      this.estado='fim';
+      Interface.gameOver();
+      Jog.vida=3;
+      return;
+    }
+    Cam.segue(Jog,Mundo,0,true);
+  },
+
+  abreFicha(id){
+    this.fichas.add(id);
+    this.salva();
+    this.estado='ficha';
+    Interface.ficha(id,()=>{
+      this.estado='jogando';
+      this.travaEntrada=.2;
+      Interface.mostra(null);
+    });
+  },
+
+  abreDialogo(id){
+    if(this.estado!=='jogando')return;
+    this.estado='dialogo';
+    this.dialogoPassa=Interface.dialogo(id,()=>{
+      this.estado='jogando';
+      this.dialogoPassa=null;
+      this.travaEntrada=.2;
+      Interface.mostra(null);
+    });
+  },
+
+  completaFase(){
+    if(this.estado!=='jogando')return;
+    this.estado='quiz';
+    Som.fase();
+    Part.solta(Jog.x+16,Jog.y+20,30,['#43E098','#FFC53D','#FFFFFF'],{vel:300,vida:1,tam:7});
+    const f=this.fase;
+    this.faseMax=Math.max(this.faseMax,Math.min(5,f+1));
+    this.salva();
+    setTimeout(()=>{
+      Interface.quiz(f,(acertos,total)=>{
+        if(acertos===total)Jog.cura(2);
+        else if(acertos>0)Jog.cura(1);
+        this.estado='fim';
+        Interface.fimDeFase(f,acertos,total);
+      });
+    },520);
+  },
+
+  venceChefe(){
+    this.estado='quiz';
+    Som.fase();
+    Interface.faixa('Falar quebrou o ciclo.','verde');
+    const f=this.fase;
+    setTimeout(()=>{
+      Interface.quiz(f,(acertos,total)=>{
+        if(acertos>0)Jog.cura(2);
+        this.estado='fim';
+        Interface.fimDeFase(f,acertos,total);
+      });
+    },1600);
+  },
+
+  final(){
+    this.faseMax=5;
+    this.salva();
+    this.estado='fim';
+    Interface.final();
+  },
+
+  pedePausa(){
+    if(this.estado==='jogando')this.abrePausa();
+    else if(this.estado==='pausado')this.fechaPausa();
+  },
+  abrePausa(){
+    this.estado='pausado';
+    Interface.pausa();
+  },
+  fechaPausa(){
+    this.estado='jogando';
+    this.travaEntrada=.2;
+    Interface.mostra(null);
+  },
+
+  /* ---------- laço ---------- */
+  atualiza(dt){
+    this.tempoTotal+=dt;
+    Ent.atualiza();
+    Interface.atualizaFaixa(dt);
+    if(this.travaEntrada>0)this.travaEntrada-=dt;
+    if(this.transicao>0)this.transicao-=dt;
+
+    if(this.estado==='dialogo'){
+      if((Ent.qualquerNova||Ent.puloNovo||Ent.vozNova)&&this.travaEntrada<=0&&this.dialogoPassa){
+        this.travaEntrada=.22;
+        this.dialogoPassa();
+      }
+      Part.atualiza(dt);
+      return;
+    }
+    if(this.estado!=='jogando')return;
+
+    const f=Arte.faseAtual;
+    Som.tocaMusica(dt,f.escala,f.bpm);
+
+    atualizaSolidos(dt);
+    Jog.atualiza(dt);
+    for(const e of Mundo.inimigos){
+      if(!e.vivo&&e.morte<=0)continue;
+      if(e.x<Cam.ox-700||e.x>Cam.ox+Vista.larg+700)continue;
+      atualizaInimigo(e,dt);
+    }
+    for(let i=Mundo.inimigos.length-1;i>=0;i--)
+      if(!Mundo.inimigos[i].vivo&&Mundo.inimigos[i].morte<=0)Mundo.inimigos.splice(i,1);
+    if(Mundo.chefe)atualizaChefe(Mundo.chefe,dt);
+    atualizaProjeteis(dt);
+    atualizaItens(dt);
+    atualizaCenario(dt);
+    Part.atualiza(dt);
+    Cam.segue(Jog,Mundo,dt,false);
+  },
+
+  desenha(){
+    Arte.quadro();
+    if(this.transicao>0){
+      ctx.save();
+      ctx.setTransform(Vista.dpr,0,0,Vista.dpr,0,0);
+      ctx.globalAlpha=clamp(this.transicao/.55,0,1);
+      ctx.fillStyle='#0C1226';
+      ctx.fillRect(0,0,Vista.cssL,Vista.cssA);
+      ctx.restore();
+      ctx.globalAlpha=1;
+    }
+  }
+};
+
+/* ============================================================
+   18. ARRANQUE
+   ============================================================ */
+Ent.inicia();
+Vista.redimensiona();
+addEventListener('resize',()=>Vista.redimensiona());
+addEventListener('orientationchange',()=>setTimeout(()=>Vista.redimensiona(),160));
+document.addEventListener('fullscreenchange',()=>setTimeout(()=>Vista.redimensiona(),120));
+
+$('#b-pausa').onclick=()=>Jogo.pedePausa();
+$('#b-som').onclick=()=>Interface.alternaSom();
+$('#b-tela').onclick=()=>Interface.telaCheia();
+$('#b-girar-ok').onclick=()=>{Jogo.girarDispensado=true;$('#girar').classList.remove('on');};
+$('#dialogo').addEventListener('pointerdown',()=>{
+  if(Jogo.estado==='dialogo'&&Jogo.dialogoPassa&&Jogo.travaEntrada<=0){
+    Jogo.travaEntrada=.22;
+    Jogo.dialogoPassa();
+  }
+});
+tela.addEventListener('pointerdown',()=>{
+  Som.inicia();Som.acorda();
+  if(Jogo.estado==='dialogo'&&Jogo.dialogoPassa&&Jogo.travaEntrada<=0){
+    Jogo.travaEntrada=.22;
+    Jogo.dialogoPassa();
+  }
+});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&Jogo.estado==='jogando')Jogo.abrePausa();
+});
+addEventListener('contextmenu',e=>{if(e.target.closest('#toques'))e.preventDefault();});
+
+let ultimo=performance.now();
+function laco(agora){
+  let dt=(agora-ultimo)/1000;
+  ultimo=agora;
+  if(dt>.05)dt=.05;              /* trava o passo em quedas de quadro */
+  if(dt>0)Jogo.atualiza(dt);
+  Jogo.desenha();
+  requestAnimationFrame(laco);
+}
+
+Jogo.inicia();
+requestAnimationFrame(laco);
+setTimeout(()=>{
+  const ab=$('#abertura');
+  ab.classList.add('sai');
+  setTimeout(()=>ab.remove(),600);
+},420);
+
+})();
+</script></body></html>
