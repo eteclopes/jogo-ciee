@@ -40,32 +40,55 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 .camada{position:absolute;inset:0;display:none;z-index:20}
 .camada.on{display:flex}
-.camada.escura{background:linear-gradient(180deg,rgba(18,10,42,.95),rgba(18,10,42,.99));backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:calc(18px + var(--safe-t)) 18px calc(18px + var(--safe-b))}
+.camada.escura{background:
+    radial-gradient(1200px 600px at 50% -10%,rgba(168,85,247,.22),transparent 70%),
+    repeating-linear-gradient(135deg,rgba(255,255,255,.022) 0 2px,transparent 2px 22px),
+    linear-gradient(180deg,rgba(14,8,32,.97),rgba(10,6,24,.99));
+  backdrop-filter:blur(7px);align-items:center;justify-content:center;
+  padding:calc(20px + var(--safe-t)) 18px calc(20px + var(--safe-b))}
 .rolar{max-height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;width:100%;display:flex;align-items:center;justify-content:center}
 
 .display{font-family:var(--display);letter-spacing:-.02em;line-height:.92;text-transform:uppercase}
-.olho{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--papel-2)}
-h1.titulo{font-family:var(--display);font-size:clamp(32px,8vw,66px);line-height:.88;margin:0;text-transform:uppercase;letter-spacing:-.03em}
-h1.titulo .lilas{color:var(--lilas-claro)}
+.olho{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--lilas-claro);
+  display:inline-flex;align-items:center;gap:8px}
+.olho::before{content:'';width:22px;height:2px;background:var(--lilas);display:inline-block;border-radius:2px}
+.linha-fina{color:var(--papel-2);font-size:13.5px;line-height:1.6;margin:0 0 4px;max-width:60ch}
+.cartao{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.022));
+  border:1px solid rgba(199,190,230,.18);border-radius:16px;padding:20px 20px 18px;position:relative;overflow:hidden}
+.cartao::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--lilas),var(--sol),var(--verde-claro))}
+.divisor{height:1px;background:linear-gradient(90deg,rgba(199,190,230,.3),transparent);margin:18px 0 14px}
+h1.titulo{font-family:var(--display);font-size:clamp(34px,8.4vw,70px);line-height:.86;margin:0;text-transform:uppercase;letter-spacing:-.035em;
+  text-shadow:0 0 34px rgba(168,85,247,.5)}
+h1.titulo .lilas{color:var(--lilas-claro);display:inline-block;animation:respira 4.5s ease-in-out infinite}
+@keyframes respira{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+h2.sec{position:relative;padding-left:16px}
+h2.sec::before{content:'';position:absolute;left:0;top:.12em;bottom:.18em;width:5px;border-radius:3px;
+  background:linear-gradient(180deg,var(--lilas),var(--sol))}
 h2.sec{font-family:var(--display);font-size:clamp(20px,4.6vw,32px);margin:0 0 10px;text-transform:uppercase;letter-spacing:-.02em}
 p{line-height:1.55;margin:0 0 12px}
 
-.btn{font-family:var(--display);text-transform:uppercase;font-size:clamp(15px,3.4vw,19px);
-  border:0;border-radius:12px;padding:15px 22px;cursor:pointer;color:#1b0733;background:var(--sol);
-  box-shadow:0 5px 0 #b8862a;transition:transform .07s,box-shadow .07s;width:100%;display:block}
+.btn{font-family:var(--display);text-transform:uppercase;font-size:clamp(15px,3.4vw,19px);letter-spacing:.005em;
+  border:0;border-radius:13px;padding:16px 22px;cursor:pointer;color:#1b0733;
+  background:linear-gradient(180deg,#FFD770,var(--sol));
+  box-shadow:0 5px 0 #b8862a, 0 10px 24px rgba(255,197,61,.18);
+  transition:transform .07s,box-shadow .07s,filter .15s;width:100%;display:block;position:relative}
+.btn:hover{filter:brightness(1.06)}
 .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #b8862a}
 .btn:focus-visible{outline:3px solid var(--lilas-claro);outline-offset:3px}
-.btn.roxo{background:var(--lilas-claro);box-shadow:0 5px 0 #6b28b0;color:#1b0733}
+.btn.roxo{background:linear-gradient(180deg,#DCC0FF,var(--lilas-claro));box-shadow:0 5px 0 #6b28b0,0 10px 24px rgba(168,85,247,.22);color:#1b0733}
 .btn.roxo:active{box-shadow:0 1px 0 #6b28b0}
-.btn.verde{background:var(--verde-claro);box-shadow:0 5px 0 #10784a;color:#042315}
+.btn.verde{background:linear-gradient(180deg,#6FF0B6,var(--verde-claro));box-shadow:0 5px 0 #10784a,0 10px 24px rgba(67,224,152,.2);color:#042315}
 .btn.verde:active{box-shadow:0 1px 0 #10784a}
-.btn.vazio{background:transparent;color:var(--papel);box-shadow:inset 0 0 0 2px rgba(199,190,230,.4)}
+.btn.vazio{background:rgba(255,255,255,.03);color:var(--papel);box-shadow:inset 0 0 0 2px rgba(199,190,230,.32)}
+.btn.vazio:hover{background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 2px rgba(199,190,230,.55)}
 .btn.vazio:active{transform:translateY(2px)}
 .linha-btn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 .menu-caixa{max-width:580px;width:100%;text-align:left}
 .marca{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.marca .selo{font-family:var(--display);font-size:12px;background:var(--lilas-fundo);color:#fff;padding:6px 10px;border-radius:6px;letter-spacing:.03em}
+.marca .selo{font-family:var(--display);font-size:11.5px;background:var(--lilas-fundo);color:#fff;padding:7px 11px;border-radius:7px;
+  letter-spacing:.04em;box-shadow:0 3px 12px rgba(109,40,217,.35)}
 .marca .selo.azul{background:#1B4FD8}
 .sub{color:var(--papel-2);font-size:clamp(13px,3.2vw,16px);margin:14px 0 20px;max-width:46ch}
 .menu-botoes{display:flex;flex-direction:column;gap:10px}
@@ -74,8 +97,9 @@ p{line-height:1.55;margin:0 0 12px}
 
 .painel{max-width:620px;width:100%}
 .placar{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}
-.placar div{background:rgba(255,255,255,.05);border-radius:11px;padding:13px 10px;text-align:center;border:1px solid rgba(199,190,230,.14)}
-.placar .n{font-family:var(--display);font-size:clamp(21px,5vw,30px);color:var(--sol);line-height:1}
+.placar div{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border-radius:13px;padding:14px 10px;
+  text-align:center;border:1px solid rgba(199,190,230,.16)}
+.placar .n{font-family:var(--display);font-size:clamp(21px,5vw,30px);color:var(--sol);line-height:1;text-shadow:0 0 18px rgba(255,197,61,.35)}
 .placar .r{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--papel-2);margin-top:6px}
 .canais{background:rgba(168,85,247,.13);border:1px solid rgba(168,85,247,.42);border-radius:12px;padding:16px;margin:16px 0}
 .canais h4{font-family:var(--display);font-size:15px;margin:0 0 10px;text-transform:uppercase;color:var(--lilas-claro)}
@@ -103,11 +127,25 @@ p{line-height:1.55;margin:0 0 12px}
 .verbete p{font-size:12.8px;color:var(--papel-2);margin:0;line-height:1.45}
 .verbete.travado{border-left-color:rgba(199,190,230,.2);opacity:.4}
 .verbete .fonte{font-family:var(--mono);font-size:10px;color:var(--lilas-claro);margin-top:8px;letter-spacing:.04em}
-.cartilha{max-width:820px;width:100%}
+.cartilha{max-width:860px;width:100%}
+.bichos{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;margin:16px 0 20px}
+.bicho{display:flex;gap:14px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(199,190,230,.16);border-radius:14px;padding:14px;align-items:flex-start}
+.bicho.travado{opacity:.42}
+.bicho .retrato{flex:0 0 76px;height:76px;border-radius:12px;background:rgba(18,10,42,.6);
+  border:1px solid rgba(199,190,230,.2);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bicho .retrato img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
+.bicho .retrato span{font-family:var(--display);font-size:26px;color:rgba(199,190,230,.4)}
+.bicho .dados{flex:1;min-width:0}
+.bicho h4{font-family:var(--display);font-size:14.5px;margin:2px 0 7px;text-transform:uppercase;line-height:1.1;color:var(--papel)}
+.bicho p{font-size:12.8px;color:var(--papel-2);margin:0;line-height:1.5}
+.bicho .como{margin-top:9px;font-size:12.2px;color:var(--verde-claro);border-top:1px dashed rgba(199,190,230,.22);padding-top:8px;line-height:1.45}
+.bicho .como b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--papel-2);margin-bottom:3px}
 .abas{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
-.aba{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:8px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(199,190,230,.2);color:var(--papel-2);cursor:pointer}
-.aba.on{background:var(--lilas);border-color:var(--lilas);color:#fff}
+.aba{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:9px 13px;border-radius:9px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(199,190,230,.2);color:var(--papel-2);cursor:pointer;transition:.14s}
+.aba:hover{border-color:var(--lilas-claro);color:var(--papel)}
+.aba.on{background:linear-gradient(180deg,#C084FC,var(--lilas));border-color:var(--lilas);color:#fff;box-shadow:0 4px 14px rgba(168,85,247,.35)}
 .palavra{display:flex;gap:6px;margin:10px 0 0}
 .palavra span{font-family:var(--display);font-size:15px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
   border-radius:6px;background:rgba(255,255,255,.06);border:1.5px solid rgba(199,190,230,.25);color:var(--papel-2)}
@@ -127,6 +165,8 @@ p{line-height:1.55;margin:0 0 12px}
 #faixa.on{opacity:1;transform:translateX(-50%) translateY(4px)}
 #faixa.verde{background:var(--verde)}
 #faixa.sol{background:var(--sol);color:#1b0733}
+#faixa.quemé{background:linear-gradient(180deg,rgba(18,10,42,.96),rgba(30,16,58,.96));border:2px solid var(--sol);
+  color:var(--sol);text-transform:none;font-family:var(--corpo);font-weight:700;font-size:14.5px;letter-spacing:0}
 #faixa.mural{background:rgba(18,10,42,.94);border:2px solid var(--lilas-claro);color:var(--lilas-claro);text-transform:none;font-family:var(--corpo);font-weight:600;font-size:14px}
 
 /* CONTROLES: só esquerda, direita e pular */
@@ -316,6 +356,32 @@ const Som={
   }
 };
 
+/* ---------- 3b. Folha de sprites (opcional) ----------
+   Se não houver folha configurada, ou se ela falhar em carregar,
+   o jogo continua com a Manu desenhada por código. Nunca quebra. */
+const Sprites={
+  img:null,pronto:false,erro:false,cfg:null,
+  carrega(cfg){
+    this.cfg=cfg;
+    if(!cfg||!cfg.fonte)return;
+    const im=new Image();
+    im.onload=()=>{
+      if(!cfg.larg||!cfg.alt){
+        let maior=0;
+        for(const k in cfg.poses)for(const q of cfg.poses[k].q)if(q>maior)maior=q;
+        cfg.larg=cfg.larg||Math.round(im.width/(maior+1));
+        cfg.alt=cfg.alt||im.height;
+      }
+      this.img=im;this.pronto=true;
+    };
+    im.onerror=()=>{
+      this.erro=true;
+      if(window.console)console.warn('Folha de sprites não carregou; usando a Manu desenhada.');
+    };
+    im.src=cfg.fonte;
+  }
+};
+
 /* ---------- 4. Entrada: teclado, toque e gamepad ---------- */
 const Ent={
   esq:false,dir:false,baixo:false,pulo:false,puloNovo:false,
@@ -407,7 +473,7 @@ const Vista={
   }
 };
 const Cam={
-  x:0,y:0,alvoX:0,alvoY:0,tremor:0,tremorX:0,tremorY:0,
+  x:0,y:0,alvoX:0,alvoY:0,tremor:0,tremorX:0,tremorY:0,zoom:1,zoomAlvo:1,
   segue(p,mundo,dt,instantaneo){
     const olhar=clamp(p.vx*.45,-140,140);
     this.alvoX=p.x+p.w/2-Vista.larg/2+olhar;
@@ -427,8 +493,12 @@ const Cam={
       const f=this.tremor*this.tremor*16;
       this.tremorX=rnd(-f,f);this.tremorY=rnd(-f,f);
     }else{this.tremorX=this.tremorY=0;}
+    /* soco de zoom: estica rápido e volta devagar */
+    this.zoomAlvo=aprox(this.zoomAlvo,1,dt*.9);
+    this.zoom=lerp(this.zoom,this.zoomAlvo,1-Math.pow(.0001,dt));
   },
   sacode(f){this.tremor=Math.max(this.tremor,f);},
+  soco(f){this.zoomAlvo=Math.max(this.zoomAlvo,1+f);this.zoom=Math.max(this.zoom,1+f*.7);},
   get ox(){return this.x+this.tremorX;},
   get oy(){return this.y+this.tremorY;}
 };
@@ -592,10 +662,65 @@ const MURAL_POR_ID={};
 for(const m of ORDEM_MURAIS)MURAL_POR_ID[m.id]=m;
 
 /* ============================================================
+   FOLHA DE SPRITES DA MANU
+   Deixe "fonte" vazio para usar a Manu desenhada por código.
+   Para trocar por arte própria: rode o fatiar.py na sua folha,
+   cole aqui o data:image/png;base64 (ou o nome do arquivo .png)
+   e confira os índices dos quadros em "poses".
+   ============================================================ */
+const FOLHA_MANU={
+  fonte:'',              /* '' = arte desenhada · 'manu.png' · 'data:image/png;base64,...' */
+  larg:0, alt:0,         /* tamanho de cada quadro no atlas; 0 = descobre sozinho */
+  alturaMundo:62,        /* altura da Manu em unidades do jogo (a colisão continua 52) */
+  desloqueY:3,           /* ajuste fino dos pés */
+  poses:{
+    parado:{q:[0,1,2,3],       fps:6},
+    voz:   {q:[4],             fps:1},
+    corre: {q:[5,6,7,8,9,10],  fps:14},
+    pulo:  {q:[11],            fps:1},
+    caindo:{q:[12],            fps:1},
+    dano:  {q:[14],            fps:1},
+    caido: {q:[15],            fps:1}
+  }
+};
+
+/* ============================================================
    As letras C-I-E-E espalhadas pelo mapa.
    Juntar as quatro é o que abre a saída da fase.
    ============================================================ */
 const PALAVRA=['C','I','E','E'];
+
+/* ============================================================
+   Como cada pessoa é desenhada.
+   tipo: idosa | adulta | jovem | crianca
+   extra: oculos | bone | avental | jaleco | cracha | boina | lenco
+   ============================================================ */
+const VISUAIS={
+  vo:      {tipo:'idosa',  pele:'#D9A87F', cabelo:'#D8D2EE', roupa:'#5FBF92', roupa2:'#2E8C63', extra:'oculos'},
+  mae:     {tipo:'adulta', pele:'#C08858', cabelo:'#3A2016', roupa:'#E0704F', roupa2:'#A84A34', extra:'avental'},
+  teo1:    {tipo:'crianca',pele:'#E8B78F', cabelo:'#2A1A12', roupa:'#4D8BFF', roupa2:'#2B4FA8', extra:''},
+  cida:    {tipo:'idosa',  pele:'#8C5A34', cabelo:'#F0EAFA', roupa:'#FFC53D', roupa2:'#C98F1E', extra:'lenco'},
+
+  prof:    {tipo:'adulta', pele:'#E8B78F', cabelo:'#5A3220', roupa:'#43E098', roupa2:'#1E8C5C', extra:'oculos'},
+  bia:     {tipo:'jovem',  pele:'#C08858', cabelo:'#1E1218', roupa:'#FF8AA1', roupa2:'#C4506A', extra:''},
+  jorge:   {tipo:'adulta', pele:'#8C5A34', cabelo:'#3A3A46', roupa:'#4A5A8C', roupa2:'#2B3560', extra:'bone'},
+  duda:    {tipo:'jovem',  pele:'#E8B78F', cabelo:'#C4506A', roupa:'#C99BFF', roupa2:'#8B5FD1', extra:''},
+
+  teo2:    {tipo:'jovem',  pele:'#E8B78F', cabelo:'#2A1A12', roupa:'#2B4FA8', roupa2:'#16306B', extra:'bone'},
+  kaue:    {tipo:'adulta', pele:'#6B4426', cabelo:'#1A1016', roupa:'#8FB6FF', roupa2:'#4D8BFF', extra:'oculos'},
+  rafa:    {tipo:'jovem',  pele:'#C08858', cabelo:'#43E098', roupa:'#1E2A5C', roupa2:'#0F1740', extra:'oculos'},
+  bia3:    {tipo:'jovem',  pele:'#C08858', cabelo:'#1E1218', roupa:'#FF8AA1', roupa2:'#C4506A', extra:''},
+
+  tia:     {tipo:'adulta', pele:'#8C5A34', cabelo:'#4A2A18', roupa:'#FF8AA1', roupa2:'#B04F68', extra:'lenco'},
+  vizinha: {tipo:'idosa',  pele:'#E8B78F', cabelo:'#E7E1FA', roupa:'#9C6AC4', roupa2:'#6B3E96', extra:''},
+  delegada:{tipo:'adulta', pele:'#6B4426', cabelo:'#1A1016', roupa:'#3A4A78', roupa2:'#1E2A50', extra:'cracha'},
+  farmacia:{tipo:'adulta', pele:'#C08858', cabelo:'#5A3220', roupa:'#F4F1FF', roupa2:'#C7BEE6', extra:'jaleco'},
+
+  marcia:  {tipo:'adulta', pele:'#8C5A34', cabelo:'#2A1A12', roupa:'#C99BFF', roupa2:'#8B5FD1', extra:'cracha'},
+  ciee:    {tipo:'adulta', pele:'#E8B78F', cabelo:'#3A3A46', roupa:'#1B4FD8', roupa2:'#12358F', extra:'cracha'},
+  teo3:    {tipo:'jovem',  pele:'#E8B78F', cabelo:'#2A1A12', roupa:'#43E098', roupa2:'#1E8C5C', extra:''},
+  lu:      {tipo:'adulta', pele:'#C08858', cabelo:'#8B5FD1', roupa:'#F4F1FF', roupa2:'#C7BEE6', extra:'jaleco'}
+};
 
 /* ============================================================
    Conversas
@@ -703,19 +828,92 @@ const AVISOS={
   seguidor:['Um a menos repetindo','Parou de repassar','Pensou por conta'],
   alfa:['Sem plateia ele é só um homem','O discurso caiu','Ninguém segue mais'],
   ciume:['Ciúme não é amor','Isso é controle','Ela não é de ninguém'],
-  muro:['"Sempre foi assim" caiu','O silêncio rachou','Alguém falou']
+  muro:['"Sempre foi assim" caiu','O silêncio rachou','Alguém falou'],
+  cobranca:['Não é só obrigação dela','Divide a casa','Cansei de ouvir isso'],
+  turma:['Sozinho ele não ri','A plateia dispersou','Sem graça agora'],
+  bot:['Um a menos repetindo','Parou de espalhar','Perfil derrubado'],
+  ameaca:['Apareceu, caiu','Sem escuro pra esconder','Isso é ameaça, e é crime']
+};
+
+/* ============================================================
+   QUEM É QUEM — o que cada criatura representa na vida real.
+   Aparece em faixa curta no primeiro encontro e completo na Cartilha.
+   ============================================================ */
+const BESTIARIO={
+  piada:{curto:'a piada que testa até onde o grupo aceita',
+    txt:'A piada machista que circula na mesa de jantar, no grupo do trabalho, no recreio. Ela é solta pra ver quem ri. Quando todo mundo ri, deixa de ser humor e vira permissão — o grupo avisou que ali aquilo passa.',
+    como:'Pise em cima, ou use a voz.'},
+  rotulo:{curto:'o rótulo que decide antes da pessoa falar',
+    txt:'"Isso não é pra você", "coisa de menina", "senta direito". São frases que ensinam meninas a ocupar menos espaço e meninos a achar isso natural. Nenhuma delas é sobre capacidade: todas são sobre lugar.',
+    como:'Só cai com a tampa aberta. Fechado, ele não escuta nada.'},
+  cobranca:{curto:'a lista de tarefas que só sobra pra ela',
+    txt:'Arrumar, servir, lembrar, cuidar. No Brasil, mulheres gastam cerca do dobro do tempo dos homens em afazeres domésticos e cuidado — tempo que sai do estudo, do trabalho e do descanso delas.',
+    como:'Pule a onda que ela manda pelo chão e pise quando ela se expuser.'},
+  turma:{curto:'o grupo que ri junto e dá plateia',
+    txt:'Sozinho, quase ninguém repetiria aquilo. A turma é o que transforma um comentário isolado em regra do ambiente. Quem ri junto também sustenta.',
+    como:'Derrube um e os outros perdem o passo.'},
+  comentario:{curto:'o ódio que chega escrito',
+    txt:'Ameaçar, expor, humilhar e perseguir online são formas reais de violência, com efeitos reais. Um comentário parece pouco; mil deles viram um muro. Curtir e repassar também é escrever.',
+    como:'Estoure pulando por baixo, ou cale com a voz.'},
+  seguidor:{curto:'quem repassa sem pensar',
+    txt:'A plateia é o que dá força ao discurso. O alcance não vem de quem fala: vem de quem compartilha. Parar de repassar é uma decisão pequena que tira o chão de quem espalha.',
+    como:'Pise. Sem plateia, o Alfa fica exposto.'},
+  bot:{curto:'o conteúdo que se copia sozinho',
+    txt:'O algoritmo entrega o que prende, não o que faz bem — e raiva prende. Por isso o discurso se replica sozinho: cada segundo parado vira mais um perfil repetindo a mesma coisa.',
+    como:'Derrube rápido, antes que ele copie.'},
+  alfa:{curto:'o influenciador que ensina que ser homem é mandar',
+    txt:'A machosfera é o conjunto de perfis, fóruns e canais que promovem definições cada vez mais estreitas e agressivas de masculinidade, ligando valor de homem a controle, dinheiro e domínio — principalmente sobre as mulheres. Pesquisadores encontram meninos de 12 e 13 anos já dentro disso.',
+    como:'Derrube os seguidores primeiro. Sem plateia, ele é só um homem falando sozinho.'},
+  ciume:{curto:'o controle disfarçado de amor',
+    txt:'Ver o celular todo dia, escolher a roupa, brigar quando ela vê a família. Isso tem nome: violência psicológica, e é crime desde 2021 (art. 147-B do Código Penal). Quase nunca começa no soco — começa exatamente assim.',
+    como:'Espinho em cima: pisar não dá. Ele cega quando persegue — leve até um buraco, ou insista na voz.'},
+  ameaca:{curto:'a violência que aparece e some',
+    txt:'A casa vive em suspense: hoje passa, amanhã não. Some quando tem gente por perto e volta atrás da porta fechada. É o que torna tão difícil provar — e é por isso que registrar data, hora e o que foi dito importa tanto.',
+    como:'Só dá pra atingir quando ela aparece.'},
+  muro:{curto:'a frase que sustenta todo o resto',
+    txt:'"Sempre foi assim", "não se mete", "isso não sai daqui". O silêncio da família, do vizinho e do grupo é o que mantém tudo de pé. A violência de gênero não se sustenta só por quem agride.',
+    como:'Não cai no grito solto. Caia de bem alto por perto, ou use a voz carregada.'},
+  ciclo:{curto:'tensão, explosão e arrependimento',
+    txt:'O ciclo gira em três voltas: a tensão, com clima pesado; a explosão, com a agressão; e a lua de mel, com choro, flor e promessa. A terceira é a que engana, porque faz parecer que passou. Sem ajuda, o ciclo recomeça — mais curto e mais grave.',
+    como:'Só recebe dano quando cai. Pise na cabeça.'}
+};
+
+/* ---- micro-tutoriais pintados no cenário ---- */
+const DICAS={
+  1:[[560,'PULE EM CIMA','das piadas prontas'],
+     [1560,'A TAMPA ABRE E FECHA','só pise com ela aberta'],
+     [2620,'A COBRANÇA MANDA ONDA','pule por cima dela'],
+     [3400,'A TÁBUA DESABA','não pare em cima'],
+     [4560,'ACHE AS 4 LETRAS','sem C-I-E-E a saída não abre']],
+  2:[[1180,'O CIÚME FICA CEGO','deixe ele te seguir até o buraco'],
+     [2140,'ESSA PLATAFORMA ANDA','espere a hora certa'],
+     [3300,'A TURMA ANDA JUNTA','derrube um e os outros correm'],
+     [4400,'MOLA JOGA MAIS ALTO','use pra alcançar o alto']],
+  3:[[640,'PULE POR BAIXO','pra estourar o comentário'],
+     [1560,'O FEED SOME E VOLTA','atravesse quando estiver aceso'],
+     [2100,'O ALFA TEM PLATEIA','derrube os seguidores antes'],
+     [3260,'O BOT SE MULTIPLICA','derrube rápido'],
+     [4300,'SEGURE A VOZ','pra soltar o grito forte']],
+  4:[[880,'SUBA E SE JOGUE','a queda de altura racha o muro'],
+     [2200,'FIQUE EM CIMA','o elevador só sobe com peso'],
+     [3500,'A AMEAÇA SOME','só machuca ela quando aparecer'],
+     [5060,'CUIDADO','o ciúme te segue por tudo']],
+  5:[[860,'TUDO JUNTO AGORA','use o que você aprendeu'],
+     [2560,'A REDE SE ACENDE','pise numa e a próxima aparece'],
+     [4200,'O PORTÃO PEDE AS LETRAS','junte C-I-E-E pra entrar'],
+     [4900,'PISE NA CABEÇA','só quando o Ciclo cair']]
 };
 
 const FASES=[
   {n:1,nome:'Antes da escola',tema:'A cultura machista começa em casa',cor:'#FFC53D',
    resumo:'Sete da manhã. Ninguém grita, ninguém bate. Mas repare em quem levanta pra arrumar a mesa e em quem só senta.',
-   ceu:['#3A2140','#6B3556','#B0644F'],chao:'#5A3243',detalhe:'#FFC53D',
+   ceu:['#4A2E5C','#93547A','#E39A6B'],chao:'#6B3A52',detalhe:'#FFD37A',
    dica:'Pise na piada pronta ou use a VOZ. E ache as quatro letras: sem C-I-E-E a saída não abre.',
    escala:[392,440,494,587,494,440],bpm:96},
 
   {n:2,nome:'O caminho',tema:'Da rua até a escola',cor:'#43E098',
    resumo:'O trajeto de sempre, os apelidos de sempre. E o namorado da Bia checando o celular dela de novo.',
-   ceu:['#123A44','#1B6B63','#3FA37A'],chao:'#1E5348',detalhe:'#43E098',
+   ceu:['#0F3B4A','#1E7A70','#5FBF92'],chao:'#1E5B4E',detalhe:'#6BF0AF',
    dica:'Novo: o CIÚME tem espinho em cima. A voz derruba, mas o rápido é ele te perseguir cego até um buraco.',
    escala:[330,392,440,330,294,392],bpm:104},
 
@@ -727,7 +925,7 @@ const FASES=[
 
   {n:4,nome:'Portas fechadas',tema:'Violência de gênero intrafamiliar',cor:'#FF5470',
    resumo:'A violência dentro de casa quase nunca começa no soco. Começa no controle — e conta com o silêncio de fora.',
-   ceu:['#1A0E22','#3B1732','#6B2440'],chao:'#33162C',detalhe:'#FF5470',
+   ceu:['#251232','#5B2049','#9C3A5A'],chao:'#4A2140',detalhe:'#FF8AA1',
    dica:'Novo: o MURO do "sempre foi assim" não cai no grito solto. Caia de bem alto em cima, ou use a voz carregada.',
    escala:[262,311,349,415,349,311],bpm:98},
 
@@ -746,11 +944,11 @@ const GRAV_SOBE=2000, GRAV_DESCE=2750, VEL_PULO=790;
 const QUEDA_FORTE=165;   /* cair mais que isso vira impacto */
 
 const Mundo={
-  larg:4000,alt:1100,solidos:[],inimigos:[],itens:[],projeteis:[],perigos:[],
-  enfeites:[],npcs:[],murais:[],checkpoints:[],saida:null,nascer:{x:120,y:400},chefe:null,
+  larg:4000,alt:1100,chaoY:900,solidos:[],inimigos:[],itens:[],projeteis:[],perigos:[],
+  enfeites:[],npcs:[],murais:[],dicas:[],checkpoints:[],saida:null,nascer:{x:120,y:400},chefe:null,portao:null,
   limpa(){
     this.solidos=[];this.inimigos=[];this.itens=[];this.projeteis=[];this.perigos=[];
-    this.enfeites=[];this.npcs=[];this.murais=[];this.checkpoints=[];this.saida=null;this.chefe=null;
+    this.enfeites=[];this.npcs=[];this.murais=[];this.dicas=[];this.checkpoints=[];this.saida=null;this.chefe=null;this.portao=null;
   }
 };
 
@@ -935,6 +1133,8 @@ const Jog={
     this.esticaX=1.4;this.esticaY=.62;
     this.impactoBrilho=1;
     Cam.sacode(.35+forca*.4);
+    Cam.soco(.045+forca*.03);
+    Jogo.trava(.085);
     Som.impacto();
     const cx=this.x+this.w/2, py=this.y+this.h;
     for(let i=0;i<16;i++){
@@ -969,6 +1169,7 @@ const Jog={
     this.combo=0;
     Som.dano();
     Cam.sacode(.45);
+    Jogo.trava(.06);
     const d=deX!==undefined?(sign(this.x+this.w/2-deX)||1):-this.dir;
     this.vx=d*290;this.vy=-330;
     Part.solta(this.x+this.w/2,this.y+this.h/2,14,['#FF5470','#FFC53D'],{vel:230,vida:.55,tam:5});
@@ -998,6 +1199,7 @@ const Jog={
   },
   /* quique ao derrubar alguém, com combo se emendar */
   quica(forte){
+    Jogo.trava(forte?.07:.045);
     this.vy=forte?-620:-540;
     this.esticaX=1.24;this.esticaY=.78;
     this.combo++;this.comboT=1.4;
@@ -1016,7 +1218,7 @@ const Jog={
    ============================================================ */
 const TIPOS={
   /* pisar em cima */
-  piada:{nome:'Foi Só Brincadeira',w:42,h:38,vida:1,vel:66,cor:'#C97A2E',cor2:'#FFD08A',
+  piada:{nome:'Foi Só Brincadeira',w:48,h:44,vida:1,vel:66,cor:'#E08A2E',cor2:'#FFF0D6',
     pisavel:true,como:'pisar ou usar a voz',pontos:60},
   /* pisar, mas só com a tampa aberta */
   rotulo:{nome:'Lugar de Mulher',w:44,h:44,vida:2,vel:52,cor:'#8C6A44',cor2:'#D8A96A',
@@ -1038,6 +1240,21 @@ const TIPOS={
     pisavel:false,como:'levar até um buraco, ou insistir na voz',pontos:200,
     recado:'Espinho em cima: pisar não dá. Ele fica cego quando persegue.'},
   /* cair em cima de bem alto */
+  /* Fase 1 — manda onda rasteira; fica exposta ao se recuperar */
+  cobranca:{nome:'A Cobrança',w:46,h:54,vida:2,vel:34,cor:'#B0512E',cor2:'#FFB27A',
+    pisavel:true,como:'pular a onda e pisar na recuperação',pontos:150,
+    recado:'Ela manda onda pelo chão. Pule a onda e pise depois.'},
+  /* Fase 2 — anda em bando; os outros aceleram quando um cai */
+  turma:{nome:'A Turma',w:32,h:38,vida:1,vel:74,cor:'#2E7A63',cor2:'#7FE0B8',
+    pisavel:true,como:'pisar um por um',pontos:70},
+  /* Fase 3 — se multiplica se você demorar */
+  bot:{nome:'O Bot',w:34,h:34,vida:1,vel:66,cor:'#1E3A8C',cor2:'#7FC4FF',
+    pisavel:true,voa:true,como:'derrubar rápido, antes de copiar',pontos:100,
+    recado:'Cada segundo vira mais um. Derrube rápido.'},
+  /* Fase 4 — só existe de verdade quando aparece */
+  ameaca:{nome:'A Ameaça',w:40,h:56,vida:3,vel:62,cor:'#4A1030',cor2:'#FF5470',
+    pisavel:false,fantasma:true,como:'atacar só quando ela aparece',pontos:220,
+    recado:'Some e volta. Só dá pra atingir quando ela aparece.'},
   muro:{nome:'Sempre Foi Assim',w:58,h:460,vida:4,vel:0,cor:'#4A3F5C',cor2:'#8C7BA8',
     pisavel:false,soVozForte:true,semDano:true,como:'cair de altura perto, ou voz carregada',pontos:180,
     recado:'Grito solto não racha frase feita. Caia de bem mais alto — ou carregue a voz.'}
@@ -1050,6 +1267,8 @@ function criaInimigo(tipo,x,y,op){
     tipo,x,y:y-t.h,w:t.w,h:t.h,vx:0,vy:0,dir:op.dir||-1,
     vida:t.vida,vidaMax:t.vida,noChao:false,timer:rnd(0,1.4),estado:'anda',
     piscar:0,atordoado:0,anim:rnd(0,6),vivo:true,morte:0,avisou:false,
+    squash:1,tampa:1,alerta:0,vidaMostra:0,
+    solidez:1,copias:0,bando:null,pressa:0,recarga:0,
     origemX:x,pontos:t.pontos,def:t,seguidores:null,orbita:null
   };
   if(t.voa)e.baseY=y-t.h-(op.altura||0), e.y=e.baseY;
@@ -1070,6 +1289,18 @@ function criaAlfa(x,y,op){
   Mundo.inimigos.push(a);
   return a;
 }
+/* A Turma nasce em trio e reage quando um cai */
+function criaTurma(x,y,n){
+  const grupo=[];
+  for(let i=0;i<(n||3);i++){
+    const e=criaInimigo('turma',x+i*34,y,{dir:-1});
+    e.bando=grupo;
+    grupo.push(e);
+    Mundo.inimigos.push(e);
+  }
+  return grupo;
+}
+
 function plateiaViva(a){
   if(!a.seguidores)return 0;
   let n=0;
@@ -1080,6 +1311,9 @@ function plateiaViva(a){
 function atualizaInimigo(e,dt){
   if(!e.vivo){e.morte-=dt;e.y+=110*dt;return;}
   if(e.piscar>0)e.piscar-=dt;
+  if(e.alerta>0)e.alerta-=dt;
+  if(e.vidaMostra>0)e.vidaMostra-=dt;
+  e.squash=lerp(e.squash,1,1-Math.pow(.002,dt));
   e.anim+=dt;
   if(e.atordoado>0){
     e.atordoado-=dt;
@@ -1108,9 +1342,12 @@ function atualizaInimigo(e,dt){
       e.timer-=dt;
       if(e.timer<=0){
         e.aberto=!e.aberto;
-        e.timer=e.aberto?1.5:1.9;
+        e.timer=e.aberto?1.6:2;
         if(e.aberto)Part.solta(cx,e.y,6,[t.cor2],{vel:80,vida:.3,tam:4,ang:-Math.PI/2});
+        else Som.nota(220,.08,'square',.05);
       }
+      /* a tampa não pula de estado: ela gira */
+      e.tampa=lerp(e.tampa,e.aberto?1:0,1-Math.pow(.004,dt));
       e.vx=e.dir*(e.aberto?t.vel:t.vel*.45);
       e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
       moveCorpo(e,dt);
@@ -1122,7 +1359,10 @@ function atualizaInimigo(e,dt){
       /* flutua, e mergulha quando você passa por baixo */
       if(e.estado==='anda'){
         e.y=e.baseY+Math.sin(e.anim*2.2)*20;
-        if(d<230&&jy>cy){e.estado='mergulha';e.timer=.45;e.alvoX=jx;}
+        if(d<230&&jy>cy){
+          e.estado='mergulha';e.timer=.45;e.alvoX=jx;e.alerta=.45;
+          Som.nota(600,.07,'square',.05);
+        }
       }else if(e.estado==='mergulha'){
         e.timer-=dt;
         if(e.timer>0){e.y+=Math.sin(e.anim*30)*1.2;}
@@ -1195,6 +1435,105 @@ function atualizaInimigo(e,dt){
       }
       break;
     }
+    /* --- A Cobrança: telegrafa, manda onda pelo chão, fica exposta --- */
+    case 'cobranca':{
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      if(e.estado==='anda'){
+        e.vx=e.dir*t.vel;
+        if(d<340&&Math.abs(jy-cy)<130){
+          e.estado='mira';e.timer=.75;e.vx=0;
+          e.dir=sign(jx-cx)||e.dir;
+          Som.nota(280,.1,'square',.06);
+        }
+      }else if(e.estado==='mira'){
+        e.vx=0;e.timer-=dt;
+        if(Math.random()<.35)
+          Part.solta(cx+e.dir*16,e.y+14,1,[t.cor2],{vel:60,vida:.3,tam:3,grav:-50});
+        if(e.timer<=0){
+          e.estado='exposta';e.timer=1.3;
+          Mundo.projeteis.push({x:cx,y:e.y+e.h-24,w:26,h:24,vx:e.dir*260,vy:0,
+            dono:'inimigo',dano:1,vida:3,raio:13,rasteira:true,anim:0});
+          Som.nota(150,.24,'sawtooth',.1,-50);
+          Cam.sacode(.16);
+        }
+      }else{
+        /* exposta: parada, piscando, fácil de pisar */
+        e.vx=0;e.timer-=dt;
+        if(e.timer<=0)e.estado='anda';
+      }
+      moveCorpo(e,dt);
+      if(e.estado==='anda'){
+        if(e.encostouParede)e.dir*=-1;
+        if(e.noChao&&!chaoEm(e.x+e.w/2+e.dir*(e.w/2+8),e.y+e.h+2,40))e.dir*=-1;
+      }
+      break;
+    }
+
+    /* --- A Turma: anda em bando e acelera quando um cai --- */
+    case 'turma':{
+      if(e.pressa>0)e.pressa-=dt;
+      const v=t.vel*(e.pressa>0?1.5:1);
+      if(e.pressa>0&&d<420)e.dir=sign(jx-cx)||e.dir;
+      e.vx=e.dir*v;
+      e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+      moveCorpo(e,dt);
+      if(e.encostouParede)e.dir*=-1;
+      if(e.noChao&&!chaoEm(e.x+e.w/2+e.dir*(e.w/2+7),e.y+e.h+2,40))e.dir*=-1;
+      break;
+    }
+
+    /* --- O Bot: se multiplica se você demorar --- */
+    case 'bot':{
+      const alvo=d<520?jx-e.w/2:e.origemX;
+      e.x=aprox(e.x,alvo,t.vel*dt);
+      e.y=e.baseY+Math.sin(e.anim*2.6)*16;
+      e.dir=sign(jx-cx)||e.dir;
+      e.timer-=dt;
+      if(e.timer<=0&&e.copias<2&&Mundo.inimigos.filter(o=>o.tipo==='bot'&&o.vivo).length<6){
+        e.timer=5;
+        e.copias++;
+        const c=criaInimigo('bot',e.x+rnd(-70,70),e.baseY+e.h,{});
+        c.baseY=e.baseY+rnd(-30,30);
+        c.y=c.baseY;
+        c.copias=1;
+        c.timer=6;
+        Mundo.inimigos.push(c);
+        Part.solta(cx,cy,12,[t.cor2,'#FFFFFF'],{vel:150,vida:.5,tam:4,grav:0});
+        Som.nota(700,.09,'square',.05,-200);
+        Part.texto(cx,e.y-6,'copiou','#7FC4FF');
+      }
+      break;
+    }
+
+    /* --- A Ameaça: só existe quando aparece --- */
+    case 'ameaca':{
+      e.timer-=dt;
+      if(e.estado==='anda'){                       /* visível */
+        e.solidez=aprox(e.solidez,1,dt*4);
+        if(d<400)e.dir=sign(jx-cx)||e.dir;
+        e.vx=e.dir*t.vel;
+        e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
+        moveCorpo(e,dt);
+        if(e.encostouParede)e.dir*=-1;
+        if(e.noChao&&!chaoEm(e.x+e.w/2+e.dir*(e.w/2+8),e.y+e.h+2,40)){e.x-=e.vx*dt;e.vx=0;}
+        if(e.timer<=0){e.estado='some';e.timer=2.1;Som.nota(180,.3,'sine',.06,-90);}
+      }else{                                       /* sumida: intocável */
+        e.solidez=aprox(e.solidez,.12,dt*4);
+        e.vx=0;e.vy=0;
+        if(e.timer<=1.9&&Math.random()<.25)
+          Part.solta(cx,cy,1,[t.cor2],{vel:40,vida:.5,tam:3,grav:-20});
+        if(e.timer<=0){
+          e.estado='anda';e.timer=2.6;
+          /* reaparece perto do jogador, mas nunca em cima dele */
+          const lado=sign(cx-jx)||1;
+          e.x=clamp(jx+lado*rnd(110,190)-e.w/2,20,Mundo.larg-e.w-20);
+          Part.solta(cx,cy,14,[t.cor,t.cor2],{vel:170,vida:.5,tam:5,grav:0});
+          Som.nota(120,.2,'sawtooth',.08);
+        }
+      }
+      break;
+    }
+
     case 'muro':
       /* parado: ele É a parede. Só avisa quem esbarra. */
       if(!e.avisou&&Math.abs((Jog.x+Jog.w/2)-(e.x+e.w/2))<70&&Jog.noChao){
@@ -1210,6 +1549,15 @@ function atualizaInimigo(e,dt){
 function checaContato(e){
   if(!e.vivo||!Jog.vivo||!bate(Jog,e))return;
   const t=e.def;
+  if(t.fantasma&&e.solidez<.6)return;      /* sumida: atravessa */
+  if(e.tipo==='cobranca'&&e.estado!=='exposta'&&Jog.vy>80&&(Jog.y+Jog.h)-e.y<30){
+    /* só dá pra pisar nela na recuperação */
+    if(!e.avisou){e.avisou=true;Interface.faixa(t.recado,'sol');}
+    e.vidaMostra=2;
+    Jog.vy=-330;
+    Som.bloqueado();
+    return;
+  }
   const pisando=Jog.vy>80&&(Jog.y+Jog.h)-e.y<30;
   const porBaixo=Jog.vy<-40&&(e.y+e.h)-Jog.y<30;
 
@@ -1222,11 +1570,13 @@ function checaContato(e){
   }
   if(pisando){
     if(e.tipo==='alfa'&&plateiaViva(e)>0){
+      e.vidaMostra=2;
       if(!e.avisou){e.avisou=true;Interface.faixa(t.recado,'sol');}
       Jog.leva(1,e.x+e.w/2);
       return;
     }
     if(e.tipo==='rotulo'&&!e.aberto){
+      e.vidaMostra=2;e.squash=1.2;
       if(!e.avisou){e.avisou=true;Interface.faixa(t.recado,'sol');}
       Jog.vy=-330;
       Som.nota(150,.14,'square',.1);
@@ -1247,15 +1597,21 @@ function checaContato(e){
 function machucaInimigo(e,dano){
   if(!e.vivo)return;
   e.vida-=dano;e.piscar=.16;
+  e.squash=1.42;
+  e.vidaMostra=2.4;
   Part.solta(e.x+e.w/2,e.y+e.h/2,7,['#FFFFFF',e.def.cor2],{vel:170,vida:.35,tam:4});
   if(e.vida<=0){
     e.vivo=false;e.morte=.5;
     Jog.ganha(e.pontos);
     Som.acerto();
     Cam.sacode(.18);
+    Jogo.trava(.07);
     Part.solta(e.x+e.w/2,e.y+e.h/2,20,[e.def.cor,e.def.cor2,'#FFFFFF'],{vel:260,vida:.75,tam:6});
     const av=AVISOS[e.tipo];
     if(av)Part.texto(e.x+e.w/2,e.y-4,pick(av),'#43E098');
+    if(e.bando){
+      for(const o of e.bando)if(o.vivo){o.pressa=2.2;o.vidaMostra=1.4;}
+    }
     if(e.tipo==='muro'&&e.solido)e.solido.removido=true;
     if(Math.random()<.18)criaItem('vida',e.x+e.w/2-13,e.y+6);
   }else{
@@ -1301,6 +1657,15 @@ function atualizaChefe(b,dt){
 
   switch(b.estado){
     case 'entrada':
+      /* fica só rondando até a Manu pisar na arena */
+      b.y=b.voo+Math.sin(b.anim*2)*16;
+      if(Jog.x+Jog.w/2<ARENA.esq-30){b.timer=1.2;break;}
+      if(b.timer<=0){
+        b.estado='ronda';b.timer=1.8;
+        Interface.faixa('O CICLO — VOLTA 1 · TENSÃO');
+        Cam.sacode(.5);Som.chefe();
+      }
+      break;
     case 'troca':
       b.y=b.voo+Math.sin(b.anim*2)*16;
       if(b.timer<=0){b.estado='ronda';b.timer=b.fase===1?1.8:(b.fase===2?1.2:1.5);}
@@ -1386,7 +1751,8 @@ function machucaChefe(b,dano){
   if(b.invul>0||!b.vivo)return;
   b.vida-=dano;b.piscar=.2;b.invul=.35;
   Som.acerto();
-  Cam.sacode(.4);
+  Cam.sacode(.4);Cam.soco(.05);
+  Jogo.trava(.1);
   Part.solta(b.x+b.w/2,b.y,16,['#FFFFFF','#C99BFF','#FFC53D'],{vel:250,vida:.5,tam:6});
   Part.texto(b.x+b.w/2,b.y-12,'!','#FFC53D');
   if(b.vida<=0){
@@ -1435,6 +1801,24 @@ const L={
       ex:dx,ey:dy,alcance,vel:vel||60,t:0,dx:0,dy:0});
   },
   quebra(x,y,w){Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',quebrando:true,caindo:false,sumiu:false,timer:0,volta:0});},
+  /* FASE 3 — o feed: some e volta no ritmo */
+  pisca(x,y,w,defas,periodo){
+    Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',pisca:true,
+      defas:defas||0,periodo:periodo||2.4,ligado:true,t:0});
+  },
+  /* FASE 4 — elevador: só sobe enquanto tem alguém em cima */
+  elevador(x,y,w,curso,vel){
+    Mundo.solidos.push({x,y,w,h:22,tipo:'bloco',elevador:true,
+      oy:y,curso:curso||150,vel:vel||95,dx:0,dy:0,movel:true,carregado:false});
+  },
+  /* FASE 5 — rede de apoio: pise numa e a próxima acende */
+  rede(x,y,w,grupo,ordem){
+    Mundo.solidos.push({x,y,w,h:20,tipo:'bloco',rede:true,grupo,ordem,
+      aceso:ordem===0,removido:ordem!==0,brilho:0});
+  },
+  /* micro-tutorial pintado no fundo */
+  dica(x,y,titulo,linha){Mundo.dicas.push({x,y:y-150,titulo,linha,anim:rnd(0,6)});},
+  turma(x,y,n){criaTurma(x,y,n);},
   mola(x,y){Mundo.enfeites.push({tipo:'mola',x,y:y-18,w:46,h:18,carga:0});},
   espinho(x,y,w){Mundo.perigos.push({tipo:'espinho',x,y:y-18,w,h:18});},
   letra(i,x,y){criaItem('letra',x,y,i);},
@@ -1449,10 +1833,16 @@ const L={
     e.solido=s;
     Mundo.solidos.push(s);
   },
-  npc(x,y,id){Mundo.npcs.push({x,y:y-58,w:34,h:58,id,anim:rnd(0,6),falou:false});},
+  npc(x,y,id){Mundo.npcs.push({x,y:y-62,w:34,h:62,id,anim:rnd(0,6),falou:false,visual:VISUAIS[id]||null});},
   mural(x,y,dados){Mundo.murais.push({x:x-70,y:y-190,w:140,h:190,dados,disparado:false,anim:rnd(0,6)});},
   check(x,y){Mundo.checkpoints.push({x,y:y-70,w:26,h:70,ativo:false,anim:0});},
   saida(x,y){Mundo.saida={x,y:y-96,w:64,h:96,anim:0,aberta:false,avisoT:0};},
+  /* portão da arena: barra o caminho até você ter as quatro letras */
+  portao(x,y){
+    const s={x,y:y-460,w:46,h:460,tipo:'bloco',cor:'#2A1250',ehPortao:true};
+    Mundo.solidos.push(s);
+    Mundo.portao={solido:s,x,y:y-460,w:46,h:460,aberto:false,selado:false,anim:0,avisoT:0};
+  },
   deco(tipo,x,y,w,h,cor){Mundo.enfeites.push({tipo,x,y,w,h,cor,anim:rnd(0,6)});},
   piso(x0,x1,y,buracos,alt){
     alt=alt||220;
@@ -1467,288 +1857,312 @@ const L={
 };
 
 /* ------------------------------------------------------------
-   FASE 1 — Antes da escola · a cultura machista em casa
-   Ensina: andar, pular, pisar, usar a voz e juntar as letras.
+   FASE 1 — Antes da escola · cultura machista em casa
+   MECÂNICA DA FASE: tábuas que desabam (o arranjo caseiro não segura)
+   INIMIGOS: piada · rótulo · cobrança
    ------------------------------------------------------------ */
 function fase1(){
-  Mundo.larg=5300;Mundo.alt=1000;Mundo.nascer={x:110,y:700};
+  Mundo.larg=5500;Mundo.alt=1000;Mundo.nascer={x:110,y:700};
   const S=820, M=MURAIS[1];
-  L.piso(0,5300,S,[[880,1000],[1560,1690],[2280,2400],[3080,3230],[3900,4030],[4520,4650]]);
-  for(let i=0;i<13;i++)L.deco('casa',150+i*420,S-250,170,250,'#5A3243');
-  for(let i=0;i<8;i++)L.deco('varal',380+i*640,S-300,150,4,'#FFC53D');
+  L.piso(0,5500,S,[[880,1000],[1560,1690],[2280,2400],[3080,3230],[3900,4030],[4560,4700]]);
+  for(let i=0;i<13;i++)L.deco('casa',150+i*430,S-250,170,250,'#6B3A52');
+  for(let i=0;i<8;i++)L.deco('varal',380+i*640,S-300,150,4,'#FFD37A');
 
   L.npc(300,S,'vo');
-  L.mural(520,S,M[0]);
+  L.mural(500,S,M[0]);
   L.inim('piada',700,S,{dir:-1});
   L.passagem(870,712,150);
 
   L.bloco(1180,700,140,24);
-  L.letra(0,1230,640);                    /* C — no caminho, ensina o que é */
+  L.letra(0,1230,640);
   L.inim('piada',1330,S,{dir:-1});
   L.check(1400,S);
-  L.mural(1500,S,M[1]);
+  L.mural(1490,S,M[1]);
 
   L.passagem(1550,706,170);
-  L.npc(1780,S,'mae');
+  L.inim('rotulo',1740,S,{dir:1});      /* no chão firme, depois do vão */
+  L.npc(1800,S,'mae');
   L.bloco(1900,700,140,24);
   L.bloco(2090,610,140,24);
-  L.letra(1,2140,548);                    /* I — subindo dois degraus */
+  L.letra(1,2140,548);
   L.vida(2320,760);
 
   L.passagem(2270,706,150);
-  L.inim('rotulo',2560,S,{dir:-1});
-  L.mural(2620,S,M[2]);
-  L.inim('piada',2760,S,{dir:1});
-  L.check(2900,S);
-  L.npc(3000,S,'teo1');
+  L.inim('cobranca',2680,S,{dir:-1});
+  L.mural(2540,S,M[2]);
+  L.check(2880,S);
+  L.npc(2980,S,'teo1');
 
-  L.bloco(3060,700,150,24);
-  L.passagem(3250,662,160);
-  L.mola(3520,S);
-  L.bloco(3690,548,150,24);
-  L.letra(2,3740,486);                    /* E — só de mola */
-  L.inim('rotulo',3820,S,{dir:-1});
+  /* tábuas que desabam, sobre o vão */
+  L.quebra(3080,700,120);
+  L.quebra(3260,672,120);
+  L.bloco(3440,700,140,24);
+  L.inim('rotulo',3300,S,{dir:-1});
+  L.mola(3620,S);                       /* céu livre: o bloco acaba em 3580 */
+  L.bloco(3690,572,150,24);   /* 248px acima do chão: a mola sobe 292 */
+  L.letra(2,3740,510);
 
   L.passagem(3890,706,170);
-  L.bloco(4130,690,150,24);
-  L.inim('piada',4340,S,{dir:-1});
-  L.check(4440,S);
-  L.mural(4500,S,M[3]);
+  L.inim('cobranca',4120,S,{dir:1});
+  L.bloco(4180,690,150,24);
+  L.check(4460,S);
+  L.mural(4520,S,M[3]);
 
-  L.passagem(4510,706,160);
-  L.npc(4740,S,'cida');
-  L.inim('rotulo',4880,S,{dir:-1});
-  L.bloco(4930,690,140,24);
-  L.letra(3,4980,628);                    /* E — guardado */
-  L.inim('piada',5060,S,{dir:1});
-  L.mural(5100,S,M[4]);
-  L.vida(5140,760);
-  L.saida(5170,S);
+  L.passagem(4550,706,170);
+  L.quebra(4800,690,120);
+  L.npc(4880,S,'cida');
+  L.bloco(5010,684,140,24);
+  L.letra(3,5060,622);
+  L.inim('piada',5160,S,{dir:1});
+  L.mural(5220,S,M[4]);
+  L.vida(5280,760);
+  L.saida(5350,S);
 }
 
 /* ------------------------------------------------------------
    FASE 2 — O caminho · o controle começa
-   Ensina: o Ciúme fica cego e cai sozinho no buraco.
+   MECÂNICA DA FASE: plataformas que andam (ônibus, carrinho, esteira)
+   INIMIGOS: piada · rótulo · ciúme · turma
    ------------------------------------------------------------ */
 function fase2(){
-  Mundo.larg=5900;Mundo.alt=1040;Mundo.nascer={x:110,y:700};
+  Mundo.larg=6000;Mundo.alt=1040;Mundo.nascer={x:110,y:700};
   const S=830, M=MURAIS[2];
-  L.piso(0,5900,S,[[880,1020],[1400,1570],[2280,2440],[3050,3240],[4100,4260],[4620,4810],[5450,5600]]);
-  for(let i=0;i<15;i++)L.deco('predio',140+i*400,S-rnd(190,300),120,320,'#1E5348');
-  for(let i=0;i<10;i++)L.deco('poste',300+i*560,S-160,12,160,'#43E098');
+  L.piso(0,6000,S,[[880,1020],[1400,1570],[2100,2380],[3050,3240],[4080,4360],[4620,4810],[5450,5600]]);
+  for(let i=0;i<15;i++)L.deco('predio',140+i*410,S-rnd(190,300),120,320,'#1E5B4E');
+  for(let i=0;i<10;i++)L.deco('poste',300+i*560,S-160,12,160,'#6BF0AF');
 
   L.npc(300,S,'prof');
-  L.mural(470,S,M[0]);
+  L.mural(460,S,M[0]);
   L.inim('piada',700,S,{dir:-1});
   L.passagem(870,716,170);
-  L.letra(0,930,650);                     /* C */
-  L.check(1150,S);
-  L.mural(1230,S,M[1]);
-  L.inim('ciume',1290,S,{dir:-1});        /* o buraco à frente é a resposta */
+  L.letra(0,930,650);
+  L.check(1130,S);
+  L.mural(1240,S,M[1]);
+  L.inim('ciume',1300,S,{dir:-1});
 
-  L.npc(1720,S,'bia');
-  L.inim('rotulo',1920,S,{dir:-1});
-  L.bloco(2020,706,150,24);
-  L.letra(1,2070,644);                    /* I */
+  L.npc(1700,S,'bia');
+  L.inim('rotulo',1900,S,{dir:-1});
+  L.bloco(1960,706,120,24);
+  L.letra(1,2000,644);
 
-  L.passagem(2270,716,160);
-  L.bloco(2600,700,150,24);
-  L.inim('piada',2660,S,{dir:-1});
-  L.vida(2650,640);
-  L.mural(2820,S,M[2]);
+  /* plataformas móveis sobre o vão largo */
+  L.movel(2110,716,150,22,1,0,210,88);
+  L.movel(2110,616,120,22,0,1,120,64);
+  L.inim('piada',2560,S,{dir:-1});
+  L.bloco(2560,700,150,24);
+  L.vida(2610,640);
+  L.mural(2800,S,M[2]);
   L.inim('ciume',2920,S,{dir:1});
 
   L.check(3320,S);
-  L.npc(3400,S,'jorge');
-  L.mola(3600,S);
-  L.bloco(3760,558,150,24);
-  L.letra(2,3810,496);                    /* E — de mola */
-  L.inim('rotulo',3960,S,{dir:-1});
+  L.turma(3420,S,3);
+  L.npc(3600,S,'jorge');
+  L.mola(3800,S);
+  L.bloco(3940,582,150,24);   /* folga real para a mola */
+  L.letra(2,3990,520);
+  L.inim('rotulo',4020,S,{dir:-1});
 
-  L.passagem(4090,716,170);
-  L.bloco(4330,700,150,24);
-  L.mural(4420,S,M[3]);
-  L.inim('ciume',4520,S,{dir:1});
+  L.movel(4090,716,160,22,1,0,240,104);
+  L.bloco(4400,700,150,24);
+  L.mural(4460,S,M[3]);
+  L.inim('ciume',4560,S,{dir:1});
 
-  L.check(4900,S);
-  L.npc(4980,S,'duda');
-  L.inim('piada',5140,S,{dir:-1});
-  L.bloco(5240,700,150,24);
-  L.inim('rotulo',5300,S,{dir:1});
-  L.mural(5380,S,M[4]);
-  L.passagem(5440,716,170);
-  L.letra(3,5500,650);                    /* E — em cima do último vão */
-  L.bloco(5650,690,150,24);
-  L.vida(5700,630);
-  L.saida(5790,S);
+  L.check(4920,S);
+  L.npc(5000,S,'duda');
+  L.turma(5140,S,3);
+  L.bloco(5280,700,150,24);
+  L.mural(5390,S,M[4]);
+  L.movel(5440,716,170,22,1,0,190,96);
+  L.letra(3,5520,650);
+  L.bloco(5700,690,150,24);
+  L.vida(5750,630);
+  L.saida(5860,S);
 }
 
 /* ------------------------------------------------------------
    FASE 3 — A Machosfera · onde o ódio recruta
-   Ensina: estourar comentário por baixo, voz carregada, plateia do Alfa.
+   MECÂNICA DA FASE: o feed pisca — plataformas que somem e voltam
+   INIMIGOS: comentário · alfa+seguidores · bot · piada
    ------------------------------------------------------------ */
 function fase3(){
-  Mundo.larg=6100;Mundo.alt=1050;Mundo.nascer={x:110,y:700};
+  Mundo.larg=6200;Mundo.alt=1050;Mundo.nascer={x:110,y:700};
   const S=840, M=MURAIS[3];
-  L.piso(0,6100,S,[[900,1040],[1700,1860],[2700,2870],[3520,3690],[4400,4560],[5250,5420]]);
+  L.piso(0,6200,S,[[900,1040],[1500,1900],[2700,2870],[3520,3690],[4400,4560],[5250,5420]]);
   for(let i=0;i<16;i++)L.deco('tela',150+i*380,S-rnd(200,340),100,300,'#141B4D');
-  for(let i=0;i<20;i++)L.deco('bit',120+i*300,S-rnd(120,420),10,10,'#4D8BFF');
+  for(let i=0;i<22;i++)L.deco('bit',120+i*280,S-rnd(120,420),10,10,'#4D8BFF');
 
   L.npc(300,S,'teo2');
-  L.mural(470,S,M[0]);
+  L.mural(440,S,M[0]);
   L.inim('comentario',720,S,{altura:130});
-  L.passagem(890,720,160);
-  L.letra(0,950,654);                     /* C */
+  L.passagem(890,720,150);
+  L.letra(0,940,654);
   L.inim('comentario',1180,S,{altura:100});
-  L.inim('piada',1350,S,{dir:-1});
-  L.check(1520,S);
-  L.mural(1600,S,M[1]);
+  L.check(1380,S);
+  L.mural(1450,S,M[1]);
 
-  L.passagem(1690,718,180);
-  L.npc(1980,S,'kaue');
-  L.alfa(2260,S,{dir:-1});
-  L.bloco(2460,700,150,24);
-  L.letra(1,2510,638);                    /* I — atrás do Alfa */
-  L.vida(2600,760);
+  /* o feed pisca: travessia longa em ritmo */
+  L.pisca(1520,716,120,0,2.4);
+  L.pisca(1700,716,120,.8,2.4);
+  L.pisca(1880,716,120,1.6,2.4);
+  L.inim('bot',1760,S,{altura:150});
+
+  L.npc(2060,S,'kaue');
+  L.alfa(2320,S,{dir:-1});
+  L.bloco(2500,700,150,24);
+  L.letra(1,2550,638);
+  L.vida(2640,760);
 
   L.inim('comentario',2620,S,{altura:150});
   L.passagem(2690,720,180);
   L.mural(2960,S,M[2]);
-  L.inim('comentario',3040,S,{altura:110});
-  L.inim('comentario',3180,S,{altura:170});
-  L.check(3320,S);
-  L.npc(3400,S,'rafa');
+  L.inim('bot',3120,S,{altura:120});
+  L.check(3300,S);
+  L.npc(3380,S,'rafa');
 
-  L.mola(3480,S);
-  L.bloco(3520,566,150,24);
-  L.letra(2,3570,504);                    /* E — de mola */
-  L.passagem(3700,714,170);
-  L.bloco(3920,700,150,24);
-  L.inim('piada',4120,S,{dir:-1});
-  L.mural(4230,S,M[3]);
+  L.mola(3460,S);
+  L.bloco(3500,592,150,24);   /* folga real para a mola */
+  L.letra(2,3550,530);
+  L.pisca(3700,714,130,0,2.2);
+  L.pisca(3880,714,130,1.1,2.2);
+  L.bloco(4060,700,150,24);
+  L.inim('piada',4180,S,{dir:-1});
+  L.mural(4290,S,M[3]);
 
   L.passagem(4390,720,180);
   L.inim('comentario',4620,S,{altura:120});
-  L.alfa(4880,S,{dir:-1});
+  L.alfa(4900,S,{dir:-1});
   L.check(5100,S);
   L.npc(5180,S,'bia3');
 
-  L.passagem(5240,720,180);
-  L.letra(3,5300,654);                    /* E */
-  L.inim('comentario',5560,S,{altura:140});
-  L.bloco(5700,712,150,24);
-  L.mural(5820,S,M[4]);
-  L.vida(5880,760);
-  L.saida(5960,S);
+  L.pisca(5250,720,150,0,2.6);
+  L.pisca(5430,720,150,1.3,2.6);
+  L.letra(3,5300,654);
+  L.inim('bot',5600,S,{altura:160});
+  L.bloco(5760,712,150,24);
+  L.mural(5880,S,M[4]);
+  L.vida(5940,760);
+  L.saida(6060,S);
 }
 
 /* ------------------------------------------------------------
    FASE 4 — Portas fechadas · violência intrafamiliar
-   Ensina: a queda de altura racha o muro do "sempre foi assim".
+   MECÂNICA DA FASE: elevador que só sobe com peso em cima
+   INIMIGOS: muro · ciúme · comentário · ameaça · piada
    ------------------------------------------------------------ */
 function fase4(){
-  Mundo.larg=6100;Mundo.alt=1080;Mundo.nascer={x:110,y:700};
+  Mundo.larg=6200;Mundo.alt=1080;Mundo.nascer={x:110,y:700};
   const S=850, M=MURAIS[4];
-  L.piso(0,6100,S,[[1130,1300],[2150,2320],[3080,3260],[4180,4360],[5100,5270]]);
-  for(let i=0;i<13;i++)L.deco('casa',160+i*440,S-270,180,270,'#33162C');
-  for(let i=0;i<9;i++)L.deco('janelaAcesa',420+i*620,S-190,52,64,'#FF5470');
+  L.piso(0,6200,S,[[1130,1300],[2150,2320],[3080,3260],[4180,4360],[5100,5270]]);
+  for(let i=0;i<13;i++)L.deco('casa',160+i*450,S-270,180,270,'#4A2140');
+  for(let i=0;i<9;i++)L.deco('janelaAcesa',420+i*620,S-190,52,64,'#FF8AA1');
 
   L.npc(300,S,'tia');
-  L.mural(470,S,M[0]);
+  L.mural(460,S,M[0]);
   L.inim('piada',680,S,{dir:-1});
 
-  /* primeiro muro: suba a escada, ande até a ponta e deixe-se cair */
-  L.bloco(820,725,150,24);                /* 125 acima do chão */
-  L.bloco(1010,600,340,24);               /* +125: a ponta é a rampa de queda */
-  L.letra(0,1060,538);                    /* C — no alto da escada */
-  L.mural(900,S,M[1]);
-  L.passagem(1120,726,190);               /* rota baixa, que esbarra no muro */
+  L.bloco(820,725,150,24);
+  L.bloco(1010,600,340,24);
+  L.letra(0,1060,538);
+  L.mural(930,S,M[1]);
+  L.passagem(1120,726,190);
   L.muro(1400,S);
 
-  L.check(1420,S);
-  L.npc(1500,S,'vizinha');
-  L.inim('ciume',1680,S,{dir:-1});
+  L.check(1480,S);
+  L.npc(1560,S,'vizinha');
+  L.inim('ciume',1740,S,{dir:-1});
   L.bloco(1900,720,150,24);
-  L.letra(1,1950,658);                    /* I */
+  L.letra(1,1950,658);
 
   L.passagem(2140,726,180);
-  L.inim('comentario',2420,S,{altura:120});
-  L.mola(2560,S);
-  L.bloco(2640,600,160,24);               /* alcançada pela mola */
-  L.vida(2690,540);
+  /* elevador: só sobe enquanto ela fica em cima */
+  L.elevador(2400,726,130,190,95);
+  L.bloco(2620,506,160,24);
+  L.vida(2670,446);
   L.mural(2760,S,M[2]);
-  L.muro(2900,S);
+  L.inim('comentario',2860,S,{altura:130});
+  L.mola(2560,S);
+  L.check(2890,S);                      /* antes do muro: dá pra repetir só a queda */
+  L.muro(2960,S);
 
-  L.check(3000,S);
   L.passagem(3070,726,190);
-  L.npc(3400,S,'delegada');
-  L.inim('ciume',3560,S,{dir:1});
-  L.mural(3760,S,M[3]);
+  L.npc(3380,S,'delegada');
+  L.inim('ameaca',3560,S,{dir:1});
+  L.mural(3740,S,M[3]);
 
   L.bloco(3900,725,150,24);
-  L.bloco(4080,600,320,24);               /* segunda rampa de queda */
-  L.letra(2,4130,538);                    /* E — outra escada */
+  L.bloco(4080,600,320,24);
+  L.letra(2,4130,538);
   L.passagem(4170,726,190);
   L.muro(4480,S);
   L.check(4620,S);
 
   L.npc(4700,S,'farmacia');
-  L.inim('comentario',4880,S,{altura:150});
-  L.mural(4960,S,M[4]);
-  L.inim('piada',5030,S,{dir:-1});
+  L.elevador(4880,726,130,200,95);
+  L.bloco(5090,496,150,24);
+  L.vida(5140,436);
+  L.mural(5000,S,M[4]);
   L.passagem(5090,726,190);
-  L.letra(3,5150,660);                    /* E */
-  L.inim('ciume',5420,S,{dir:1});
-  L.bloco(5700,722,150,24);
-  L.vida(5750,662);
-  L.saida(5940,S);
+  L.inim('ameaca',5350,S,{dir:-1});
+  L.letra(3,5150,660);
+  L.inim('ciume',5480,S,{dir:1});
+  L.bloco(5760,722,150,24);
+  L.vida(5810,662);
+  L.saida(6020,S);
 }
 
 /* ------------------------------------------------------------
    FASE 5 — Bem Querer · a rede que quebra o ciclo
+   MECÂNICA DA FASE: rede de apoio — pise numa e a próxima acende
+   INIMIGOS: todos + O Ciclo
    ------------------------------------------------------------ */
 function fase5(){
   Mundo.larg=5900;Mundo.alt=1060;Mundo.nascer={x:110,y:700};
   const S=840, M=MURAIS[5];
-  L.piso(0,4500,S,[[900,1050],[1780,1950],[2600,2780],[3510,3680]]);
+  L.piso(0,4500,S,[[900,1050],[1780,1950],[2500,3000],[3510,3680]]);
   L.bloco(4500,S,1400,220);
-  L.bloco(4460,S-440,44,460,'#2A1250');
+  L.portao(4462,S);
   L.bloco(5840,S-480,60,500,'#2A1250');
   for(let i=0;i<11;i++)L.deco('bandeira',220+i*380,S-200,64,200,'#C99BFF');
 
   L.npc(280,S,'marcia');
-  L.mural(460,S,M[0]);
+  L.mural(440,S,M[0]);
   L.inim('piada',700,S,{dir:-1});
   L.passagem(890,716,170);
-  L.letra(0,950,650);                     /* C */
+  L.letra(0,950,650);
   L.inim('comentario',1180,S,{altura:120});
   L.bloco(1300,712,150,24);
-  L.letra(1,1350,650);                    /* I */
+  L.letra(1,1350,650);
   L.check(1500,S);
   L.npc(1580,S,'ciee');
   L.mural(1680,S,M[1]);
 
   L.passagem(1770,716,180);
-  L.alfa(2100,S,{dir:-1});
-  L.vida(2320,760);
-  L.inim('ciume',2450,S,{dir:1});
-  L.mural(2520,S,M[2]);
+  L.turma(2080,S,3);
+  L.alfa(2260,S,{dir:-1});
+  L.vida(2400,760);
+  L.mural(2460,S,M[2]);
 
-  L.passagem(2590,716,190);
-  L.check(2960,S);
-  L.npc(3040,S,'teo3');
-  L.mola(3160,S);
-  L.bloco(3200,590,150,24);               /* alcançada pela mola */
-  L.letra(2,3250,528);                    /* E — de mola */
+  /* rede de apoio: uma acende a outra, sobre o vão maior do jogo */
+  L.rede(2510,716,120,'a',0);
+  L.rede(2690,690,120,'a',1);
+  L.rede(2870,716,120,'a',2);
+  L.inim('bot',2760,S,{altura:190});
+
+  L.check(3050,S);
+  L.npc(3120,S,'teo3');
+  L.mola(3200,S);
+  L.bloco(3240,590,150,24);
+  L.letra(2,3290,528);
   L.mural(3060,S,M[3]);
-  L.muro(3400,S);
+  L.muro(3450,S);        /* folga da rampa: dá pra sair andando e cair */
 
   L.passagem(3500,716,190);
-  L.inim('comentario',3820,S,{altura:130});
+  L.inim('ameaca',3760,S,{dir:-1});
+  L.inim('ciume',3880,S,{dir:1});
   L.npc(3980,S,'lu');
   L.bloco(4120,706,150,24);
-  L.letra(3,4170,644);                    /* E — última antes da arena */
-  L.mural(4260,S,M[4]);
+  L.letra(3,4170,644);
+  L.mural(4280,S,M[4]);
   L.vida(4320,760);
   L.check(4380,S);
 
@@ -1764,6 +2178,20 @@ function montaFase(n){
   Mundo.limpa();
   Part.limpa();
   CONSTRUTORES[n-1]();
+  /* altura do chão da fase: usada para escurecer o vão dos buracos */
+  Mundo.chaoY=Math.min.apply(null,Mundo.solidos.filter(s=>s.h>=100&&!s.ehPortao).map(s=>s.y));
+  /* dicas do arquivo de conteúdo, coladas na altura do chão */
+  const dd=DICAS[n]||[];
+  for(const [dx,tit,lin] of dd)L.dica(dx,Mundo.chaoY,tit,lin);
+  /* dica e mural disputam a mesma parede: afasta quem ficou por cima */
+  for(const d of Mundo.dicas){
+    for(let volta=0;volta<8;volta++){
+      const m=Mundo.murais.find(m=>Math.abs((m.x+m.w/2)-d.x)<190);
+      if(!m)break;
+      d.x+=(d.x>=m.x+m.w/2)?200:-200;
+      d.x=clamp(d.x,140,Mundo.larg-140);
+    }
+  }
   Jog.novaFase(n);
   /* letras já coletadas não voltam a aparecer */
   for(let i=Mundo.itens.length-1;i>=0;i--){
@@ -1778,8 +2206,28 @@ function montaFase(n){
    14. CENÁRIO VIVO
    ============================================================ */
 function atualizaSolidos(dt){
+  const T=Jogo.tempoTotal;
   for(const s of Mundo.solidos){
-    if(s.movel){
+    /* o feed pisca: aceso 60% do ciclo, com aviso antes de sumir */
+    if(s.pisca){
+      const fase=((T+s.defas)%s.periodo)/s.periodo;
+      const antes=s.ligado;
+      s.ligado=fase<.62;
+      s.removido=!s.ligado;
+      s.t=fase;
+      if(antes&&!s.ligado&&Jog.plataforma===s)Jog.plataforma=null;
+    }
+    /* elevador: sobe com peso em cima, desce sozinho */
+    if(s.elevador){
+      const emCima=Jog.plataforma===s||(Jog.noChao&&Math.abs((Jog.y+Jog.h)-s.y)<6&&
+        Jog.x+Jog.w>s.x&&Jog.x<s.x+s.w);
+      s.carregado=emCima;
+      const alvo=emCima?s.oy-s.curso:s.oy;
+      const ny=aprox(s.y,alvo,s.vel*dt);
+      s.dx=0;s.dy=ny-s.y;s.y=ny;
+      continue;
+    }
+    if(s.movel&&!s.elevador){
       s.t+=dt*(s.vel/Math.max(1,s.alcance));
       const p=(Math.sin(s.t*Math.PI)+1)/2;
       const nx=s.ox+s.ex*s.alcance*p, ny=s.oy+s.ey*s.alcance*p;
@@ -1823,6 +2271,19 @@ function atualizaCenario(dt){
     if(bate(Jog,{x:p.x+4,y:p.y+6,w:p.w-8,h:p.h-6})&&Jog.invul<=0&&Jog.vivo)
       Jog.leva(1,Jog.x+Jog.w/2);
   }
+  /* rede de apoio: quem pisa numa acende a seguinte */
+  const pl=Jog.plataforma;
+  if(pl&&pl.rede&&pl.aceso){
+    pl.brilho=1;
+    for(const s of Mundo.solidos){
+      if(s.rede&&s.grupo===pl.grupo&&s.ordem===pl.ordem+1&&!s.aceso){
+        s.aceso=true;s.removido=false;s.brilho=1;
+        Som.nota(520+pl.ordem*80,.14,'triangle',.08);
+        Part.solta(s.x+s.w/2,s.y+8,12,['#C99BFF','#FFFFFF'],{vel:130,vida:.5,tam:4,grav:-40});
+      }
+    }
+  }
+  for(const s of Mundo.solidos)if(s.rede&&s.brilho>0)s.brilho-=dt*1.6;
   for(const c of Mundo.checkpoints){
     c.anim+=dt;
     if(!c.ativo&&bate(Jog,c)){
@@ -1851,6 +2312,33 @@ function atualizaCenario(dt){
       Jogo.abreDialogo(n.id);
     }
   }
+  /* portão da arena do chefe */
+  const pt=Mundo.portao;
+  if(pt){
+    pt.anim+=dt;
+    if(pt.avisoT>0)pt.avisoT-=dt;
+    const perto=Math.abs((Jog.x+Jog.w/2)-(pt.x+pt.w/2));
+    if(!pt.aberto){
+      if(Jogo.letras.size>=PALAVRA.length&&perto<190){
+        pt.aberto=true;
+        pt.solido.removido=true;
+        Som.fase();Cam.sacode(.5);
+        Interface.faixa('C-I-E-E completo. O portão abriu.','verde');
+        Part.solta(pt.x+pt.w/2,pt.y+pt.h/2,26,['#FFC53D','#C99BFF','#FFFFFF'],{vel:280,vida:.9,tam:6});
+      }else if(perto<120&&pt.avisoT<=0){
+        pt.avisoT=2.8;
+        Som.bloqueado();
+        Interface.faixa('Faltam '+(PALAVRA.length-Jogo.letras.size)+' letra(s) do CIEE','sol');
+      }
+    }else if(!pt.selado&&Jog.x>pt.x+pt.w+130){
+      pt.selado=true;
+      pt.solido.removido=false;
+      Som.chefe();Cam.sacode(.7);
+      Interface.faixa('Daqui só se sai atravessando.','sol');
+      Part.solta(pt.x+pt.w/2,pt.y+pt.h/2,22,['#FF5470','#C99BFF'],{vel:220,vida:.8,tam:6});
+    }
+  }
+
   if(Mundo.saida){
     const sd=Mundo.saida;
     sd.anim+=dt;
@@ -1941,16 +2429,34 @@ function vozAtinge(e,p){
 const Arte={
   faseAtual:FASES[0],
   _margemTopo:null,
+  _cores:{},
+  /* Mistura duas cores hex. Camadas de fundo pintadas com cor SÓLIDA já
+     misturada com o céu ficam muito mais limpas do que várias camadas
+     translúcidas empilhadas — que viram borrão. */
+  mistura(a,b,t){
+    const k=a+b+(t*100|0);
+    if(this._cores[k])return this._cores[k];
+    const pa=parseInt(a.slice(1),16), pb=parseInt(b.slice(1),16);
+    const r=Math.round(((pa>>16)&255)*(1-t)+((pb>>16)&255)*t);
+    const v=Math.round(((pa>>8)&255)*(1-t)+((pb>>8)&255)*t);
+    const z=Math.round((pa&255)*(1-t)+(pb&255)*t);
+    return this._cores[k]='rgb('+r+','+v+','+z+')';
+  },
 
   quadro(){
     const g=ctx;
     g.setTransform(Vista.dpr,0,0,Vista.dpr,0,0);
     this.ceu(g);
     g.save();
-    g.scale(Vista.escala,Vista.escala);
+    const z=Cam.zoom;
+    g.translate(Vista.cssL/2,Vista.cssA/2);
+    g.scale(Vista.escala*z,Vista.escala*z);
+    g.translate(-Vista.larg/2,-Vista.alt/2);
     g.translate(-Math.round(Cam.ox),-Math.round(Cam.oy));
     this.paralaxe(g);
+    this.ambiente(g);
     this.murais(g);
+    this.dicas(g);
     this.enfeites(g);
     this.solidos(g);
     this.perigos(g);
@@ -1964,6 +2470,7 @@ const Arte={
     this.manu(g);
     this.ondas(g);
     Part.desenha(g);
+    this.frente(g);
     g.restore();
     this.hud(g);
   },
@@ -1978,40 +2485,154 @@ const Arte={
     g.fillRect(0,0,Vista.cssL,Vista.cssA);
   },
 
+  /* Uma faixa de prédios/casas. Desenha silhuetas sólidas, espaçadas,
+     sem sobrepor — cada camada tem sua cor já misturada com o céu. */
+  faixaPredios(g,cor,veloc,baseY,larg,vao,altMin,altVar,semente,telhado){
+    g.fillStyle=cor;
+    const off=Cam.ox*veloc;
+    const passo=larg+vao;
+    const i0=Math.floor((off-larg)/passo);
+    const i1=i0+Math.ceil(Vista.larg/passo)+2;
+    for(let i=i0;i<i1;i++){
+      const x=Cam.ox+(i*passo-off);
+      const h=altMin+((i*semente)%altVar);
+      const y=baseY-h;
+      if(telhado==='casa'){
+        g.beginPath();
+        g.moveTo(x-larg*.12,y);
+        g.lineTo(x+larg/2,y-larg*.28);
+        g.lineTo(x+larg*1.12,y);
+        g.closePath();g.fill();
+        g.fillRect(x,y,larg,h);
+      }else if(telhado==='torre'){
+        g.fillRect(x,y,larg,h);
+        g.fillRect(x+larg*.42,y-14-((i*7)%16),4,16);
+        g.fillRect(x+larg*.16,y-7,larg*.2,7);
+      }else{
+        g.fillRect(x,y,larg,h);
+      }
+    }
+  },
+
   paralaxe(g){
     const f=this.faseAtual;
+    const ceu=f.ceu[2];
+    const base=Cam.oy+Vista.alt;
+    const perfil=(f.n===1||f.n===4)?'casa':(f.n===3?'torre':'plano');
+    /* três faixas, da mais distante para a mais próxima */
+    this.faixaPredios(g,this.mistura(ceu,f.detalhe,.16),.86,base-118,170,120,90,110,53,perfil);
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.5),  .70,base-64, 150,96, 140,150,97,perfil);
+    /* névoa entre as camadas: sensação de distância */
+    const nv=g.createLinearGradient(0,base-300,0,base-40);
+    nv.addColorStop(0,'rgba(0,0,0,0)');
+    nv.addColorStop(1,this.mistura(ceu,'#ffffff',.06));
+    g.save();g.globalAlpha=.5;g.fillStyle=nv;
+    g.fillRect(Cam.ox-10,base-300,Vista.larg+20,262);
+    g.restore();
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.78),.45,base-14,132,84,170,190,151,perfil);
+    /* janelas acesas na faixa da frente */
     g.save();
-    g.globalAlpha=.26;
     g.fillStyle=f.detalhe;
-    const o1=Cam.ox*.72;
-    for(let i=0;i<26;i++){
-      const bx=(i*340-o1)%(Mundo.larg+400);
-      const alt=140+((i*97)%190);
-      g.fillRect(Cam.ox+bx-200,Cam.oy+Vista.alt-alt-60,150,alt);
+    g.globalAlpha=.22;
+    const off=Cam.ox*.45, passo=216;
+    const k0=Math.floor((off-132)/passo);
+    for(let i=k0;i<k0+Math.ceil(Vista.larg/passo)+2;i++){
+      const x=Cam.ox+(i*passo-off);
+      const h=170+((i*151)%190);
+      for(let r=0;r<Math.floor(h/62);r++)
+        for(let c=0;c<3;c++)
+          if((i+r*3+c)%4!==0)g.fillRect(x+16+c*38,base-14-h+26+r*62,22,26);
     }
     g.restore();
-    g.save();
-    g.globalAlpha=.4;
-    g.fillStyle=f.chao;
-    const o2=Cam.ox*.45;
-    for(let i=0;i<30;i++){
-      const bx=(i*250-o2)%(Mundo.larg+400);
-      const alt=200+((i*151)%240);
-      g.fillRect(Cam.ox+bx-200,Cam.oy+Vista.alt-alt-20,110,alt);
+    /* subsolo: sem isso o buraco mostra o fundo claro e parece piso */
+    const cy=Mundo.chaoY;
+    if(cy<Cam.oy+Vista.alt){
+      const gr=g.createLinearGradient(0,cy,0,cy+230);
+      gr.addColorStop(0,this.mistura(f.chao,'#000000',.42));
+      gr.addColorStop(1,this.mistura(f.ceu[0],'#000000',.62));
+      g.fillStyle=gr;
+      g.fillRect(Cam.ox-10,cy,Vista.larg+20,Cam.oy+Vista.alt-cy+20);
     }
-    g.restore();
     if(f.n===3){
       /* grade digital da machosfera */
       g.save();
-      g.globalAlpha=.14;
+      g.globalAlpha=.12;
       g.strokeStyle=f.detalhe;g.lineWidth=1;
-      const passo=64, ox=Cam.ox*.3%passo, oy=Cam.oy*.3%passo;
-      for(let x=-ox;x<Vista.larg+passo;x+=passo){
+      const pas=64, ox=Cam.ox*.3%pas, oy=Cam.oy*.3%pas;
+      for(let x=-ox;x<Vista.larg+pas;x+=pas){
         g.beginPath();g.moveTo(Cam.ox+x,Cam.oy);g.lineTo(Cam.ox+x,Cam.oy+Vista.alt);g.stroke();
       }
-      for(let y=-oy;y<Vista.alt+passo;y+=passo){
+      for(let y=-oy;y<Vista.alt+pas;y+=pas){
         g.beginPath();g.moveTo(Cam.ox,Cam.oy+y);g.lineTo(Cam.ox+Vista.larg,Cam.oy+y);g.stroke();
       }
+      g.restore();
+    }
+  },
+
+  /* Partículas de ambiente: poeira em casa, folhas na rua, bits na
+     machosfera. Custam pouco e tiram a sensação de cenário parado. */
+  ambiente(g){
+    const f=this.faseAtual, t=Jogo.tempoTotal;
+    const cores={1:'#FFC53D',2:'#43E098',3:'#4D8BFF',4:'#FF5470',5:'#C99BFF'};
+    const cor=cores[f.n]||'#FFFFFF';
+    g.save();
+    for(let i=0;i<26;i++){
+      const semente=i*137.5;
+      const vx=(f.n===3?90:34)+(i%5)*12;
+      const x=((semente*7+t*vx)%(Vista.larg+120))-60+Cam.ox;
+      const y=((semente*11+Math.sin(t*.6+i)*30)%(Vista.alt+60))-30+Cam.oy;
+      const tam=f.n===3?3:2+(i%3);
+      g.globalAlpha=.10+((i*37)%40)/220+Math.sin(t*1.6+i)*.05;
+      g.fillStyle=cor;
+      if(f.n===3)g.fillRect(x,y,2,tam*3);
+      else g.beginPath(),g.arc(x,y,tam*.6,0,Math.PI*2),g.fill();
+    }
+    g.restore();
+  },
+
+  /* Silhuetas passando na frente da câmera: profundidade barata */
+  frente(g){
+    const f=this.faseAtual;
+    g.save();
+    g.globalAlpha=.2;
+    g.fillStyle='#000';
+    const o=Cam.ox*1.28;
+    for(let i=0;i<8;i++){
+      const bx=(i*620-o)%(Mundo.larg+900);
+      g.fillRect(Cam.ox+bx-350,Cam.oy+Vista.alt-150,58,190);
+    }
+    g.restore();
+  },
+
+  /* Micro-tutoriais: texto grande e apagado pintado na parede do fundo,
+     no lugar exato onde a mecânica aparece. Não pausa, não pede clique. */
+  dicas(g){
+    for(const d of Mundo.dicas){
+      if(d.x<Cam.ox-260||d.x>Cam.ox+Vista.larg+260)continue;
+      d.anim+=1/60;
+      const perto=Math.abs((Jog.x+Jog.w/2)-d.x);
+      const forca=clamp(1-(perto-120)/260,.22,1);
+      g.save();
+      g.globalAlpha=forca*.5;
+      g.textAlign='center';
+      g.fillStyle=this.faseAtual.detalhe;
+      g.font='900 27px Arial Black,system-ui,sans-serif';
+      g.fillText(d.titulo,d.x,d.y);
+      g.globalAlpha=forca*.34;
+      g.fillStyle='#F4F1FF';
+      g.font='600 16px system-ui,sans-serif';
+      g.fillText(d.linha,d.x,d.y+23);
+      /* seta apontando pro chão */
+      g.globalAlpha=forca*.3;
+      g.strokeStyle=this.faseAtual.detalhe;
+      g.lineWidth=3;g.lineCap='round';
+      const bal=Math.sin(d.anim*2.4)*4;
+      g.beginPath();
+      g.moveTo(d.x,d.y+40);g.lineTo(d.x,d.y+70+bal);
+      g.moveTo(d.x-8,d.y+62+bal);g.lineTo(d.x,d.y+70+bal);
+      g.lineTo(d.x+8,d.y+62+bal);
+      g.stroke();
+      g.textAlign='left';
       g.restore();
     }
   },
@@ -2020,29 +2641,41 @@ const Arte={
     for(const m of Mundo.murais){
       if(m.x+m.w<Cam.ox-80||m.x>Cam.ox+Vista.larg+80)continue;
       const lido=m.disparado;
+      const x=m.x+6, y=m.y+34, w=m.w-12, h=m.h-46;
       g.save();
-      g.globalAlpha=lido?.5:.9;
-      g.fillStyle='rgba(0,0,0,.32)';
-      g.fillRect(m.x+8,m.y+40,m.w-16,m.h-52);
-      g.fillStyle=lido?'#7C6BA0':'#C99BFF';
-      g.fillRect(m.x+8,m.y+40,m.w-16,5);
-      /* rabiscos de pichação */
-      g.strokeStyle=lido?'rgba(199,190,230,.4)':'#C99BFF';
-      g.lineWidth=3;g.lineCap='round';
+      /* painel de parede */
+      g.fillStyle=lido?'rgba(20,12,44,.55)':'rgba(20,12,44,.8)';
+      g.fillRect(x,y,w,h);
+      g.strokeStyle=lido?'rgba(199,190,230,.3)':'#C99BFF';
+      g.lineWidth=2.5;
+      g.strokeRect(x+.5,y+.5,w-1,h-1);
+      /* laço lilás pintado no alto */
+      g.fillStyle=lido?'rgba(199,190,230,.4)':'#C99BFF';
+      const lx=x+w/2, ly=y+22;
+      g.beginPath();
+      g.moveTo(lx,ly+4);
+      g.bezierCurveTo(lx-13,ly-9,lx-13,ly-2,lx-2,ly+3);
+      g.bezierCurveTo(lx-8,ly+11,lx-4,ly+14,lx,ly+5);
+      g.bezierCurveTo(lx+4,ly+14,lx+8,ly+11,lx+2,ly+3);
+      g.bezierCurveTo(lx+13,ly-2,lx+13,ly-9,lx,ly+4);
+      g.fill();
+      /* linhas de texto pintadas */
+      g.fillStyle=lido?'rgba(199,190,230,.28)':'rgba(244,241,255,.62)';
       for(let i=0;i<4;i++){
-        const y=m.y+64+i*20;
-        g.beginPath();
-        g.moveTo(m.x+20,y);
-        g.lineTo(m.x+m.w-20-((i*23)%40),y+Math.sin(m.anim+i)*2);
-        g.stroke();
-      }
-      if(!lido){
-        const pulso=Math.sin(m.anim*3)*.5+.5;
-        g.globalAlpha=.25+pulso*.25;
-        g.fillStyle='#C99BFF';
-        g.beginPath();g.arc(m.x+m.w/2,m.y+m.h*.55,60+pulso*8,0,Math.PI*2);g.fill();
+        const lw=w-26-((i*29)%34);
+        g.fillRect(x+13,y+46+i*15,lw,4);
       }
       g.restore();
+      if(!lido){
+        /* brilho discreto na moldura, só pra chamar o olho */
+        const pu=Math.sin(m.anim*2.6)*.5+.5;
+        g.save();
+        g.globalAlpha=.18+pu*.22;
+        g.strokeStyle='#FFC53D';
+        g.lineWidth=4;
+        g.strokeRect(x-3,y-3,w+6,h+6);
+        g.restore();
+      }
     }
   },
 
@@ -2062,20 +2695,30 @@ const Arte={
           g.fillRect(d.x-3,d.y+d.h-h-8,d.w+6,3);
           break;
         }
-        case 'casa':
-          g.fillStyle='rgba(0,0,0,.3)';g.fillRect(d.x,d.y,d.w,d.h);
-          g.fillStyle=f.detalhe;g.globalAlpha=.18;
-          g.beginPath();g.moveTo(d.x-12,d.y);g.lineTo(d.x+d.w/2,d.y-48);g.lineTo(d.x+d.w+12,d.y);g.closePath();g.fill();
+        case 'casa':{
+          const cp=this.mistura(f.ceu[2],f.chao,.9);
+          g.fillStyle=cp;
+          g.beginPath();g.moveTo(d.x-14,d.y);g.lineTo(d.x+d.w/2,d.y-52);g.lineTo(d.x+d.w+14,d.y);g.closePath();g.fill();
+          g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle='rgba(0,0,0,.22)';
+          g.fillRect(d.x,d.y,d.w,6);
+          g.fillStyle=f.detalhe;g.globalAlpha=.2;
+          g.fillRect(d.x+26,d.y+42,40,40);g.fillRect(d.x+d.w-66,d.y+42,40,40);
           g.globalAlpha=1;
-          g.fillStyle='rgba(255,197,61,.16)';
-          g.fillRect(d.x+28,d.y+44,42,42);g.fillRect(d.x+108,d.y+44,42,42);
+          g.fillStyle='rgba(0,0,0,.3)';
+          g.fillRect(d.x+d.w/2-17,d.y+d.h-72,34,72);
           break;
-        case 'predio':
-          g.fillStyle='rgba(0,0,0,.33)';g.fillRect(d.x,d.y,d.w,d.h);
-          g.fillStyle='rgba(255,255,255,.1)';
+        }
+        case 'predio':{
+          g.fillStyle=this.mistura(f.ceu[2],f.chao,.92);
+          g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle='rgba(0,0,0,.25)';g.fillRect(d.x,d.y,d.w,5);
+          g.fillStyle=f.detalhe;g.globalAlpha=.18;
           for(let r=0;r<5;r++)for(let c=0;c<3;c++)
             if((r*3+c+Math.floor(d.x))%3!==0)g.fillRect(d.x+12+c*34,d.y+18+r*48,20,24);
+          g.globalAlpha=1;
           break;
+        }
         case 'poste':{
           g.fillStyle='rgba(255,255,255,.18)';g.fillRect(d.x,d.y,d.w,d.h);
           const gr=g.createRadialGradient(d.x+6,d.y,4,d.x+6,d.y,110);
@@ -2095,12 +2738,17 @@ const Arte={
           g.globalAlpha=1;
           break;
         }
-        case 'tela':
-          g.fillStyle='rgba(0,0,0,.4)';g.fillRect(d.x,d.y,d.w,d.h);
-          g.fillStyle=f.detalhe;g.globalAlpha=.14+Math.sin(Jogo.tempoTotal*3+d.anim)*.06;
+        case 'tela':{
+          g.fillStyle=this.mistura(f.ceu[2],'#000000',.42);
+          g.fillRect(d.x,d.y,d.w,d.h);
+          g.fillStyle=f.detalhe;
+          g.globalAlpha=.16+Math.sin(Jogo.tempoTotal*3+d.anim)*.07;
           g.fillRect(d.x+6,d.y+6,d.w-12,d.h*.4);
+          g.globalAlpha=.5;
+          g.fillRect(d.x,d.y,d.w,3);
           g.globalAlpha=1;
           break;
+        }
         case 'bit':
           g.fillStyle=f.detalhe;
           g.globalAlpha=.3+Math.sin(Jogo.tempoTotal*4+d.anim)*.25;
@@ -2149,9 +2797,71 @@ const Arte={
       if(s.removido)continue;
       if(s.x+s.w<Cam.ox-80||s.x>Cam.ox+Vista.larg+80)continue;
       if(s.ehMuro)continue;                        /* desenhado como inimigo */
+      if(s.ehPortao){this.portao(g,s);continue;}
       if(s.quebrando&&s.sumiu){
         g.globalAlpha=.16;g.fillStyle=f.detalhe;
         g.fillRect(s.x,s.y,s.w,4);g.globalAlpha=1;
+        continue;
+      }
+      if(s.pisca){
+        /* o feed: aceso, avisando ou apagado */
+        const saindo=s.t>.5&&s.t<.62;
+        g.save();
+        if(!s.ligado){
+          g.globalAlpha=.22;
+          g.strokeStyle=f.detalhe;g.lineWidth=2;g.setLineDash([7,7]);
+          g.strokeRect(s.x+1,s.y+1,s.w-2,16);
+          g.setLineDash([]);
+          g.restore();
+          continue;
+        }
+        if(saindo)g.globalAlpha=.55+Math.sin(Jogo.tempoTotal*34)*.35;
+        g.fillStyle=f.detalhe;
+        g.fillRect(s.x,s.y,s.w,7);
+        g.globalAlpha*= .45;
+        g.fillRect(s.x,s.y+7,s.w,9);
+        g.restore();
+        continue;
+      }
+      if(s.rede){
+        const br=Math.max(0,s.brilho);
+        g.save();
+        g.fillStyle='#C99BFF';
+        g.fillRect(s.x,s.y,s.w,6);
+        g.globalAlpha=.45;
+        g.fillRect(s.x,s.y+6,s.w,12);
+        g.globalAlpha=.25+br*.5;
+        g.fillStyle='#FFC53D';
+        g.fillRect(s.x,s.y-2,s.w,3);
+        /* mãos dadas: pontinhos ligando as pontas */
+        g.globalAlpha=.5;
+        g.fillStyle='#F4F1FF';
+        for(let i=8;i<s.w-6;i+=18)g.fillRect(s.x+i,s.y+2,5,2);
+        g.restore();
+        continue;
+      }
+      if(s.elevador){
+        g.fillStyle=s.carregado?'#43E098':(s.cor||f.chao);
+        g.fillRect(s.x,s.y,s.w,s.h);
+        g.fillStyle='#FFC53D';
+        g.fillRect(s.x,s.y,s.w,5);
+        g.fillStyle='rgba(0,0,0,.3)';
+        for(let i=10;i<s.w-8;i+=20)g.fillRect(s.x+i,s.y+9,10,4);
+        /* corda até o alto */
+        g.strokeStyle='rgba(255,255,255,.2)';g.lineWidth=2;
+        g.beginPath();
+        g.moveTo(s.x+s.w/2,s.y);g.lineTo(s.x+s.w/2,s.oy-s.curso-40);
+        g.stroke();
+        /* seta indicando que sobe com peso */
+        g.globalAlpha=s.carregado?.8:.35;
+        g.fillStyle='#FFC53D';
+        const sb=Math.sin(Jogo.tempoTotal*4)*3;
+        g.beginPath();
+        g.moveTo(s.x+s.w/2,s.y-16+sb);
+        g.lineTo(s.x+s.w/2-7,s.y-6+sb);
+        g.lineTo(s.x+s.w/2+7,s.y-6+sb);
+        g.closePath();g.fill();
+        g.globalAlpha=1;
         continue;
       }
       if(s.tipo==='passagem'){
@@ -2163,11 +2873,26 @@ const Arte={
       }
       g.fillStyle=s.cor||f.chao;
       g.fillRect(s.x,s.y,s.w,s.h);
+      /* faixa de luz no topo + degradê pra baixo, pra não ficar chapado */
       g.fillStyle=f.detalhe;
-      g.globalAlpha=s.quebrando?(s.caindo?.5+Math.sin(Jogo.tempoTotal*30)*.3:.75):.85;
+      g.globalAlpha=s.quebrando?(s.caindo?.5+Math.sin(Jogo.tempoTotal*30)*.3:.75):.9;
       g.fillRect(s.x,s.y,s.w,5);
-      g.globalAlpha=.13;g.fillRect(s.x,s.y+5,s.w,10);
+      g.globalAlpha=.16;g.fillRect(s.x,s.y+5,s.w,9);
       g.globalAlpha=1;
+      if(s.h>60){
+        const gr=g.createLinearGradient(0,s.y,0,s.y+Math.min(s.h,150));
+        gr.addColorStop(0,'rgba(0,0,0,0)');
+        gr.addColorStop(1,'rgba(0,0,0,.34)');
+        g.fillStyle=gr;
+        g.fillRect(s.x,s.y,s.w,Math.min(s.h,150));
+        /* pedrinhas: quebram a superfície lisa */
+        g.fillStyle='rgba(255,255,255,.05)';
+        for(let i=0;i<s.w;i+=37){
+          const k=(s.x+i)|0;
+          g.fillRect(s.x+i+(k%13),s.y+26+(k%41),13,4);
+          g.fillRect(s.x+i+(k%23),s.y+62+(k%29),8,3);
+        }
+      }
       if(s.movel){
         g.fillStyle='rgba(255,255,255,.22)';
         for(let i=8;i<s.w-8;i+=22)g.fillRect(s.x+i,s.y+9,10,3);
@@ -2176,6 +2901,40 @@ const Arte={
         g.fillStyle='rgba(0,0,0,.16)';
         for(let i=0;i<s.w;i+=48)g.fillRect(s.x+i,s.y+24,44,3);
       }
+    }
+  },
+
+  portao(g,s){
+    const pt=Mundo.portao;
+    const selado=pt&&pt.selado;
+    g.fillStyle='#1B1038';
+    g.fillRect(s.x,s.y,s.w,s.h);
+    /* grades */
+    g.fillStyle=selado?'#FF5470':'#C99BFF';
+    g.globalAlpha=.75;
+    for(let i=0;i<3;i++)g.fillRect(s.x+7+i*13,s.y+10,5,s.h-20);
+    g.globalAlpha=1;
+    g.fillStyle=selado?'#FF5470':'#C99BFF';
+    g.fillRect(s.x-6,s.y,s.w+12,10);
+    for(let y=s.y+40;y<s.y+s.h;y+=70)g.fillRect(s.x-3,y,s.w+6,6);
+    if(!selado){
+      /* letras que faltam, na altura dos olhos */
+      const base=s.y+s.h-190;
+      g.font='900 15px Arial Black,system-ui,sans-serif';
+      g.textAlign='center';
+      for(let i=0;i<PALAVRA.length;i++){
+        const lx=s.x+s.w/2, ly=base+i*30;
+        const tem=Jogo.letras.has(i);
+        g.fillStyle=tem?'#FFC53D':'rgba(199,190,230,.18)';
+        g.beginPath();
+        g.roundRect?g.roundRect(lx-12,ly-12,24,24,5):g.rect(lx-12,ly-12,24,24);
+        g.fill();
+        g.fillStyle=tem?'#1b0733':'rgba(199,190,230,.5)';
+        g.textBaseline='middle';
+        g.fillText(PALAVRA[i],lx,ly+1);
+        g.textBaseline='alphabetic';
+      }
+      g.textAlign='left';
     }
   },
 
@@ -2291,31 +3050,169 @@ const Arte={
 
   npcs(g){
     for(const n of Mundo.npcs){
-      if(n.x<Cam.ox-100||n.x>Cam.ox+Vista.larg+100)continue;
-      const bob=Math.sin(n.anim*2)*2.5;
-      g.fillStyle='rgba(0,0,0,.25)';
-      g.beginPath();g.ellipse(n.x+n.w/2,n.y+n.h+3,20,6,0,0,Math.PI*2);g.fill();
-      g.fillStyle=n.falou?'#7C6BA0':'#43E098';
-      g.fillRect(n.x+4,n.y+20+bob,n.w-8,n.h-24);
-      g.fillStyle='#E8B78F';
-      g.beginPath();g.arc(n.x+n.w/2,n.y+13+bob,12,0,Math.PI*2);g.fill();
-      g.fillStyle='#2A1A12';
-      g.beginPath();g.arc(n.x+n.w/2,n.y+8+bob,12,Math.PI,Math.PI*2);g.fill();
+      if(n.x<Cam.ox-120||n.x>Cam.ox+Vista.larg+120)continue;
+      const v=n.visual||{tipo:'adulta',pele:'#E8B78F',cabelo:'#3A2016',roupa:'#43E098',roupa2:'#1E8C5C',extra:''};
+      const bob=Math.sin(n.anim*1.9)*2.2;
+      const gesto=Math.sin(n.anim*1.4);
+      const cx=n.x+n.w/2, base=n.y+n.h;
+      /* proporção por tipo */
+      const alt={idosa:.9,adulta:1,jovem:.94,crianca:.78}[v.tipo]||1;
+      const quad=base-24*alt-bob, omb=base-40*alt-bob, cabY=base-52*alt-bob;
+      const rCab=9.2*(v.tipo==='crianca'?.94:1);
+
+      g.fillStyle='rgba(0,0,0,.26)';
+      g.beginPath();g.ellipse(cx,base+3,15,4.6,0,0,Math.PI*2);g.fill();
+
+      /* pernas */
+      g.fillStyle='#2B3A6B';
+      g.fillRect(cx-8,quad,7,base-quad);
+      g.fillRect(cx+1,quad,7,base-quad);
+      g.fillStyle='#3A3348';
+      g.fillRect(cx-9,base-4,9,4);g.fillRect(cx,base-4,9,4);
+
+      /* braço de trás */
+      const bx=v.tipo==='idosa'?.35:.8;
+      this.membroEntre(g,cx-9,omb+2,cx-12,omb+15+gesto*2*bx,5.4,v.pele);
+
+      /* tronco */
+      g.fillStyle=v.roupa;
+      g.beginPath();
+      g.moveTo(cx-9,omb-1);g.lineTo(cx+9,omb-1);
+      g.lineTo(cx+10.5,quad+2);g.lineTo(cx-10.5,quad+2);
+      g.closePath();g.fill();
+      g.fillStyle=v.roupa2;
+      g.fillRect(cx-9,omb-1,18,3.4);
+      g.fillRect(cx-10.5,quad-3,21,5);
+
+      /* acessórios de roupa */
+      if(v.extra==='avental'){
+        g.fillStyle='#F4F1FF';
+        g.fillRect(cx-6,omb+4,12,quad-omb-1);
+        g.fillStyle=v.roupa2;
+        g.fillRect(cx-6,omb+4,12,2);
+      }
+      if(v.extra==='jaleco'){
+        g.fillStyle='#F4F1FF';
+        g.beginPath();
+        g.moveTo(cx-10,omb);g.lineTo(cx-3,omb);g.lineTo(cx-3,quad+3);g.lineTo(cx-11,quad+3);
+        g.closePath();g.fill();
+        g.beginPath();
+        g.moveTo(cx+10,omb);g.lineTo(cx+3,omb);g.lineTo(cx+3,quad+3);g.lineTo(cx+11,quad+3);
+        g.closePath();g.fill();
+      }
+      if(v.extra==='cracha'){
+        g.strokeStyle='rgba(231,225,250,.85)';g.lineWidth=1.3;
+        g.beginPath();g.moveTo(cx-3,omb+1);g.lineTo(cx-4,omb+9);g.stroke();
+        g.fillStyle='#FFC53D';
+        g.fillRect(cx-7,omb+9,7,5);
+        g.fillStyle='#1B4FD8';g.fillRect(cx-7,omb+9,7,1.6);
+      }
+
+      /* cabeça */
+      g.fillStyle=v.pele;
+      g.beginPath();g.arc(cx,cabY,rCab,0,Math.PI*2);g.fill();
+      /* cabelo por tipo */
+      g.fillStyle=v.cabelo;
+      if(v.tipo==='idosa'){
+        g.beginPath();g.arc(cx,cabY-1,rCab+1.4,Math.PI,0);g.fill();
+        g.beginPath();g.arc(cx,cabY-rCab-1,4.6,0,Math.PI*2);g.fill();   /* coque */
+      }else if(v.tipo==='crianca'){
+        g.beginPath();g.arc(cx,cabY-1,rCab+.8,Math.PI,0);g.fill();
+        g.fillRect(cx-rCab-.8,cabY-3,rCab*2+1.6,4);
+      }else{
+        g.beginPath();g.arc(cx,cabY-1,rCab+1,Math.PI,0);g.fill();
+        g.fillRect(cx-rCab-1,cabY-3,rCab*2+2,5);
+        g.beginPath();g.arc(cx-rCab*.85,cabY+3,3.4,0,Math.PI*2);g.fill();
+        g.beginPath();g.arc(cx+rCab*.85,cabY+3,3.4,0,Math.PI*2);g.fill();
+      }
+      if(v.extra==='lenco'){
+        g.fillStyle=v.roupa2;
+        g.beginPath();g.arc(cx,cabY-1,rCab+2,Math.PI,0);g.fill();
+        g.beginPath();
+        g.moveTo(cx+rCab,cabY-1);g.lineTo(cx+rCab+7,cabY+7);g.lineTo(cx+rCab-2,cabY+4);
+        g.closePath();g.fill();
+      }
+      if(v.extra==='bone'){
+        g.fillStyle=v.roupa2;
+        g.beginPath();g.arc(cx,cabY-2,rCab+1,Math.PI,0);g.fill();
+        g.fillRect(cx-2,cabY-3,rCab+9,3.4);
+      }
+      if(v.extra==='boina'){
+        g.fillStyle=v.roupa2;
+        g.beginPath();g.ellipse(cx,cabY-rCab+1,rCab+2,4,0,0,Math.PI*2);g.fill();
+      }
+
+      /* rosto */
       g.fillStyle='#120A2A';
-      g.fillRect(n.x+n.w/2-5,n.y+12+bob,2.6,3);
-      g.fillRect(n.x+n.w/2+2,n.y+12+bob,2.6,3);
+      const p2=(Jogo.tempoTotal*1.3+n.anim)%4.2<.12;
+      if(p2){
+        g.fillRect(cx-4.6,cabY+1.4,3.2,1.5);
+        g.fillRect(cx+1.4,cabY+1.4,3.2,1.5);
+      }else{
+        g.fillRect(cx-4.6,cabY-.4,3,3.6);
+        g.fillRect(cx+1.6,cabY-.4,3,3.6);
+      }
+      g.fillStyle='#B5615E';
+      g.beginPath();g.arc(cx,cabY+4.6,2.6,.2,Math.PI-.2);g.fill();
+      if(v.extra==='oculos'){
+        g.strokeStyle='rgba(20,14,40,.85)';g.lineWidth=1.5;
+        g.beginPath();g.arc(cx-3,cabY+.8,4,0,Math.PI*2);g.stroke();
+        g.beginPath();g.arc(cx+3.4,cabY+.8,4,0,Math.PI*2);g.stroke();
+        g.beginPath();g.moveTo(cx+1,cabY+.8);g.lineTo(cx-.6,cabY+.8);g.stroke();
+      }
+
+      /* braço da frente, gesticulando enquanto fala */
+      const g2=n.falou?gesto*.4:gesto;
+      this.membroEntre(g,cx+9,omb+2,cx+13+g2*3,omb+14-Math.abs(g2)*5,5.8,v.pele);
+
+      /* balão de conversa */
       if(!n.falou){
-        const pulso=Math.sin(n.anim*3)*.5+.5;
-        g.globalAlpha=.55+pulso*.4;
+        const pu=Math.sin(n.anim*3)*.5+.5;
+        g.globalAlpha=.6+pu*.4;
         g.fillStyle='#FFC53D';
         g.beginPath();
-        g.roundRect?g.roundRect(n.x+n.w/2-13,n.y-26+bob,26,18,5):g.rect(n.x+n.w/2-13,n.y-26+bob,26,18);
+        g.roundRect?g.roundRect(cx-13,cabY-rCab-26+bob*.4,26,17,6):g.rect(cx-13,cabY-rCab-26,26,17);
         g.fill();
+        g.beginPath();
+        g.moveTo(cx-4,cabY-rCab-10+bob*.4);g.lineTo(cx+1,cabY-rCab-4+bob*.4);g.lineTo(cx+5,cabY-rCab-10+bob*.4);
+        g.closePath();g.fill();
         g.fillStyle='#120A2A';
-        for(let i=0;i<3;i++)g.fillRect(n.x+n.w/2-8+i*6,n.y-18+bob,3,3);
+        for(let i=0;i<3;i++)g.fillRect(cx-8+i*6,cabY-rCab-19+bob*.4,3.4,3.4);
         g.globalAlpha=1;
       }
     }
+  },
+
+  /* Vida em blocos: lê melhor que barra contínua em bichos de 1 a 4 pontos.
+     Aparece ao levar dano, quando a guarda barra o golpe, ou o tempo todo
+     em quem tem mais de um ponto de vida. */
+  barraVida(g,e){
+    const t=e.def;
+    const guarda=(t.blindaFechado&&!e.aberto)||(t.protegido&&plateiaViva(e)>0)||
+                 t.soVozForte||(t.fantasma&&e.solidez<.6)||
+                 (e.tipo==='cobranca'&&e.estado!=='exposta');
+    const vis=e.vidaMostra>0?1:(e.vidaMax>1?.62:.42);
+    const n=e.vidaMax, larg=Math.max(26,Math.min(e.w+10,n*13));
+    const bw=larg/n, bh=5;
+    const bx=e.x+e.w/2-larg/2, by=e.y-15;
+    g.save();
+    g.globalAlpha=vis;
+    g.fillStyle='rgba(12,8,26,.75)';
+    g.beginPath();
+    g.roundRect?g.roundRect(bx-2.5,by-2.5,larg+5,bh+5,3.5):g.rect(bx-2.5,by-2.5,larg+5,bh+5);
+    g.fill();
+    for(let i=0;i<n;i++){
+      g.fillStyle=i<e.vida?(e.vida<=1?'#FF5470':(e.vida<=2?'#FFC53D':'#43E098')):'rgba(199,190,230,.2)';
+      g.fillRect(bx+i*bw+1,by,bw-2,bh);
+    }
+    if(guarda){
+      const gx=bx+larg+9, gy=by+bh/2;
+      g.fillStyle='#C7BEE6';
+      g.fillRect(gx-4,gy-1,8,7);
+      g.strokeStyle='#C7BEE6';g.lineWidth=1.8;
+      g.beginPath();g.arc(gx,gy-1,2.6,Math.PI,0);g.stroke();
+    }
+    g.restore();
   },
 
   inimigos(g){
@@ -2326,61 +3223,94 @@ const Arte={
         g.globalAlpha=Math.max(0,e.morte/.5);
         g.translate(0,(1-e.morte/.5)*24);
       }
-      const pisca=e.piscar>0&&Math.floor(e.piscar*40)%2===0;
-      const c1=pisca?'#FFFFFF':e.def.cor;
-      const c2=pisca?'#FFFFFF':e.def.cor2;
-      const x=e.x,y=e.y,w=e.w,h=e.h,cx=x+w/2,cy=y+h/2;
-      if(!e.def.voa&&e.tipo!=='muro'){
-        g.fillStyle='rgba(0,0,0,.24)';
-        g.beginPath();g.ellipse(cx,y+h+3,w*.45,5,0,0,Math.PI*2);g.fill();
-      }
-      if(e.atordoado>0){
-        g.globalAlpha*=.85;
-        for(let i=0;i<3;i++){
-          const a=e.anim*7+i*2.1;
-          g.fillStyle='#FFC53D';
-          g.fillRect(cx+Math.cos(a)*20-2,y-12+Math.sin(a)*5,4,4);
-        }
-      }
+      this.corpoInimigo(g,e);
+      g.restore();
+      if(e.vivo)this.barraVida(g,e);
+    }
+  },
 
+  /* O desenho de um inimigo, isolado do laço — assim o mesmo código
+     serve para o jogo e para os retratos da Cartilha. */
+  corpoInimigo(g,e){
+    const pisca=e.piscar>0&&Math.floor(e.piscar*40)%2===0;
+    const c1=pisca?'#FFFFFF':e.def.cor;
+    const c2=pisca?'#FFFFFF':e.def.cor2;
+    const x=e.x,y=e.y,w=e.w,h=e.h,cx=x+w/2,cy=y+h/2;
+    if(e.squash!==1){
+      g.translate(cx,y+h);
+      g.scale(1/Math.max(.5,e.squash),e.squash);
+      g.translate(-cx,-(y+h));
+    }
+    if(!e.def.voa&&e.tipo!=='muro'&&!e.semSombra){
+      g.fillStyle='rgba(0,0,0,.24)';
+      g.beginPath();g.ellipse(cx,y+h+3,w*.45,5,0,0,Math.PI*2);g.fill();
+    }
+    if(e.atordoado>0){
+      g.globalAlpha*=.85;
+      for(let i=0;i<3;i++){
+        const a=e.anim*7+i*2.1;
+        g.fillStyle='#FFC53D';
+        g.fillRect(cx+Math.cos(a)*20-2,y-12+Math.sin(a)*5,4,4);
+      }
+    }
       switch(e.tipo){
         case 'piada':{
-          const bal=Math.sin(e.anim*9)*2.5;
-          /* balão de fala rindo */
-          g.fillStyle=c1;
-          g.beginPath();
-          g.roundRect?g.roundRect(x,y+bal,w,h-9,11):g.rect(x,y+bal,w,h-9);
-          g.fill();
-          g.beginPath();
-          g.moveTo(cx-7,y+h-10+bal);g.lineTo(cx+2,y+h-1+bal);g.lineTo(cx+8,y+h-10+bal);
-          g.closePath();g.fill();
-          /* boca rindo */
-          g.fillStyle='#3A1B08';
-          g.beginPath();g.ellipse(cx,y+h*.5+bal,12,7+Math.abs(bal),0,0,Math.PI*2);g.fill();
-          g.fillStyle=c2;
-          g.fillRect(cx-9,y+h*.5-6+bal,18,3.5);
-          /* olhos apertados de rir */
-          g.strokeStyle='#3A1B08';g.lineWidth=2.6;g.lineCap='round';
-          for(const s of[-1,1]){
+          const bal=Math.sin(e.anim*9)*2;
+          const pas=Math.sin(e.anim*9);
+          const bh=h-12;                       /* altura do balão */
+          /* perninhas embaixo do balão */
+          g.strokeStyle='#7A4A18';g.lineWidth=3.4;g.lineCap='round';
+          for(const sg of[-1,1]){
             g.beginPath();
-            g.arc(cx+s*11,y+13+bal,5,Math.PI*.15,Math.PI*.85);
+            g.moveTo(cx+sg*8,y+bh-2+bal);
+            g.lineTo(cx+sg*8+pas*sg*4,y+h+2);
             g.stroke();
           }
+          g.save();
+          g.translate(0,bal);
+          /* rabinho do balão, desenhado antes pra encostar direito */
+          g.fillStyle=c1;
+          g.beginPath();
+          g.moveTo(cx-e.dir*4,y+bh-8);
+          g.lineTo(cx-e.dir*15,y+bh+9);
+          g.lineTo(cx+e.dir*7,y+bh-4);
+          g.closePath();g.fill();
+          /* corpo do balão */
+          g.beginPath();
+          g.roundRect?g.roundRect(x,y,w,bh,13):g.rect(x,y,w,bh);
+          g.fillStyle=c1;g.fill();
+          g.strokeStyle='#7A3F0C';g.lineWidth=2.6;g.stroke();
+          /* "HÁ HÁ" escrito dentro, é isso que faz ler como piada */
+          g.fillStyle=c2;
+          g.font='900 15px Arial Black,system-ui,sans-serif';
+          g.textAlign='center';g.textBaseline='middle';
+          g.fillText('HÁ HÁ',cx,y+bh*.42+Math.abs(bal)*.5);
+          g.textAlign='left';g.textBaseline='alphabetic';
+          /* boca rindo pequena embaixo do texto */
+          g.fillStyle='#7A3F0C';
+          g.beginPath();
+          g.ellipse(cx,y+bh*.76,8,3.4+Math.abs(bal)*.5,0,0,Math.PI*2);
+          g.fill();
+          g.restore();
           break;
         }
         case 'rotulo':{
-          const ab=e.aberto;
+          const ab=e.aberto, tp=e.tampa;
           /* caixa */
           g.fillStyle=c1;
           g.fillRect(x+3,y+12,w-6,h-12);
-          g.fillStyle='rgba(0,0,0,.2)';
+          g.fillStyle='rgba(0,0,0,.22)';
           g.fillRect(x+3,y+12,w-6,4);
-          /* tampa */
+          g.fillStyle='rgba(0,0,0,.14)';
+          g.fillRect(x+3,y+h-9,w-6,6);
+          /* tampa: gira em vez de pular de estado */
           g.save();
           g.translate(x+3,y+13);
-          g.rotate(ab?-1.05:0);
+          g.rotate(-1.05*tp);
           g.fillStyle=c2;
           g.fillRect(0,-11,w-6,12);
+          g.fillStyle='rgba(255,255,255,.22)';
+          g.fillRect(0,-11,w-6,3);
           g.restore();
           /* etiqueta */
           g.fillStyle=ab?'rgba(244,241,255,.9)':'#F4F1FF';
@@ -2415,11 +3345,22 @@ const Arte={
           }
           g.strokeStyle=c2;g.lineWidth=3;g.lineCap='round';
           g.beginPath();g.arc(cx,y+32,8,Math.PI*1.15,Math.PI*1.85);g.stroke();
-          if(mergulha){
-            g.strokeStyle='rgba(255,84,112,.7)';g.lineWidth=2;
-            g.beginPath();g.moveTo(cx,y-10);g.lineTo(cx,y-2);g.stroke();
-          }
           g.restore();
+          if(e.alerta>0){
+            const f=e.alerta/.45;
+            g.globalAlpha=f;
+            g.fillStyle='#FF5470';
+            g.font='900 22px Arial Black,system-ui,sans-serif';
+            g.textAlign='center';
+            g.fillText('!',cx,y-14-(1-f)*10);
+            g.textAlign='left';
+            g.globalAlpha=1;
+          }
+          if(mergulha){
+            g.strokeStyle='rgba(255,84,112,.5)';g.lineWidth=2;g.setLineDash([5,6]);
+            g.beginPath();g.moveTo(cx,y+h);g.lineTo(cx,y+h+60);g.stroke();
+            g.setLineDash([]);
+          }
           break;
         }
         case 'seguidor':{
@@ -2452,7 +3393,7 @@ const Arte={
           if(plateia){
             g.strokeStyle='rgba(255,197,61,.75)';g.lineWidth=2;
             g.beginPath();g.arc(cx,cy,46+Math.sin(e.anim*3)*4,0,Math.PI*2);g.stroke();
-          }else{
+          }else if(!e.emRetrato){
             g.fillStyle='rgba(255,84,112,.9)';
             g.font='700 11px system-ui,sans-serif';
             g.textAlign='center';
@@ -2493,6 +3434,153 @@ const Arte={
           }
           break;
         }
+        case 'cobranca':{
+          const exp=e.estado==='exposta', mira=e.estado==='mira';
+          const tr=mira?Math.sin(e.anim*22)*2:0;
+          /* prancheta */
+          g.fillStyle=exp?'#7A3A22':c1;
+          g.fillRect(x+4+tr,y+12,w-8,h-12);
+          g.fillStyle='#F4F1FF';
+          g.fillRect(x+9+tr,y+20,w-18,h-26);
+          g.fillStyle='#9A9AB0';
+          for(let i=0;i<3;i++)g.fillRect(x+13+tr,y+26+i*8,w-26-(i===2?9:0),2.6);
+          g.fillStyle=c2;
+          g.fillRect(x+11+tr,y+7,w-22,8);
+          /* dedo em riste */
+          g.save();
+          g.translate(cx+e.dir*(w*.42)+tr,y+8);
+          g.rotate(e.dir>0?(mira?-.5:-.2):(mira?.5:.2));
+          g.fillStyle='#E8B78F';
+          g.beginPath();
+          g.roundRect?g.roundRect(-4,-16,8,18,4):g.rect(-4,-16,8,18);
+          g.fill();
+          g.restore();
+          /* sobrancelha brava */
+          g.strokeStyle='#3A1B08';g.lineWidth=3;g.lineCap='round';
+          g.beginPath();
+          g.moveTo(cx-11,y+2);g.lineTo(cx-2,y+6);
+          g.moveTo(cx+11,y+2);g.lineTo(cx+2,y+6);
+          g.stroke();
+          if(mira){
+            g.fillStyle='#FF5470';
+            g.font='900 20px Arial Black,system-ui,sans-serif';
+            g.textAlign='center';
+            g.fillText('!',cx,y-10);
+            g.textAlign='left';
+          }
+          if(exp){
+            g.globalAlpha=.35+Math.sin(e.anim*10)*.2;
+            g.fillStyle='#43E098';
+            g.beginPath();g.arc(cx,cy,30,0,Math.PI*2);g.fill();
+            g.globalAlpha=1;
+          }
+          break;
+        }
+        case 'turma':{
+          const bal=Math.sin(e.anim*11)*2;
+          const corr=e.pressa>0;
+          const cb=corr?'#FF5470':c1;
+          /* pernas */
+          g.strokeStyle=cb;g.lineWidth=3.2;g.lineCap='round';
+          for(const sg of[-1,1]){
+            g.beginPath();
+            g.moveTo(cx+sg*5,y+h-9);
+            g.lineTo(cx+sg*5+Math.sin(e.anim*11+sg)*3,y+h);
+            g.stroke();
+          }
+          /* corpo */
+          g.fillStyle=cb;
+          g.beginPath();
+          g.roundRect?g.roundRect(x+6,y+15+bal,w-12,h-24,5):g.rect(x+6,y+15+bal,w-12,h-24);
+          g.fill();
+          /* bracinhos apontando */
+          g.strokeStyle=cb;g.lineWidth=3;
+          g.beginPath();
+          g.moveTo(x+6,y+19+bal);g.lineTo(x-1+e.dir*3,y+25+bal);
+          g.moveTo(x+w-6,y+19+bal);g.lineTo(x+w+1+e.dir*3,y+25+bal);
+          g.stroke();
+          /* cabeça rindo */
+          g.fillStyle=c2;
+          g.beginPath();g.arc(cx,y+11+bal,9.5,0,Math.PI*2);g.fill();
+          g.fillStyle='#1B2A22';
+          g.beginPath();g.arc(cx-3.6,y+9+bal,1.8,0,Math.PI*2);g.fill();
+          g.beginPath();g.arc(cx+3.6,y+9+bal,1.8,0,Math.PI*2);g.fill();
+          g.strokeStyle='#1B2A22';g.lineWidth=2;
+          g.beginPath();g.arc(cx,y+12+bal,4.2,.18,Math.PI-.18);g.stroke();
+          if(corr){
+            g.globalAlpha=.55;
+            g.fillStyle='#FF5470';
+            for(let i=1;i<=2;i++)g.fillRect(cx-e.dir*(12+i*7),y+20,6,3);
+            g.globalAlpha=1;
+          }
+          break;
+        }
+        case 'bot':{
+          const gira=Math.sin(e.anim*3)*.16;
+          g.save();
+          g.translate(cx,cy);g.rotate(gira);
+          g.fillStyle=c1;
+          g.beginPath();
+          g.roundRect?g.roundRect(-w/2,-h/2,w,h,7):g.rect(-w/2,-h/2,w,h);
+          g.fill();
+          g.strokeStyle=c2;g.lineWidth=2;
+          g.beginPath();
+          g.roundRect?g.roundRect(-w/2+3,-h/2+3,w-6,h-6,5):g.rect(-w/2+3,-h/2+3,w-6,h-6);
+          g.stroke();
+          /* carinha de tela */
+          g.fillStyle=c2;
+          g.fillRect(-8,-5,4,4);g.fillRect(4,-5,4,4);
+          g.fillRect(-6,4,12,2.4);
+          /* setas de repetição */
+          g.strokeStyle='rgba(127,196,255,.8)';g.lineWidth=2;
+          g.beginPath();g.arc(0,0,w*.62,-1.1,1.1);g.stroke();
+          g.beginPath();g.arc(0,0,w*.62,Math.PI-1.1,Math.PI+1.1);g.stroke();
+          g.restore();
+          /* barra de quanto falta pra copiar */
+          if(e.copias<2&&!e.emRetrato){
+            const f2=1-clamp(e.timer/5,0,1);
+            g.fillStyle='rgba(12,8,26,.6)';
+            g.fillRect(x,y+h+3,w,3);
+            g.fillStyle='#FF5470';
+            g.fillRect(x,y+h+3,w*f2,3);
+          }
+          break;
+        }
+        case 'ameaca':{
+          const sol=e.solidez;
+          g.globalAlpha=sol;
+          /* vulto */
+          g.fillStyle=c1;
+          g.beginPath();
+          g.moveTo(cx,y);
+          g.bezierCurveTo(x+w+8,y+h*.3,x+w-2,y+h,cx+Math.sin(e.anim*3)*4,y+h);
+          g.bezierCurveTo(x+2,y+h,x-8,y+h*.3,cx,y);
+          g.closePath();g.fill();
+          /* mão erguida */
+          if(sol>.7){
+            g.fillStyle=this.mistura(c1,'#FFFFFF',.22);
+            g.save();
+            g.translate(cx+e.dir*15,y+20);g.rotate(e.dir*.5);
+            g.beginPath();
+            g.roundRect?g.roundRect(-5,-16,10,20,5):g.rect(-5,-16,10,20);
+            g.fill();
+            g.restore();
+          }
+          /* olhos */
+          g.fillStyle=c2;
+          g.globalAlpha=sol*(sol>.7?1:.5);
+          g.beginPath();g.arc(cx-6+e.dir*2,y+20,3.6,0,Math.PI*2);g.fill();
+          g.beginPath();g.arc(cx+6+e.dir*2,y+20,3.6,0,Math.PI*2);g.fill();
+          g.globalAlpha=1;
+          if(sol<.6){
+            g.globalAlpha=.4;
+            g.strokeStyle=c2;g.lineWidth=2;g.setLineDash([4,5]);
+            g.strokeRect(x+2,y+2,w-4,h-4);
+            g.setLineDash([]);
+            g.globalAlpha=1;
+          }
+          break;
+        }
         case 'muro':{
           g.fillStyle=c1;
           g.fillRect(x,y,w,h);
@@ -2505,15 +3593,58 @@ const Arte={
           }
           g.fillStyle=c2;
           g.fillRect(x,y,w,5);
-          /* cara fechada */
+          /* cara fechada, lá em cima */
           g.fillStyle='#1B1524';
-          g.fillRect(x+11,y+30,10,5);g.fillRect(x+w-21,y+30,10,5);
-          g.fillRect(x+13,y+52,w-26,4);
+          g.fillRect(x+12,y+30,10,5);g.fillRect(x+w-22,y+30,10,5);
+          g.fillRect(x+14,y+52,w-28,4);
+          /* rachaduras crescem com o dano */
+          const dnv=1-e.vida/e.vidaMax;
+          if(dnv>0){
+            g.strokeStyle='rgba(255,255,255,.45)';
+            g.lineWidth=2.2;g.lineCap='round';
+            const n=Math.ceil(dnv*5);
+            for(let i=0;i<n;i++){
+              const yy=y+70+i*((h-90)/5);
+              g.beginPath();
+              g.moveTo(x+6,yy);
+              g.lineTo(x+w*.45,yy+((i%2)?18:-16));
+              g.lineTo(x+w-6,yy+((i%2)?-8:12));
+              g.stroke();
+            }
+          }
           break;
         }
       }
-      g.restore();
-    }
+  },
+
+  /* Retrato de um inimigo em PNG, para a Cartilha. Fica em cache. */
+  _retratos:{},
+  retrato(tipo,lado){
+    lado=lado||96;
+    const k=tipo+'@'+lado;
+    if(this._retratos[k])return this._retratos[k];
+    try{
+      const cv=document.createElement('canvas');
+      cv.width=lado;cv.height=lado;
+      const g2=cv.getContext('2d');
+      const e=criaInimigo(tipo,0,0,{});
+      if(tipo==='rotulo')e.aberto=true,e.tampa=1;
+      if(tipo==='ciume')e.estado='anda';
+      if(tipo==='cobranca')e.estado='mira';
+      /* o muro tem 460px: no retrato mostramos só a parte de cima, onde está a cara */
+      if(tipo==='muro')e.h=150;
+      e.anim=1.1;e.solidez=1;e.squash=1;e.semSombra=true;e.emRetrato=true;
+      /* margem generosa: vários bichos desenham fora da própria caixa
+         (o dedo da Cobrança, o "HÁ HÁ" da piada) */
+      const esc=Math.min((lado-34)/e.w,(lado-30)/e.h);
+      e.x=0;e.y=0;
+      g2.save();
+      g2.translate(lado/2-e.w*esc/2,lado/2-e.h*esc/2+6);
+      g2.scale(esc,esc);
+      this.corpoInimigo(g2,e);
+      g2.restore();
+      return this._retratos[k]=cv.toDataURL('image/png');
+    }catch(err){return '';}
   },
 
   chefe(g,b){
@@ -2524,17 +3655,28 @@ const Arte={
     const pisca=b.piscar>0&&Math.floor(b.piscar*40)%2===0;
     const cx=b.x+b.w/2, cy=b.y+b.h/2;
     g.save();
-    g.globalAlpha=.2+Math.sin(b.anim*3)*.06;
+    g.globalAlpha=(caido?.07:.16)+Math.sin(b.anim*3)*.04;
     g.fillStyle=c2;
-    g.beginPath();g.arc(cx,cy,b.w*.8,0,Math.PI*2);g.fill();
+    g.beginPath();g.arc(cx,cy,b.w*(caido?.5:.62),0,Math.PI*2);g.fill();
     g.globalAlpha=1;
     /* máscara */
-    g.fillStyle=pisca?'#FFFFFF':(caido?'#5B4A72':c1);
     g.beginPath();
     g.moveTo(cx,b.y);
     g.bezierCurveTo(b.x+b.w,b.y+10,b.x+b.w,b.y+b.h*.72,cx,b.y+b.h);
     g.bezierCurveTo(b.x,b.y+b.h*.72,b.x,b.y+10,cx,b.y);
-    g.closePath();g.fill();
+    g.closePath();
+    g.fillStyle=pisca?'#FFFFFF':(caido?'#6B5687':c1);
+    g.fill();
+    g.strokeStyle=caido?'rgba(255,197,61,.9)':'rgba(12,8,26,.55)';
+    g.lineWidth=caido?4:3;
+    g.stroke();
+    /* brilho de cima, dá volume */
+    g.save();g.clip();
+    const bg=g.createLinearGradient(0,b.y,0,b.y+b.h);
+    bg.addColorStop(0,'rgba(255,255,255,.16)');
+    bg.addColorStop(.6,'rgba(255,255,255,0)');
+    g.fillStyle=bg;g.fillRect(b.x,b.y,b.w,b.h);
+    g.restore();
     /* olhos */
     const olhoY=b.y+b.h*.36;
     if(caido){
@@ -2580,7 +3722,8 @@ const Arte={
     }
     g.restore();
 
-    /* barra fixa no topo */
+    /* barra fixa no topo, só depois que a luta começa */
+    if(b.estado==='entrada')return;
     const lg=Math.min(Vista.larg*.6,540);
     const bx=Cam.ox+(Vista.larg-lg)/2, by=Cam.oy+24;
     g.fillStyle='rgba(18,10,42,.82)';
@@ -2639,92 +3782,255 @@ const Arte={
     g.globalAlpha=1;
   },
 
-  /* --- A Manu --- */
+  /* --- qual pose a Manu está fazendo agora --- */
+  _pose:'parado',_animT:0,_quadro:0,
+  poseDaManu(){
+    const p=Jog;
+    if(!p.vivo)return 'caido';
+    if(p.invul>1.05)return 'dano';
+    if(p.vozCarga>0||p.vozRecarga>.16)return 'voz';
+    if(!p.noChao)return p.vy<0?'pulo':'caindo';
+    if(Math.abs(p.vx)>34)return 'corre';
+    return 'parado';
+  },
+  animaManu(dt){
+    const nova=this.poseDaManu();
+    if(nova!==this._pose){this._pose=nova;this._animT=0;this._quadro=0;}
+    const cfg=FOLHA_MANU.poses[this._pose]||FOLHA_MANU.poses.parado;
+    this._animT+=dt;
+    const passo=1/(cfg.fps||8);
+    while(this._animT>=passo){this._animT-=passo;this._quadro++;}
+  },
+
+  /* --- A Manu ---
+     Desenhada com um esqueleto simples: os membros são cápsulas
+     giradas a partir da articulação. É o que dá o ciclo de corrida. */
+  /* cápsula ligando dois pontos: o membro se estica e encolhe sozinho,
+     então o pé pode ficar cravado no chão enquanto o quadril sobe */
+  membroEntre(g,x1,y1,x2,y2,larg,cor){
+    const dx=x2-x1,dy=y2-y1;
+    const comp=Math.max(1,Math.sqrt(dx*dx+dy*dy));
+    g.save();
+    g.translate(x1,y1);
+    g.rotate(Math.atan2(dy,dx));
+    g.fillStyle=cor;
+    g.beginPath();
+    g.roundRect?g.roundRect(0,-larg/2,comp,larg,larg/2):g.rect(0,-larg/2,comp,larg);
+    g.fill();
+    g.restore();
+  },
+
+  membro(g,x,y,comp,larg,ang,cor){
+    g.save();
+    g.translate(x,y);
+    g.rotate(ang);
+    g.fillStyle=cor;
+    g.beginPath();
+    g.roundRect?g.roundRect(-larg/2,0,larg,comp,larg/2):g.rect(-larg/2,0,larg,comp);
+    g.fill();
+    g.restore();
+  },
+
   manu(g){
     const p=Jog;
     if(!p.vivo&&p.morrendoTimer<=0)return;
     if(p.invul>0&&p.vivo&&Math.floor(p.piscar)%2===0)return;
     const cx=p.x+p.w/2, base=p.y+p.h;
-    const anda=Math.abs(p.vx)>30&&p.noChao;
-    const passo=anda?Math.sin(p.animCaminho*15):0;
-    const noAr=!p.noChao;
 
-    g.save();
-    g.translate(cx,base);
-    g.scale(p.esticaX,p.esticaY);
-    g.translate(-cx,-base);
-
+    /* sombra encolhe conforme ela sobe */
     if(p.vivo){
-      g.fillStyle='rgba(0,0,0,.28)';
-      g.beginPath();g.ellipse(cx,base+3,16,5,0,0,Math.PI*2);g.fill();
+      const alto=p.noChao?0:clamp((p.quedaDe!==null?p.y-p.quedaDe:70)/170,0,1);
+      g.globalAlpha=.3-alto*.15;
+      g.fillStyle='#000';
+      g.beginPath();g.ellipse(cx,base+3,15-alto*5,4.6-alto*1.5,0,0,Math.PI*2);g.fill();
+      g.globalAlpha=1;
     }
-    /* brilho do impacto */
     if(p.impactoBrilho>0){
       g.globalAlpha=p.impactoBrilho*.5;
       g.fillStyle='#FFC53D';
       g.beginPath();g.ellipse(cx,base,44,12,0,0,Math.PI*2);g.fill();
       g.globalAlpha=1;
     }
-    /* pernas */
-    g.fillStyle='#2B3A6B';
-    if(p.noChao){
-      g.fillRect(cx-10+passo*4,base-20,8,20);
-      g.fillRect(cx+2-passo*4,base-20,8,20);
-    }else{
-      g.fillRect(cx-11,base-20,8,17);
-      g.fillRect(cx+3,base-22,8,20);
-    }
-    g.fillStyle='#F4F1FF';
-    g.fillRect(cx-11,base-4,9,4);
-    g.fillRect(cx+2,base-4,9,4);
-    /* saia-camiseta */
-    g.fillStyle='#C99BFF';
-    g.beginPath();
-    g.moveTo(cx-12,base-40);
-    g.lineTo(cx+12,base-40);
-    g.lineTo(cx+15,base-17);
-    g.lineTo(cx-15,base-17);
-    g.closePath();g.fill();
-    g.fillStyle='#A855F7';
-    g.fillRect(cx-12,base-40,24,6);
-    /* crachá */
-    g.fillStyle='#E7E1FA';
-    g.fillRect(cx-1,base-36,2,8);
-    g.fillStyle='#FFC53D';
-    g.fillRect(cx-5,base-29,10,7);
-    /* braços */
-    g.fillStyle='#E8B78F';
-    const braco=noAr?-7:(anda?passo*5:0);
-    g.fillRect(cx-17,base-39+braco,6,16);
-    g.fillRect(cx+11,base-39-braco,6,16);
-    /* rabo de cavalo, balança com a corrida */
-    g.fillStyle='#3A2016';
+
     g.save();
-    g.translate(cx-(p.dir>0?10:-10),base-56);
-    g.rotate((p.rabo/28)+(noAr?-.25:Math.sin(p.animCaminho*15)*.12));
+    g.translate(cx,base);
+    g.scale(p.esticaX,p.esticaY);
+    g.translate(-cx,-base);
+
+    if(Sprites.pronto){
+      const cfg=FOLHA_MANU;
+      const pose=cfg.poses[this._pose]||cfg.poses.parado;
+      const qi=pose.q[this._quadro%pose.q.length];
+      const h=cfg.alturaMundo, w=cfg.larg*(h/cfg.alt);
+      g.save();
+      g.translate(cx,base);
+      g.scale(p.dir<0?-1:1,1);
+      g.drawImage(Sprites.img,qi*cfg.larg,0,cfg.larg,cfg.alt,-w/2,-h+(cfg.desloqueY||0),w,h);
+      g.restore();
+      g.restore();
+      this.efeitosManu(g,p,cx);
+      return;
+    }
+
+    /* ---- proporções ----
+       pés na base · quadril -22 · ombro -37 · cabeça -49 */
+    const t=Jogo.tempoTotal;
+    const anda=Math.abs(p.vx)>34&&p.noChao;
+    const noAr=!p.noChao;
+    const ciclo=p.animCaminho*13;
+    const vel=clamp(Math.abs(p.vx)/330,0,1);
+    const bob=anda?Math.abs(Math.sin(ciclo))*2.2*vel:Math.sin(t*2)*.9;
+    const quad=base-27-bob, omb=base-41-bob, cabY=base-52-bob;
+    const D=p.dir>0?1:-1;
+    const PELE='#E8B78F', PELE2='#D9A87F', CABELO='#3A2016',
+          CALCA='#2B3A6B', CALCA2='#1E2A4E', BLUSA='#C99BFF', BLUSA2='#A855F7';
+
+    /* --- passada: o pé anda numa elipse; a perna liga quadril ao pé --- */
+    const passada=anda?13*vel:0, altura=anda?8*vel:0;
+    const faseA=ciclo, faseB=ciclo+Math.PI;
+    const peDe=(fase,dx)=>{
+      if(noAr){
+        /* subindo dobra as pernas; caindo estica pra frente */
+        const sobe=p.vy<0;
+        const atras=(dx*D)<0;
+        return [cx+dx+(sobe?(atras?-7*D:2*D):(atras?-2*D:9*D)),
+                base-(sobe?(atras?16:9):(atras?6:1))];
+      }
+      const lift=Math.max(0,Math.cos(fase))*altura;
+      return [cx+dx+Math.sin(fase)*passada, base-lift];
+    };
+    const pePos=[peDe(faseB,-3.5*D),peDe(faseA,3.5*D)];
+
+    const desenhaPerna=(pe,dx,corPerna,corTenis)=>{
+      const hx=cx+dx;
+      this.membroEntre(g,hx,quad,pe[0],pe[1]-3,8,corPerna);
+      g.save();
+      g.translate(pe[0],pe[1]);
+      g.fillStyle=corTenis;
+      g.beginPath();
+      g.roundRect?g.roundRect(-4.5+D*1.5,-5,10,5.5,2.4):g.rect(-4.5,-5,10,5.5);
+      g.fill();
+      g.fillStyle=BLUSA2;
+      g.fillRect(-4.5+D*1.5,-5,10,1.6);
+      g.restore();
+    };
+
+    /* --- braços: a mão orbita o ombro --- */
+    const maoDe=(ang,dx)=>[cx+dx-15*Math.sin(ang),omb+15*Math.cos(ang)];
+    let angA,angB;
+    if(noAr){
+      angA=(p.vy<0?-2.2:-1.7)*D; angB=(p.vy<0?-2.6:-2.1)*D;
+    }else if(anda){
+      angA=Math.sin(faseB)*.85; angB=Math.sin(faseA)*.85;
+    }else{
+      angA=Math.sin(t*2)*.09+.05; angB=Math.sin(t*2+1)*.09-.05;
+    }
+    if(this._pose==='voz')angB=-1.45*D;
+
+    /* ordem: tudo que fica atrás primeiro */
+    desenhaPerna(pePos[0],-3.5*D,CALCA2,'#D8D2EE');
+    const moA=maoDe(angA,-8*D);
+    this.membroEntre(g,cx-8*D,omb+1,moA[0],moA[1],5.6,PELE2);
+
+    /* tronco */
+    g.fillStyle=BLUSA;
     g.beginPath();
-    g.moveTo(0,0);
-    g.quadraticCurveTo(-(p.dir>0?16:-16),10,-(p.dir>0?12:-12),26);
-    g.quadraticCurveTo(-(p.dir>0?4:-4),16,0,4);
+    g.moveTo(cx-8.5,omb-2);
+    g.lineTo(cx+8.5,omb-2);
+    g.lineTo(cx+10,quad);
+    g.lineTo(cx-10,quad);
     g.closePath();g.fill();
-    g.restore();
-    /* cabeça */
-    g.fillStyle='#E8B78F';
-    g.beginPath();g.arc(cx,base-52,12,0,Math.PI*2);g.fill();
-    /* cabelo */
-    g.fillStyle='#3A2016';
-    g.beginPath();g.arc(cx,base-55,12.5,Math.PI,Math.PI*2);g.fill();
-    g.fillRect(cx-12.5,base-56,25,5);
-    g.beginPath();g.arc(cx-(p.dir>0?10:-10),base-56,4.5,0,Math.PI*2);g.fill();
-    /* rosto */
-    g.fillStyle='#120A2A';
-    const ox=p.dir>0?2:-6;
-    g.fillRect(cx+ox-4,base-54,3,4);
-    g.fillRect(cx+ox+3,base-54,3,4);
-    g.fillStyle='#B5615E';
-    g.fillRect(cx+ox,base-47,5,2);
+    g.fillStyle=BLUSA2;
+    g.fillRect(cx-8.5,omb-2,17,3.4);
+
+    /* saia em A */
+    const sw=anda?Math.sin(ciclo)*2.4*vel:0;
+    g.fillStyle=BLUSA2;
+    g.beginPath();
+    g.moveTo(cx-10,quad-6);
+    g.lineTo(cx+10,quad-6);
+    g.lineTo(cx+14+sw,quad+3);
+    g.lineTo(cx-14+sw,quad+3);
+    g.closePath();g.fill();
+    g.fillStyle='rgba(255,255,255,.14)';
+    g.fillRect(cx-14+sw,quad,28,2);
+
+    desenhaPerna(pePos[1],3.5*D,CALCA,'#F4F1FF');
+
+    /* crachá do CIEE, pequeno e no cordão */
+    const bal=clamp(-p.vx*.016,-3,3)+(noAr?-1.5:0);
+    g.strokeStyle='rgba(231,225,250,.8)';g.lineWidth=1.2;
+    g.beginPath();g.moveTo(cx-2*D,omb+1);g.lineTo(cx-3*D+bal,omb+8);g.stroke();
+    g.save();
+    g.translate(cx-3*D+bal,omb+8);g.rotate(bal*.06);
+    g.fillStyle='#FFC53D';
+    g.beginPath();
+    g.roundRect?g.roundRect(-3.4,0,6.8,5,1.4):g.rect(-3.4,0,6.8,5);
+    g.fill();
+    g.fillStyle='#1B4FD8';g.fillRect(-3.4,0,6.8,1.6);
     g.restore();
 
+    /* ---- cabeça ---- */
+    const hx=cx+clamp(p.vx*.012,-2.5,2.5)*D*0+D*1.5;
+    /* rabo de cavalo atrás */
+    g.save();
+    g.translate(hx-8*D,cabY-2);
+    g.rotate((p.rabo/30)*D+(noAr?-.35:Math.sin(ciclo)*.13)+D*.35);
+    g.fillStyle=CABELO;
+    g.beginPath();
+    g.moveTo(0,0);
+    g.quadraticCurveTo(-11*D,10,-9*D,24);
+    g.quadraticCurveTo(-2*D,14,0,3);
+    g.closePath();g.fill();
+    g.restore();
+    g.fillStyle=BLUSA;
+    g.beginPath();g.arc(hx-8*D,cabY-2,3,0,Math.PI*2);g.fill();
+
+    g.fillStyle=PELE;
+    g.beginPath();g.arc(hx,cabY,9.4,0,Math.PI*2);g.fill();
+    /* cabelo por cima */
+    g.fillStyle=CABELO;
+    g.beginPath();g.arc(hx,cabY-1.5,9.8,Math.PI,0);g.fill();
+    g.beginPath();
+    g.moveTo(hx-9.8,cabY-1.5);
+    g.quadraticCurveTo(hx-2*D,cabY+3.4,hx+8.4*D,cabY-3);
+    g.lineTo(hx+9.8,cabY-4);
+    g.lineTo(hx-9.8,cabY-4);
+    g.closePath();g.fill();
+
+    /* rosto, voltado para a direção da corrida */
+    const ox=D*2.5;
+    const pisca=(t%3.7)<.11;
+    g.fillStyle='#120A2A';
+    if(pisca||this._pose==='dano'){
+      g.fillRect(hx+ox-4.5,cabY+1.5,3.4,1.5);
+      g.fillRect(hx+ox+1.6,cabY+1.5,3.4,1.5);
+    }else{
+      g.fillRect(hx+ox-4.5,cabY-.5,3.2,4);
+      g.fillRect(hx+ox+1.6,cabY-.5,3.2,4);
+      g.fillStyle='rgba(255,255,255,.8)';
+      g.fillRect(hx+ox-4.1,cabY-.1,1.2,1.3);
+      g.fillRect(hx+ox+2,cabY-.1,1.2,1.3);
+    }
+    g.fillStyle='#C4756E';
+    if(this._pose==='voz'){
+      g.beginPath();g.ellipse(hx+ox,cabY+6,3,2.8,0,0,Math.PI*2);g.fill();
+    }else if(noAr){
+      g.fillRect(hx+ox-2,cabY+5.5,4.5,2);
+    }else{
+      g.beginPath();g.arc(hx+ox,cabY+4.4,2.8,.15,Math.PI-.15);g.fill();
+    }
+
+    const moB=maoDe(angB,8*D);
+    this.membroEntre(g,cx+8*D,omb+1,moB[0],moB[1],6,PELE);
+    g.fillStyle=PELE;
+    g.beginPath();g.arc(moB[0],moB[1],3.4,0,Math.PI*2);g.fill();
+
+    g.restore();
+    this.efeitosManu(g,p,cx);
+  },
+
+  efeitosManu(g,p,cx){
     /* carga da voz */
     if(p.vozCarga>0){
       const f=p.vozCarga/.55;
@@ -2851,19 +4157,31 @@ const Interface={
 
   menu(){
     const temSalvo=Jogo.faseMax>1;
+    const prog=Math.round((Jogo.vistos.size/ORDEM_MURAIS.length)*100);
     $('#c-menu').innerHTML=`
       <div class="rolar"><div class="menu-caixa">
         <div class="marca"><span class="selo azul">CIEE</span><span class="selo">Bem Querer Mulher</span></div>
         <h1 class="titulo">Se Liga<br><span class="lilas">Moçada</span></h1>
-        <div class="olho" style="margin-top:12px">O caminho da Manu</div>
-        <p class="sub">Cinco fases sobre a cultura machista que ninguém estranha, a machosfera que recruta meninos e a violência que começa dentro de casa — muito antes do primeiro soco.</p>
+        <div class="olho" style="margin-top:14px">O caminho da Manu</div>
+        <p class="sub">Nada aqui começa com um grito. Começa com a piada que todo mundo acha graça, com a tarefa que só sobra pra ela, com o "é só ciúme". Cinco fases atrás do caminho que a violência faz antes de virar violência.</p>
+        ${temSalvo?`<div class="cartao" style="margin-bottom:14px">
+          <div class="olho">Onde você parou</div>
+          <div style="display:flex;align-items:baseline;gap:12px;margin-top:10px;flex-wrap:wrap">
+            <span class="display" style="font-size:26px;color:var(--sol)">FASE ${Jogo.faseMax}</span>
+            <span style="color:var(--papel-2);font-size:13.5px">${esc(FASES[Jogo.faseMax-1].nome)} · ${esc(FASES[Jogo.faseMax-1].tema)}</span>
+          </div>
+          <div class="divisor"></div>
+          <div style="display:flex;gap:18px;font-size:12px;color:var(--papel-2);font-family:var(--mono);flex-wrap:wrap">
+            <span>CARTILHA ${prog}%</span><span>QUEM É QUEM ${Jogo.conhecidos.size}/12</span><span>${Jog.pontos} PTS</span>
+          </div>
+        </div>`:''}
         <div class="menu-botoes">
-          <button class="btn" id="m-jogar">${temSalvo?'Continuar da fase '+Jogo.faseMax:'Começar'}</button>
-          ${temSalvo?'<button class="btn roxo" id="m-novo">Começar do início</button>':''}
-          <button class="btn roxo" id="m-cart">Cartilha</button>
+          <button class="btn" id="m-jogar">${temSalvo?'Continuar':'Começar a jornada'}</button>
+          ${temSalvo?'<button class="btn vazio" id="m-novo">Recomeçar do zero</button>':''}
+          <button class="btn roxo" id="m-cart">Cartilha e Quem é quem</button>
           <button class="btn vazio" id="m-ajuda">Como se joga</button>
         </div>
-        <div class="aviso"><b>Antes de começar:</b> o jogo trata de machismo e violência contra a mulher. Se algum tema te tocar de perto, o <b>Ligue 180</b> atende de graça, 24 horas, e aceita denúncia anônima. Emergência: <b>190</b>.</div>
+        <div class="aviso"><b>Antes de começar:</b> o jogo fala de machismo e de violência contra a mulher. Se algum tema te tocar de perto, o <b>Ligue 180</b> atende de graça, 24 horas, e aceita denúncia anônima. Emergência: <b>190</b>.</div>
       </div></div>`;
     this.mostra('#c-menu');
     $('#m-jogar').onclick=()=>Jogo.iniciaFase(Jogo.faseMax);
@@ -2875,18 +4193,26 @@ const Interface={
   ajuda(){
     $('#c-pausa').innerHTML=`
       <div class="rolar"><div class="painel">
-        <div class="olho">Só dois controles</div>
+        <div class="olho">Três botões, e só</div>
         <h2 class="sec">Como se joga</h2>
-        <p style="color:var(--papel-2);font-size:14px">A Manu só sabe andar e pular. Todo o resto é saber <b>onde</b> e <b>de que altura</b>.</p>
-        <div class="grade">
-          <div class="verbete"><h4>Andar</h4><p>Setas ou A / D. No celular, os dois botões da esquerda.</p></div>
-          <div class="verbete"><h4>Pular</h4><p>Espaço, W, Z ou seta pra cima. No celular, o botão verde. Segure para pular mais alto.</p></div>
-          <div class="verbete"><h4>Pisar</h4><p>Caia em cima da piada pronta, do rótulo aberto e dos seguidores.</p></div>
-          <div class="verbete"><h4>Estourar por baixo</h4><p>Suba pulando por baixo do comentário. Por cima, ele te acerta.</p></div>
-          <div class="verbete"><h4>Cair de altura</h4><p>Queda longa vira impacto: racha o muro do "sempre foi assim" e derruba quem estiver perto.</p></div>
-          <div class="verbete"><h4>Deixar cair sozinho</h4><p>O Ciúme fica cego quando persegue e não enxerga buraco. Passe por cima do vão e ele vai atrás.</p></div>
-          <div class="verbete"><h4>Descer</h4><p>Segure a seta para baixo em cima de uma plataforma fina.</p></div>
-          <div class="verbete"><h4>Pausar</h4><p>ESC ou P. A tecla M liga e desliga o som.</p></div>
+        <p class="linha-fina">A Manu anda, pula e usa a voz. Todo o resto é saber <b>onde</b> pisar, <b>de que altura</b> cair e <b>o que não dá pra enfrentar sozinha</b>.</p>
+        <div class="cartao" style="margin:16px 0">
+          <div class="olho">Controles</div>
+          <div class="grade" style="margin:14px 0 0">
+            <div class="verbete"><h4>Andar</h4><p>Setas ou A / D. No celular, os dois botões da esquerda.</p></div>
+            <div class="verbete"><h4>Pular</h4><p>Espaço, W ou seta para cima. Segure para pular mais alto.</p></div>
+            <div class="verbete"><h4>Usar a voz</h4><p>X, F ou Enter. No celular, o botão roxo. Da fase 3 em diante, segure para carregar.</p></div>
+            <div class="verbete"><h4>Descer</h4><p>Seta para baixo em cima de plataforma fina. ESC pausa, M liga o som.</p></div>
+          </div>
+        </div>
+        <div class="olho">O que funciona contra o quê</div>
+        <div class="grade" style="margin-top:14px">
+          <div class="verbete"><h4>Pisar</h4><p>Resolve piada pronta, rótulo aberto, a turma e os seguidores.</p></div>
+          <div class="verbete"><h4>Por baixo</h4><p>Suba pulando por baixo do comentário para estourar. Por cima, ele acerta você.</p></div>
+          <div class="verbete"><h4>Cair de altura</h4><p>Queda longa vira impacto e racha o muro do "sempre foi assim".</p></div>
+          <div class="verbete"><h4>Deixar cair</h4><p>O Ciúme cega quando persegue e não enxerga buraco. Passe por cima do vão.</p></div>
+          <div class="verbete"><h4>Ordem certa</h4><p>O Alfa só cai depois da plateia dele. O rótulo, só de tampa aberta.</p></div>
+          <div class="verbete"><h4>As letras</h4><p>Cada fase esconde C, I, E e E. Sem as quatro, a saída não abre.</p></div>
         </div>
         <button class="btn" id="a-volta">Voltar</button>
       </div></div>`;
@@ -2896,24 +4222,31 @@ const Interface={
 
   fimDeFase(fase){
     const prox=FASES[fase];
+    const f=FASES[fase-1];
     $('#c-fim').innerHTML=`
       <div class="rolar"><div class="painel">
         <div class="olho">Fase ${fase} concluída</div>
-        <h2 class="sec">${esc(FASES[fase-1].nome)}</h2>
-        <p style="color:var(--papel-2);font-size:14.5px">${esc(FASES[fase-1].resumo)}</p>
+        <h2 class="sec">${esc(f.nome)}</h2>
+        <p class="linha-fina">${esc(f.resumo)}</p>
         <div class="placar">
           <div><div class="n">C·I·E·E</div><div class="r">completo</div></div>
           <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
-          <div><div class="n">${Jog.quedas}</div><div class="r">quedas</div></div>
+          <div><div class="n">${Jogo.conhecidos.size}<span style="font-size:.5em">/12</span></div><div class="r">quem é quem</div></div>
         </div>
-        ${prox?`<div class="canais" style="background:rgba(77,139,255,.1);border-color:rgba(77,139,255,.4)">
-          <h4 style="color:var(--azul)">A seguir · ${esc(prox.nome)}</h4>
-          <p style="margin:0;font-size:13.5px">${esc(prox.resumo)}</p>
-          <p style="margin:10px 0 0;font-size:13.5px;color:var(--sol)">${esc(prox.dica)}</p>
+        ${prox?`<div class="cartao" style="margin:4px 0 16px">
+          <div class="olho">A seguir · Fase ${prox.n}</div>
+          <div class="display" style="font-size:clamp(19px,4.4vw,25px);margin:10px 0 8px">${esc(prox.nome)}</div>
+          <p style="margin:0 0 12px;font-size:13.5px;color:var(--papel-2)">${esc(prox.resumo)}</p>
+          <div class="divisor"></div>
+          <p style="margin:0;font-size:13.5px;color:var(--sol)"><b>Novidade:</b> ${esc(prox.dica)}</p>
         </div>`:''}
-        <button class="btn verde" id="fim-prox">${prox?'Ir para a fase '+prox.n:'Continuar'}</button>
+        <div class="linha-btn">
+          <button class="btn vazio" id="fim-cart">Cartilha</button>
+          <button class="btn verde" id="fim-prox">${prox?'Ir para a fase '+prox.n:'Continuar'}</button>
+        </div>
       </div></div>`;
     this.mostra('#c-fim');
+    $('#fim-cart').onclick=()=>this.cartilha(()=>this.fimDeFase(fase));
     $('#fim-prox').onclick=()=>{if(prox)Jogo.iniciaFase(prox.n);else Jogo.perguntaFinal();};
   },
 
@@ -2952,11 +4285,11 @@ const Interface={
       <div class="rolar"><div class="painel">
         <div class="olho">Fim do caminho</div>
         <h1 class="titulo" style="font-size:clamp(28px,7vw,52px)">O ciclo<br><span class="lilas">se rompeu</span></h1>
-        <p style="color:var(--papel-2);margin-top:16px;font-size:14.5px">A Manu não tinha arma nenhuma. Só sabia andar e pular — e mesmo assim derrubou tudo, porque soube <b>onde pisar</b>, <b>o que não enfrentar sozinha</b> e <b>quem procurar</b>. Fora do jogo funciona igual.</p>
+        <p class="linha-fina" style="margin-top:16px;font-size:14.5px">A Manu não tinha superpoder nenhum. Andava, pulava e falava — e mesmo assim derrubou tudo, porque aprendeu <b>onde pisar</b>, <b>o que não dá pra enfrentar sozinha</b> e <b>quem procurar</b>. Fora do jogo funciona igual.</p>
         <div class="placar">
           <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
-          <div><div class="n">${Jogo.vistos.size}/${ORDEM_MURAIS.length}</div><div class="r">na cartilha</div></div>
-          <div><div class="n">${Jog.quedas}</div><div class="r">quedas</div></div>
+          <div><div class="n">${Jogo.vistos.size}<span style="font-size:.5em">/${ORDEM_MURAIS.length}</span></div><div class="r">na cartilha</div></div>
+          <div><div class="n">${Jogo.conhecidos.size}<span style="font-size:.5em">/12</span></div><div class="r">quem é quem</div></div>
         </div>
         <div class="canais">
           <h4>Guarde estes números</h4>
@@ -2978,10 +4311,13 @@ const Interface={
   gameOver(){
     $('#c-fim').innerHTML=`
       <div class="rolar"><div class="painel">
-        <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].tema)}</div>
+        <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].nome)}</div>
         <h2 class="sec">Dessa vez não deu</h2>
-        <p style="color:var(--papel-2);font-size:14.5px">Você volta no último ponto de retorno com a vida cheia.</p>
-        <p style="color:var(--sol);font-size:14px">${esc(FASES[Jogo.fase-1].dica)}</p>
+        <p class="linha-fina">Você volta no último ponto de retorno com a vida cheia. As letras que já pegou continuam com você.</p>
+        <div class="cartao" style="margin:14px 0 4px">
+          <div class="olho">Lembra disto</div>
+          <p style="margin:10px 0 0;font-size:13.5px;color:var(--sol)">${esc(FASES[Jogo.fase-1].dica)}</p>
+        </div>
         <div class="linha-btn" style="margin-top:18px">
           <button class="btn verde" id="go-tenta">Tentar de novo</button>
           <button class="btn vazio" id="go-menu">Início</button>
@@ -2995,9 +4331,12 @@ const Interface={
   pausa(){
     $('#c-pausa').innerHTML=`
       <div class="rolar"><div class="painel">
-        <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].tema)}</div>
+        <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].nome)}</div>
         <h2 class="sec">Pausa</h2>
-        <p style="color:var(--sol);font-size:14px;margin-top:-2px">${esc(FASES[Jogo.fase-1].dica)}</p>
+        <div class="cartao" style="margin:12px 0 4px">
+          <div class="olho">Nesta fase</div>
+          <p style="margin:10px 0 0;font-size:13.5px;color:var(--sol)">${esc(FASES[Jogo.fase-1].dica)}</p>
+        </div>
         <div class="palavra">${PALAVRA.map((l,i)=>`<span class="${Jogo.letras.has(i)?'tem':''}">${l}</span>`).join('')}</div>
         <div class="placar">
           <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
@@ -3026,6 +4365,7 @@ const Interface={
      Nunca interrompe a gameplay — só existe na pausa e no menu. */
   cartilha(voltar,abaAtiva){
     const aba=abaAtiva||1;
+    if(aba==='bichos')return this.cartilhaBichos(voltar);
     const verbetes=MURAIS[aba].map(m=>{
       const tem=Jogo.vistos.has(m.id);
       return `<div class="verbete${tem?'':' travado'}">
@@ -3039,8 +4379,8 @@ const Interface={
       <div class="rolar"><div class="cartilha">
         <div class="olho">${Jogo.vistos.size} de ${ORDEM_MURAIS.length} verbetes</div>
         <h2 class="sec">Cartilha</h2>
-        <p style="color:var(--papel-2);font-size:13.5px;margin:0">Tudo o que os murais e as conversas mostraram fica guardado aqui.</p>
-        <div class="abas">${[1,2,3,4,5].map(i=>`<button class="aba${i===aba?' on':''}" data-a="${i}">${esc(FASES[i-1].nome)}</button>`).join('')}</div>
+        <p class="linha-fina">Tudo o que os murais e as conversas mostraram fica guardado aqui — e nada disso pausou o jogo.</p>
+        <div class="abas">${[1,2,3,4,5].map(i=>`<button class="aba${i===aba?' on':''}" data-a="${i}">${esc(FASES[i-1].nome)}</button>`).join('')}<button class="aba" data-a="bichos">Quem é quem</button></div>
         <div class="grade">${verbetes}</div>
         ${conversas.length?`<h2 class="sec" style="font-size:18px">Quem falou com você</h2>
         <div class="grade">${conversas.map(id=>`<div class="verbete"><h4>${esc(FALAS[id].quem)}</h4><p>${esc(FALAS[id].t.join(' '))}</p></div>`).join('')}</div>`:''}
@@ -3057,7 +4397,44 @@ const Interface={
       </div></div>`;
     this.mostra('#c-cartilha');
     document.querySelectorAll('#c-cartilha .aba').forEach(b=>{
-      b.onclick=()=>this.cartilha(voltar,+b.dataset.a);
+      b.onclick=()=>this.cartilha(voltar,b.dataset.a==='bichos'?'bichos':+b.dataset.a);
+    });
+    $('#ct-volta').onclick=voltar;
+  },
+
+  /* Quem é quem: retrato de verdade do bicho, o que ele significa
+     na vida real e como se derrota. Só abre o que já foi encontrado. */
+  cardsBichos(){
+    const ordem=['piada','rotulo','cobranca','turma','comentario','seguidor',
+                 'bot','alfa','ciume','ameaca','muro','ciclo'];
+    return ordem.map(id=>{
+      const b=BESTIARIO[id];
+      const tem=Jogo.conhecidos.has(id);
+      const nome=(TIPOS[id]&&TIPOS[id].nome)||'O Ciclo';
+      const img=tem&&id!=='ciclo'?Arte.retrato(id,104):'';
+      return `<div class="bicho${tem?'':' travado'}">
+        <div class="retrato">${img?`<img src="${img}" alt="">`:'<span>?</span>'}</div>
+        <div class="dados">
+          <h4>${tem?esc(nome):'Ainda não encontrado'}</h4>
+          ${tem?`<p>${esc(b.txt)}</p><div class="como"><b>Como se derruba</b> ${esc(b.como)}</div>`
+               :'<p>Continue jogando para desbloquear.</p>'}
+        </div>
+      </div>`;
+    }).join('');
+  },
+  cartilhaBichos(voltar){
+    $('#c-cartilha').innerHTML=`
+      <div class="rolar"><div class="cartilha">
+        <div class="olho">${Jogo.conhecidos.size} de 12 encontrados</div>
+        <h2 class="sec">Quem é quem</h2>
+        <p class="linha-fina">Cada criatura do jogo é uma coisa que existe fora dele. Aqui está o que cada uma representa.</p>
+        <div class="abas">${[1,2,3,4,5].map(i=>`<button class="aba" data-a="${i}">${esc(FASES[i-1].nome)}</button>`).join('')}<button class="aba on" data-a="bichos">Quem é quem</button></div>
+        <div class="bichos">${this.cardsBichos()}</div>
+        <button class="btn" id="ct-volta">Voltar</button>
+      </div></div>`;
+    this.mostra('#c-cartilha');
+    document.querySelectorAll('#c-cartilha .aba').forEach(b=>{
+      b.onclick=()=>this.cartilha(voltar,b.dataset.a==='bichos'?'bichos':+b.dataset.a);
     });
     $('#ct-volta').onclick=voltar;
   },
@@ -3093,9 +4470,11 @@ const Jogo={
   letras:new Set(),          /* C-I-E-E da fase atual */
   letrasFase:0,
   vistos:new Set(),          /* murais lidos, vão pra Cartilha */
+  conhecidos:new Set(),      /* inimigos já encontrados */
   ouvidos:new Set(),         /* conversas já tidas */
   transicao:0,
   travaEntrada:0,
+  congela:0,
 
   inicia(){
     this.faseMax=clamp(Guarda.ler('faseMax',1),1,5);
@@ -3104,6 +4483,8 @@ const Jogo={
     if(Array.isArray(v))v.forEach(id=>{if(MURAL_POR_ID[id])this.vistos.add(id);});
     const o=Guarda.ler('ouvidos',[]);
     if(Array.isArray(o))o.forEach(id=>{if(FALAS[id])this.ouvidos.add(id);});
+    const b=Guarda.ler('conhecidos',[]);
+    if(Array.isArray(b))b.forEach(id=>{if(BESTIARIO[id])this.conhecidos.add(id);});
     const toque=('ontouchstart' in window)||navigator.maxTouchPoints>0;
     this.toqueLigado=Guarda.ler('toque',toque);
     $('#b-som').style.opacity=Som.ligado?'1':'.42';
@@ -3112,7 +4493,7 @@ const Jogo={
   },
   zera(){
     this.faseMax=1;this.ultimoCheck=null;
-    this.letras.clear();this.letrasFase=0;
+    this.letras.clear();this.letrasFase=0;this.conhecidos.clear();
     Jog.pontos=0;Jog.quedas=0;Jog.vida=4;
     Guarda.gravar('faseMax',1);Guarda.gravar('pontos',0);
   },
@@ -3121,6 +4502,7 @@ const Jogo={
     Guarda.gravar('pontos',Jog.pontos);
     Guarda.gravar('vistos',[...this.vistos]);
     Guarda.gravar('ouvidos',[...this.ouvidos]);
+    Guarda.gravar('conhecidos',[...this.conhecidos]);
   },
 
   /* --- letras do CIEE --- */
@@ -3136,6 +4518,18 @@ const Jogo={
     }else{
       Interface.faixa('Letra '+PALAVRA[i]+' · faltam '+faltam,'sol');
     }
+  },
+
+  /* --- primeiro encontro: apresenta a criatura sem parar o jogo --- */
+  conhece(tipo){
+    if(this.conhecidos.has(tipo)||!BESTIARIO[tipo])return;
+    this.conhecidos.add(tipo);
+    Jog.ganha(100);
+    const nome=(TIPOS[tipo]&&TIPOS[tipo].nome)||'O Ciclo';
+    Interface.faixa(nome.toUpperCase()+' — '+BESTIARIO[tipo].curto,'quemé');
+    Som.nota(430,.1,'triangle',.07);
+    setTimeout(()=>Som.nota(620,.12,'triangle',.06),90);
+    this.salva();
   },
 
   /* --- mural lido: faixa rápida agora, verbete na Cartilha depois --- */
@@ -3244,6 +4638,9 @@ const Jogo={
   abrePausa(){this.estado='pausado';Interface.pausa();},
   fechaPausa(){this.estado='jogando';this.travaEntrada=.2;Interface.mostra(null);},
 
+  /* Congela o quadro por alguns milissegundos. É o que dá peso ao golpe. */
+  trava(t){this.congela=Math.min(.13,Math.max(this.congela,t));},
+
   atualiza(dt){
     this.tempoTotal+=dt;
     Ent.atualiza();
@@ -3261,11 +4658,20 @@ const Jogo={
     }
     if(this.estado!=='jogando')return;
 
+    /* hitstop: o mundo para, mas as fagulhas continuam devagar */
+    if(this.congela>0){
+      this.congela-=dt;
+      Part.atualiza(dt*.22);
+      Cam.segue(Jog,Mundo,dt*.4,false);
+      return;
+    }
+
     const f=Arte.faseAtual;
     Som.tocaMusica(dt,f.escala,f.bpm);
 
     atualizaSolidos(dt);
     Jog.atualiza(dt);
+    Arte.animaManu(dt);
     if(this.toqueLigado){
       const bv=$('#t-voz');
       const cheio=Jog.vozCarga>=.5;
@@ -3274,11 +4680,18 @@ const Jogo={
     for(const e of Mundo.inimigos){
       if(!e.vivo&&e.morte<=0)continue;
       if(e.tipo!=='seguidor'&&(e.x<Cam.ox-750||e.x>Cam.ox+Vista.larg+750))continue;
+      /* entrou no quadro pela primeira vez: apresenta */
+      if(e.vivo&&!this.conhecidos.has(e.tipo)&&
+         e.x+e.w>Cam.ox&&e.x<Cam.ox+Vista.larg&&Math.abs(e.x-Jog.x)<Vista.larg*.6)
+        this.conhece(e.tipo);
       atualizaInimigo(e,dt);
     }
     for(let i=Mundo.inimigos.length-1;i>=0;i--)
       if(!Mundo.inimigos[i].vivo&&Mundo.inimigos[i].morte<=0)Mundo.inimigos.splice(i,1);
-    if(Mundo.chefe)atualizaChefe(Mundo.chefe,dt);
+    if(Mundo.chefe){
+      if(Mundo.chefe.vivo&&Mundo.chefe.estado!=='entrada')this.conhece('ciclo');
+      atualizaChefe(Mundo.chefe,dt);
+    }
     atualizaProjeteis(dt);
     atualizaItens(dt);
     atualizaCenario(dt);
@@ -3304,6 +4717,7 @@ const Jogo={
    19. ARRANQUE
    ============================================================ */
 Ent.inicia();
+Sprites.carrega(FOLHA_MANU);
 Vista.redimensiona();
 addEventListener('resize',()=>Vista.redimensiona());
 addEventListener('orientationchange',()=>setTimeout(()=>Vista.redimensiona(),160));
