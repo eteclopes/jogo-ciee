@@ -40,68 +40,140 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 .camada{position:absolute;inset:0;display:none;z-index:20}
 .camada.on{display:flex}
-.camada.escura{background:
-    radial-gradient(1200px 600px at 50% -10%,rgba(168,85,247,.22),transparent 70%),
-    repeating-linear-gradient(135deg,rgba(255,255,255,.022) 0 2px,transparent 2px 22px),
-    linear-gradient(180deg,rgba(14,8,32,.97),rgba(10,6,24,.99));
-  backdrop-filter:blur(7px);align-items:center;justify-content:center;
-  padding:calc(20px + var(--safe-t)) 18px calc(20px + var(--safe-b))}
-.rolar{max-height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;width:100%;display:flex;align-items:center;justify-content:center}
+.camada.escura{background:rgba(14,8,32,.93);
+  align-items:center;justify-content:center;
+  padding:calc(18px + var(--safe-t)) clamp(14px,3.4vw,34px) calc(18px + var(--safe-b))}
+/* o menu deixa o cenário do jogo aparecer, sem borrar nada */
+#c-menu.escura{background:linear-gradient(100deg,rgba(14,8,32,.94) 0%,rgba(14,8,32,.9) 44%,rgba(14,8,32,.6) 76%,rgba(14,8,32,.78) 100%)}
+@media (max-width:760px){
+  #c-menu.escura{background:linear-gradient(180deg,rgba(14,8,32,.93) 0%,rgba(14,8,32,.88) 52%,rgba(14,8,32,.94) 100%)}
+}
+.rolar{position:relative;z-index:1;max-height:100%;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;width:100%;display:flex;align-items:flex-start;justify-content:flex-start}
+/* margin:auto centraliza quando cabe e NÃO corta o topo quando não cabe —
+   com align-items:center o começo da Cartilha ficava inalcançável */
+.rolar>*{margin:auto;padding:2px 0}
 
 .display{font-family:var(--display);letter-spacing:-.02em;line-height:.92;text-transform:uppercase}
 .olho{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--lilas-claro);
   display:inline-flex;align-items:center;gap:8px}
-.olho::before{content:'';width:22px;height:2px;background:var(--lilas);display:inline-block;border-radius:2px}
+.olho::before{content:'';width:14px;height:5px;background:var(--lilas);display:inline-block}
 .linha-fina{color:var(--papel-2);font-size:13.5px;line-height:1.6;margin:0 0 4px;max-width:60ch}
-.cartao{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.022));
-  border:1px solid rgba(199,190,230,.18);border-radius:16px;padding:20px 20px 18px;position:relative;overflow:hidden}
-.cartao::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;
-  background:linear-gradient(90deg,var(--lilas),var(--sol),var(--verde-claro))}
-.divisor{height:1px;background:linear-gradient(90deg,rgba(199,190,230,.3),transparent);margin:18px 0 14px}
+.cartao{background:#1B1036;border:3px solid #2F1F58;border-radius:6px;
+  padding:18px 18px 16px;position:relative;overflow:hidden}
+.cartao::before{content:'';position:absolute;inset:0 0 auto 0;height:5px;background:var(--lilas)}
+.divisor{height:3px;background:#2F1F58;margin:16px 0 13px}
+
+/* --- entrada em cascata: cada bloco sobe com um atraso --- */
+@keyframes sobe{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes surge{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.anima>*{animation:sobe .52s cubic-bezier(.2,.85,.3,1) backwards}
+.anima>*:nth-child(1){animation-delay:.02s}
+.anima>*:nth-child(2){animation-delay:.08s}
+.anima>*:nth-child(3){animation-delay:.14s}
+.anima>*:nth-child(4){animation-delay:.2s}
+.anima>*:nth-child(5){animation-delay:.26s}
+.anima>*:nth-child(6){animation-delay:.32s}
+.anima>*:nth-child(7){animation-delay:.38s}
+.camada.on .painel,.camada.on .cartilha,.camada.on .quiz{animation:surge .26s cubic-bezier(.2,.9,.3,1.1)}
+
+
+/* --- fita lilás decorativa --- */
+.fita{display:flex;align-items:center;gap:10px;margin:0 0 6px}
+.fita i{display:block;height:5px;background:var(--lilas);flex:1;max-width:110px}
+.fita svg{width:26px;height:26px;fill:var(--lilas-claro);animation:balanca 5s ease-in-out infinite}
+@keyframes balanca{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+
+/* --- barra de progresso --- */
+.trilho{height:10px;border-radius:2px;background:#120A2A;overflow:hidden;margin-top:9px;box-shadow:0 0 0 3px #2F1F58}
+.trilho span{display:block;height:100%;background:var(--sol);
+  animation:enche 1s cubic-bezier(.2,.85,.3,1) backwards}
+@keyframes enche{from{width:0 !important}}
 h1.titulo{font-family:var(--display);font-size:clamp(34px,8.4vw,70px);line-height:.86;margin:0;text-transform:uppercase;letter-spacing:-.035em;
-  text-shadow:0 0 34px rgba(168,85,247,.5)}
-h1.titulo .lilas{color:var(--lilas-claro);display:inline-block;animation:respira 4.5s ease-in-out infinite}
+  text-shadow:5px 5px 0 #160d2e}
+h1.titulo .lilas{display:inline-block;color:var(--lilas-claro);
+  animation:respira 4.5s ease-in-out infinite}
 @keyframes respira{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 h2.sec{position:relative;padding-left:16px}
-h2.sec::before{content:'';position:absolute;left:0;top:.12em;bottom:.18em;width:5px;border-radius:3px;
-  background:linear-gradient(180deg,var(--lilas),var(--sol))}
+h2.sec::before{content:'';position:absolute;left:0;top:.12em;bottom:.18em;width:6px;background:var(--lilas)}
 h2.sec{font-family:var(--display);font-size:clamp(20px,4.6vw,32px);margin:0 0 10px;text-transform:uppercase;letter-spacing:-.02em}
 p{line-height:1.55;margin:0 0 12px}
 
 .btn{font-family:var(--display);text-transform:uppercase;font-size:clamp(15px,3.4vw,19px);letter-spacing:.005em;
-  border:0;border-radius:13px;padding:16px 22px;cursor:pointer;color:#1b0733;
-  background:linear-gradient(180deg,#FFD770,var(--sol));
-  box-shadow:0 5px 0 #b8862a, 0 10px 24px rgba(255,197,61,.18);
-  transition:transform .07s,box-shadow .07s,filter .15s;width:100%;display:block;position:relative}
-.btn:hover{filter:brightness(1.06)}
-.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #b8862a}
+  border:0;border-radius:5px;padding:15px 22px;cursor:pointer;color:#1b0733;
+  background:var(--sol);
+  box-shadow:0 0 0 3px #160d2e, 0 5px 0 0 #160d2e, 0 5px 0 3px #160d2e, inset 0 -4px 0 rgba(0,0,0,.24);
+  transition:transform .06s,box-shadow .06s;width:100%;display:block;position:relative}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(5px);box-shadow:0 0 0 3px #160d2e, inset 0 -2px 0 rgba(0,0,0,.24)}
 .btn:focus-visible{outline:3px solid var(--lilas-claro);outline-offset:3px}
-.btn.roxo{background:linear-gradient(180deg,#DCC0FF,var(--lilas-claro));box-shadow:0 5px 0 #6b28b0,0 10px 24px rgba(168,85,247,.22);color:#1b0733}
-.btn.roxo:active{box-shadow:0 1px 0 #6b28b0}
-.btn.verde{background:linear-gradient(180deg,#6FF0B6,var(--verde-claro));box-shadow:0 5px 0 #10784a,0 10px 24px rgba(67,224,152,.2);color:#042315}
-.btn.verde:active{box-shadow:0 1px 0 #10784a}
-.btn.vazio{background:rgba(255,255,255,.03);color:var(--papel);box-shadow:inset 0 0 0 2px rgba(199,190,230,.32)}
-.btn.vazio:hover{background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 2px rgba(199,190,230,.55)}
-.btn.vazio:active{transform:translateY(2px)}
+.btn.roxo{background:var(--lilas-claro);color:#1b0733}
+.btn.verde{background:var(--verde-claro);color:#042315}
+.btn.vazio{background:#241640;color:var(--papel);
+  box-shadow:0 0 0 3px #160d2e, 0 5px 0 0 #160d2e, 0 5px 0 3px #160d2e, inset 0 -4px 0 rgba(0,0,0,.3)}
+.btn.vazio:hover{background:#2E1C52}
 .linha-btn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-.menu-caixa{max-width:580px;width:100%;text-align:left}
+.menu-caixa{width:min(1120px,100%);text-align:left;display:grid;gap:clamp(12px,2.2vw,26px);
+  grid-template-columns:1fr;align-content:center;
+  grid-template-areas:"heroi" "esq" "prog"}
+.menu-esq{grid-area:esq;min-width:0}
+.palco-heroi{grid-area:heroi}
+.cartao-prog{grid-area:prog}
+/* telas largas: texto à esquerda, Manu e progresso à direita */
+@media (min-width:880px){
+  .menu-caixa{grid-template-columns:1.12fr .88fr;align-items:center;
+    grid-template-areas:"esq heroi" "esq prog"}
+}
+/* celular deitado: três colunas para caber tudo sem rolar */
+@media (min-width:640px) and (max-height:560px){
+  .menu-caixa{grid-template-columns:1.15fr auto .85fr;gap:16px;align-items:center;
+    grid-template-areas:"esq heroi prog"}
+  .menu-caixa .sub{margin:7px 0 9px}
+  .menu-caixa .aviso{margin-top:9px;font-size:11px}
+}
+
+/* ---------- a Manu correndo na capa ----------
+   A tira de quadros é gerada pelo próprio código de desenho do jogo e
+   animada com steps(): é a personagem de verdade, não uma ilustração. */
+.palco-heroi{position:relative;display:flex;justify-content:center;align-items:flex-end;isolation:isolate}
+.palco-heroi .luz{display:none}
+/* plataforma igual às do jogo: corpo escuro e faixa clara em cima */
+.palco-heroi .piso{position:absolute;z-index:0;bottom:0;left:50%;transform:translateX(-50%);
+  width:72%;height:18px;border-radius:3px;background:#3D1B70;
+  box-shadow:0 0 0 3px #160d2e, inset 0 5px 0 var(--lilas-claro)}
+.heroi{position:relative;z-index:1;overflow:hidden;height:clamp(128px,20vh,180px);margin-bottom:13px}
+.heroi img{position:absolute;left:0;top:0;height:100%;width:800%;max-width:none;
+  animation:correr .68s steps(8) infinite}
+@media (min-width:880px){.heroi{height:clamp(180px,30vh,290px)}}
+@media (min-width:640px) and (max-height:560px){.heroi{height:clamp(120px,42vh,190px)}}
+@keyframes correr{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+
+
+/* ---------- fagulhas lilás subindo no fundo do menu ---------- */
+.faiscas{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.faiscas i{position:absolute;bottom:-24px;width:7px;height:7px;border-radius:2px;
+  background:var(--lilas-claro);opacity:0;animation:sobeFaisca linear infinite}
+@keyframes sobeFaisca{
+  0%{opacity:0;transform:translateY(0) rotate(0) scale(.6)}
+  12%{opacity:.6}
+  88%{opacity:.2}
+  100%{opacity:0;transform:translateY(-96vh) rotate(260deg) scale(1)}}
 .marca{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.marca .selo{font-family:var(--display);font-size:11.5px;background:var(--lilas-fundo);color:#fff;padding:7px 11px;border-radius:7px;
-  letter-spacing:.04em;box-shadow:0 3px 12px rgba(109,40,217,.35)}
+.marca .selo{font-family:var(--display);font-size:11.5px;background:var(--lilas-fundo);color:#fff;padding:7px 11px;border-radius:4px;
+  letter-spacing:.04em;box-shadow:0 0 0 3px #160d2e}
 .marca .selo.azul{background:#1B4FD8}
-.sub{color:var(--papel-2);font-size:clamp(13px,3.2vw,16px);margin:14px 0 20px;max-width:46ch}
-.menu-botoes{display:flex;flex-direction:column;gap:10px}
+.sub{color:var(--papel-2);font-size:clamp(13px,1.9vw,16.5px);line-height:1.62;margin:14px 0 18px;max-width:46ch}
+.menu-botoes{display:flex;flex-direction:column;gap:clamp(8px,1.4vw,11px)}
 .aviso{margin-top:18px;font-size:12.5px;color:var(--papel-2);border-left:3px solid var(--lilas);padding:8px 0 8px 12px;line-height:1.5}
 .aviso b{color:var(--lilas-claro)}
 
 .painel{max-width:620px;width:100%}
 .placar{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}
-.placar div{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border-radius:13px;padding:14px 10px;
-  text-align:center;border:1px solid rgba(199,190,230,.16)}
-.placar .n{font-family:var(--display);font-size:clamp(21px,5vw,30px);color:var(--sol);line-height:1;text-shadow:0 0 18px rgba(255,197,61,.35)}
+.placar div{background:#1B1036;border-radius:6px;padding:13px 10px;text-align:center;border:3px solid #2F1F58}
+.placar .n{font-family:var(--display);font-size:clamp(21px,5vw,30px);color:var(--sol);line-height:1;text-shadow:2px 2px 0 #160d2e}
 .placar .r{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--papel-2);margin-top:6px}
-.canais{background:rgba(168,85,247,.13);border:1px solid rgba(168,85,247,.42);border-radius:12px;padding:16px;margin:16px 0}
+.canais{background:#241148;border:3px solid var(--lilas);border-radius:6px;padding:16px;margin:16px 0}
 .canais h4{font-family:var(--display);font-size:15px;margin:0 0 10px;text-transform:uppercase;color:var(--lilas-claro)}
 .canais ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.75}
 .canais b{color:var(--sol);font-family:var(--mono)}
@@ -109,8 +181,8 @@ p{line-height:1.55;margin:0 0 12px}
 .quiz{max-width:640px;width:100%}
 .quiz .pergunta{font-family:var(--display);font-size:clamp(19px,4.6vw,28px);text-transform:none;line-height:1.15;margin:8px 0 18px;letter-spacing:-.01em}
 .opcoes{display:flex;flex-direction:column;gap:9px}
-.opcao{text-align:left;background:rgba(255,255,255,.06);border:2px solid rgba(199,190,230,.22);color:var(--papel);
-  padding:14px 16px;border-radius:11px;font-size:15px;font-family:var(--corpo);cursor:pointer;line-height:1.35;width:100%;transition:.14s}
+.opcao{text-align:left;background:#1B1036;border:3px solid #2F1F58;color:var(--papel);
+  padding:14px 16px;border-radius:6px;font-size:15px;font-family:var(--corpo);cursor:pointer;line-height:1.35;width:100%;transition:.12s}
 .opcao:hover{border-color:var(--lilas-claro);background:rgba(168,85,247,.12)}
 .opcao:focus-visible{outline:3px solid var(--lilas-claro);outline-offset:2px}
 .opcao.certa{border-color:var(--verde-claro);background:rgba(67,224,152,.16)}
@@ -122,18 +194,26 @@ p{line-height:1.55;margin:0 0 12px}
 .feedback.nao{background:rgba(255,84,112,.14);border-left:4px solid var(--alerta)}
 
 .grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px;margin:16px 0 20px}
-.verbete{background:rgba(255,255,255,.05);border:1px solid rgba(199,190,230,.16);border-radius:11px;padding:13px 14px;border-left:4px solid var(--lilas)}
+.verbete{background:#1B1036;border:3px solid #2F1F58;border-radius:6px;padding:13px 14px;border-left:6px solid var(--lilas)}
 .verbete h4{font-family:var(--display);font-size:14px;margin:0 0 6px;text-transform:uppercase;line-height:1.1}
 .verbete p{font-size:12.8px;color:var(--papel-2);margin:0;line-height:1.45}
 .verbete.travado{border-left-color:rgba(199,190,230,.2);opacity:.4}
 .verbete .fonte{font-family:var(--mono);font-size:10px;color:var(--lilas-claro);margin-top:8px;letter-spacing:.04em}
 .cartilha{max-width:860px;width:100%}
+.fases-lista{display:grid;gap:9px;margin:16px 0 18px}
+.fase-card{display:flex;align-items:center;gap:14px;text-align:left;width:100%;cursor:pointer;
+  background:#1B1036;border:3px solid #2F1F58;border-radius:6px;padding:12px 14px;color:var(--papel);transition:.12s}
+.fase-card:hover{border-color:var(--lilas);background:#241548}
+.fase-card.travado{opacity:.38;cursor:default}
+.fase-card .num{font-family:var(--display);font-size:24px;color:var(--sol);min-width:30px;text-align:center}
+.fase-card .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.fase-card .txt b{font-family:var(--display);font-size:14px;text-transform:uppercase;letter-spacing:.01em}
+.fase-card .txt i{font-style:normal;font-size:12.2px;color:var(--papel-2)}
 .bichos{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;margin:16px 0 20px}
-.bicho{display:flex;gap:14px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-  border:1px solid rgba(199,190,230,.16);border-radius:14px;padding:14px;align-items:flex-start}
+.bicho{display:flex;gap:14px;background:#1B1036;border:3px solid #2F1F58;border-radius:6px;padding:13px;align-items:flex-start}
 .bicho.travado{opacity:.42}
-.bicho .retrato{flex:0 0 76px;height:76px;border-radius:12px;background:rgba(18,10,42,.6);
-  border:1px solid rgba(199,190,230,.2);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bicho .retrato{flex:0 0 76px;height:76px;border-radius:5px;background:#120A2A;
+  border:3px solid #2F1F58;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .bicho .retrato img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
 .bicho .retrato span{font-family:var(--display);font-size:26px;color:rgba(199,190,230,.4)}
 .bicho .dados{flex:1;min-width:0}
@@ -142,14 +222,35 @@ p{line-height:1.55;margin:0 0 12px}
 .bicho .como{margin-top:9px;font-size:12.2px;color:var(--verde-claro);border-top:1px dashed rgba(199,190,230,.22);padding-top:8px;line-height:1.45}
 .bicho .como b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--papel-2);margin-bottom:3px}
 .abas{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
-.aba{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:9px 13px;border-radius:9px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(199,190,230,.2);color:var(--papel-2);cursor:pointer;transition:.14s}
-.aba:hover{border-color:var(--lilas-claro);color:var(--papel)}
-.aba.on{background:linear-gradient(180deg,#C084FC,var(--lilas));border-color:var(--lilas);color:#fff;box-shadow:0 4px 14px rgba(168,85,247,.35)}
+.aba{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:9px 13px;border-radius:5px;
+  background:#1B1036;border:3px solid #2F1F58;color:var(--papel-2);cursor:pointer;transition:.12s}
+.aba:hover{border-color:var(--lilas);color:var(--papel)}
+.aba.on{background:var(--lilas);border-color:var(--lilas);color:#fff}
 .palavra{display:flex;gap:6px;margin:10px 0 0}
 .palavra span{font-family:var(--display);font-size:15px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;
   border-radius:6px;background:rgba(255,255,255,.06);border:1.5px solid rgba(199,190,230,.25);color:var(--papel-2)}
 .palavra span.tem{background:var(--sol);border-color:var(--sol);color:#1b0733}
+/* seletor de fases */
+.fases{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0 0}
+.fases button{background:#1B1036;border:3px solid #2F1F58;border-radius:5px;color:var(--papel-2);
+  padding:9px 4px;cursor:pointer;font-family:var(--display);font-size:15px;line-height:1;transition:.12s}
+.fases button b{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.08em;
+  margin-top:5px;font-weight:400;opacity:.75}
+.fases button:hover:not(:disabled){border-color:var(--lilas);color:var(--papel)}
+.fases button.atual{background:var(--lilas);border-color:var(--lilas);color:#fff}
+.fases button:disabled{opacity:.32;cursor:default}
+/* chave liga/desliga */
+.chave{display:flex;align-items:center;gap:11px;width:100%;background:#1B1036;border:3px solid #2F1F58;
+  border-radius:5px;padding:11px 13px;cursor:pointer;color:var(--papel);text-align:left;font-family:var(--corpo)}
+.chave:hover{border-color:var(--lilas)}
+.chave i{flex:0 0 42px;height:22px;border-radius:3px;background:#120A2A;position:relative;transition:.14s}
+.chave i::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:2px;
+  background:#5A4C7A;transition:.14s}
+.chave.on i{background:var(--verde)}
+.chave.on i::after{left:23px;background:#F4F1FF}
+.chave span{font-size:13px;line-height:1.35}
+.chave span b{display:block;font-family:var(--display);font-size:12.5px;text-transform:uppercase;margin-bottom:2px}
+.chave span em{font-style:normal;color:var(--papel-2);font-size:11.5px}
 
 #dialogo{position:absolute;left:50%;bottom:calc(122px + var(--safe-b));transform:translateX(-50%);width:min(700px,calc(100% - 24px));
   background:rgba(18,10,42,.97);border:2px solid var(--lilas);border-radius:14px;padding:15px 17px;z-index:15;display:none;
@@ -209,9 +310,23 @@ p{line-height:1.55;margin:0 0 12px}
 #abertura.sai{opacity:0;pointer-events:none;transition:opacity .5s}
 
 @media (max-height:430px){
-  .aviso{display:none}
-  h1.titulo{font-size:clamp(26px,6.4vw,42px)}
-  .sub{margin:8px 0 12px}
+  h1.titulo{font-size:clamp(24px,5.6vw,38px)}
+  .sub{margin:6px 0 10px;font-size:12.5px;-webkit-line-clamp:3}
+  .aviso{font-size:11px;margin-top:8px;padding:5px 0 5px 10px}
+  .btn{padding:11px 16px;font-size:14px}
+  .fita svg{width:20px;height:20px}
+  .placar div{padding:9px 8px}
+}
+/* telas grandes: respira mais */
+@media (min-width:1280px){
+  h1.titulo{font-size:clamp(56px,4.6vw,78px)}
+  .sub{font-size:17px}
+}
+/* toque: alvos maiores */
+@media (hover:none){
+  .btn{padding:17px 22px}
+  .aba{padding:11px 15px}
+  .opcao{padding:16px 17px}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 </style>
@@ -479,9 +594,17 @@ const Cam={
     this.alvoX=p.x+p.w/2-Vista.larg/2+olhar;
     this.alvoY=p.y+p.h/2-Vista.alt*.56;
     const maxX=Math.max(0,mundo.larg-Vista.larg);
-    const maxY=Math.max(0,mundo.alt-Vista.alt);
+    /* O enquadramento é ancorado na LINHA DO CHÃO, não no fundo do mundo.
+       Antes, em telas altas, sobrava uma laje enorme de chão embaixo. */
+    const chao=mundo.chaoY||mundo.alt;
+    const rodape=chao+Math.min(160,Math.max(80,Vista.alt*.2));
+    let maxY=Math.min(mundo.alt-Vista.alt,rodape-Vista.alt);
+    /* e a linha do chão nunca passa de ~84% da altura da tela, senão em
+       telas muito altas a Manu fica espremida no rodapé */
+    maxY=Math.max(maxY,chao-Vista.alt*.84);
+    const minY=Math.min(0,maxY);
     this.alvoX=clamp(this.alvoX,0,maxX);
-    this.alvoY=Vista.alt>=mundo.alt?(mundo.alt-Vista.alt)/2:clamp(this.alvoY,0,maxY);
+    this.alvoY=clamp(this.alvoY,minY,maxY);
     if(instantaneo){this.x=this.alvoX;this.y=this.alvoY;}
     else{
       const k=1-Math.pow(.0006,dt);
@@ -497,8 +620,8 @@ const Cam={
     this.zoomAlvo=aprox(this.zoomAlvo,1,dt*.9);
     this.zoom=lerp(this.zoom,this.zoomAlvo,1-Math.pow(.0001,dt));
   },
-  sacode(f){this.tremor=Math.max(this.tremor,f);},
-  soco(f){this.zoomAlvo=Math.max(this.zoomAlvo,1+f);this.zoom=Math.max(this.zoom,1+f*.7);},
+  sacode(f){if(Jogo.menosMovimento)return;this.tremor=Math.max(this.tremor,f*.6);},
+  soco(f){if(Jogo.menosMovimento)return;f*=.45;this.zoomAlvo=Math.max(this.zoomAlvo,1+f);this.zoom=Math.max(this.zoom,1+f*.7);},
   get ox(){return this.x+this.tremorX;},
   get oy(){return this.y+this.tremorY;}
 };
@@ -557,6 +680,8 @@ const Part={
    · NPCs    — conversas curtas, arquivadas na Cartilha também
    Para editar os textos do jogo, mexa só neste bloco.
    ============================================================ */
+
+/* O que o Téo diz quando você o alcança dentro da roda do Alfa. */
 
 const MURAIS={
   /* --- Fase 1: a cultura machista dentro de casa --- */
@@ -716,6 +841,7 @@ const VISUAIS={
   delegada:{tipo:'adulta', pele:'#6B4426', cabelo:'#1A1016', roupa:'#3A4A78', roupa2:'#1E2A50', extra:'cracha'},
   farmacia:{tipo:'adulta', pele:'#C08858', cabelo:'#5A3220', roupa:'#F4F1FF', roupa2:'#C7BEE6', extra:'jaleco'},
 
+  agda:    {tipo:'adulta', pele:'#8C5A34', cabelo:'#2A1A12', roupa:'#1B4FD8', roupa2:'#12358F', extra:'cracha'},
   marcia:  {tipo:'adulta', pele:'#8C5A34', cabelo:'#2A1A12', roupa:'#C99BFF', roupa2:'#8B5FD1', extra:'cracha'},
   ciee:    {tipo:'adulta', pele:'#E8B78F', cabelo:'#3A3A46', roupa:'#1B4FD8', roupa2:'#12358F', extra:'cracha'},
   teo3:    {tipo:'jovem',  pele:'#E8B78F', cabelo:'#2A1A12', roupa:'#43E098', roupa2:'#1E8C5C', extra:''},
@@ -761,7 +887,7 @@ const FALAS={
 
   teo2:{quem:'Téo · seu irmão',t:[
     'O vídeo dizia que homem de verdade manda em casa. Que quem não manda é fraco.',
-    'Começou com dica de treino, Manu. Aí virou isso.',
+    'Começou com dica de treino, Manu. Aí virou isso. Eu não sei mais o que é verdade nesse feed.',
     'Eu não sei mais o que é verdade nesse feed.']},
   kaue:{quem:'Prof. Kauê',t:[
     'Isso tem nome: machosfera. É o conjunto de perfis, fóruns e canais que ensinam que ser homem é dominar.',
@@ -792,6 +918,11 @@ const FALAS={
     'A gente não pergunta em voz alta e não expõe ninguém. A gente liga 190 discretamente.',
     'Aqui a farmácia inteira sabe fazer isso.']},
 
+  agda:{quem:'Agda · orientadora do CIEE',t:[
+    'Oi, Manu! Sou a Agda, do CIEE. Passo aqui na escola uma vez por mês.',
+    'O CIEE é uma entidade sem fins lucrativos: a gente aproxima estudante e empresa e cuida pra que o primeiro emprego seja aprendizado de verdade, não exploração.',
+    'E não é só vaga, não. Tem curso gratuito, orientação, e programas como o Bem Querer Mulher, que fala exatamente disso que você tá enfrentando aí fora.',
+    'Emprego não conserta machismo. Mas dinheiro no próprio nome é uma das coisas que dá pra uma mulher escolher ir embora.']},
   marcia:{quem:'Márcia · assistente social',t:[
     'Chegou no lugar certo. Aqui é o Bem Querer Mulher, do INDES — existe desde 2004.',
     'São quatro frentes: acolher quem sofreu, gerar renda pra ela poder sair, prevenir com os jovens e cobrar da sociedade.',
@@ -803,6 +934,7 @@ const FALAS={
   teo3:{quem:'Téo · seu irmão',t:[
     'Desinstalei tudo. Deu trabalho, viu.',
     'O difícil não foi sair. Foi admitir que eu tinha entrado.',
+    'Naquele dia você não me bateu. Você ficou. Foi isso que me tirou de lá.',
     'Se eu mudei, muita gente muda.']},
   lu:{quem:'Lu · psicóloga',t:[
     'O ciclo tem três voltas: a tensão, a explosão e o arrependimento.',
@@ -893,7 +1025,8 @@ const DICAS={
      [1560,'O FEED SOME E VOLTA','atravesse quando estiver aceso'],
      [2100,'O ALFA TEM PLATEIA','derrube os seguidores antes'],
      [3260,'O BOT SE MULTIPLICA','derrube rápido'],
-     [4300,'SEGURE A VOZ','pra soltar o grito forte']],
+     [4300,'SEGURE A VOZ','pra soltar o grito forte'],
+     [2290,'É O TÉO NA RODA','bater não tira ele de lá — chegue perto e fique']],
   4:[[880,'SUBA E SE JOGUE','a queda de altura racha o muro'],
      [2200,'FIQUE EM CIMA','o elevador só sobe com peso'],
      [3500,'A AMEAÇA SOME','só machuca ela quando aparecer'],
@@ -925,7 +1058,7 @@ const FASES=[
 
   {n:4,nome:'Portas fechadas',tema:'Violência de gênero intrafamiliar',cor:'#FF5470',
    resumo:'A violência dentro de casa quase nunca começa no soco. Começa no controle — e conta com o silêncio de fora.',
-   ceu:['#251232','#5B2049','#9C3A5A'],chao:'#4A2140',detalhe:'#FF8AA1',
+   ceu:['#1B0E2A','#40203C','#7A3352'],chao:'#472043',detalhe:'#FF9DB4',
    dica:'Novo: o MURO do "sempre foi assim" não cai no grito solto. Caia de bem alto em cima, ou use a voz carregada.',
    escala:[262,311,349,415,349,311],bpm:98},
 
@@ -953,6 +1086,25 @@ const Mundo={
 };
 
 function ativo(s){return !s.removido && !(s.quebrando&&s.sumiu);}
+
+/* Acha um ponto livre de paredes perto de (x,y). Usado por quem reaparece
+   ou se copia: sem isso, o bicho nasce dentro do cenário. */
+function lugarLivre(x,y,w,h,raioX,raioY,precisaChao){
+  for(let t=0;t<12;t++){
+    const tx=clamp(x+(t?rnd(-raioX,raioX):0),20,Mundo.larg-w-20);
+    const ty=y+(t?rnd(-raioY,raioY):0);
+    const caixa={x:tx,y:ty,w,h};
+    let livre=true;
+    for(const s of Mundo.solidos){
+      if(!ativo(s)||s.tipo==='passagem')continue;
+      if(bate(caixa,s)){livre=false;break;}
+    }
+    /* quem anda no chão não pode reaparecer sobre um buraco */
+    if(livre&&precisaChao&&!chaoEm(tx+w/2,ty+h+2,90))livre=false;
+    if(livre)return{x:tx,y:ty};
+  }
+  return null;
+}
 
 /* Existe chão logo abaixo deste ponto? (impede que inimigos caiam nos buracos) */
 function chaoEm(x,y,alcance){
@@ -1003,7 +1155,8 @@ function moveCorpo(e,dt){
       }else if(e.vy<0){e.y=s.y+s.h;e.vy=0;e.bateuTeto=true;}
     }
   }
-  if(e.plataforma&&e.plataforma.movel){
+  /* a Manu já foi carregada em atualizaSolidos, antes da física dela */
+  if(e!==Jog&&e.plataforma&&e.plataforma.movel){
     e.x+=e.plataforma.dx;
     e.y+=e.plataforma.dy;
   }
@@ -1165,7 +1318,7 @@ const Jog={
   leva(dano,deX){
     if(this.invul>0||!this.vivo)return;
     this.vida-=dano;
-    this.invul=1.35;
+    this.invul=Jogo.assistido?2.1:1.35;
     this.combo=0;
     Som.dano();
     Cam.sacode(.45);
@@ -1178,7 +1331,8 @@ const Jog={
   },
   caiNoBuraco(){
     if(!this.vivo)return;
-    this.vida-=1;this.quedas++;
+    this.quedas++;
+    if(!Jogo.assistido)this.vida-=1;   /* no modo tranquilo o buraco não custa coração */
     Som.morte();
     if(this.vida<=0){this.morre();return;}
     Interface.faixa('Cuidado com os buracos','sol');
@@ -1218,7 +1372,7 @@ const Jog={
    ============================================================ */
 const TIPOS={
   /* pisar em cima */
-  piada:{nome:'Foi Só Brincadeira',w:48,h:44,vida:1,vel:66,cor:'#E08A2E',cor2:'#FFF0D6',
+  piada:{nome:'Foi Só Brincadeira',w:52,h:52,vida:1,vel:66,cor:'#E08A2E',cor2:'#FFF0D6',
     pisavel:true,como:'pisar ou usar a voz',pontos:60},
   /* pisar, mas só com a tampa aberta */
   rotulo:{nome:'Lugar de Mulher',w:44,h:44,vida:2,vel:52,cor:'#8C6A44',cor2:'#D8A96A',
@@ -1231,7 +1385,7 @@ const TIPOS={
   /* pisar (são a guarda do Alfa) */
   seguidor:{nome:'Seguidor',w:26,h:26,vida:1,vel:0,cor:'#3E5FB5',cor2:'#A9C4FF',
     pisavel:true,voa:true,como:'pisar',pontos:70},
-  /* pisar só depois que os seguidores caírem */
+  /* o irmão. Não é discurso: é gente. Golpe nenhum funciona. */
   alfa:{nome:'O Alfa',w:56,h:66,vida:3,vel:52,cor:'#1E2A5C',cor2:'#6E86D8',
     pisavel:true,protegido:true,como:'derrubar os seguidores primeiro',pontos:260,
     recado:'Com plateia ele não cai. Derrube os seguidores primeiro.'},
@@ -1269,7 +1423,8 @@ function criaInimigo(tipo,x,y,op){
     piscar:0,atordoado:0,anim:rnd(0,6),vivo:true,morte:0,avisou:false,
     squash:1,tampa:1,alerta:0,vidaMostra:0,
     solidez:1,copias:0,bando:null,pressa:0,recarga:0,
-    origemX:x,pontos:t.pontos,def:t,seguidores:null,orbita:null
+    origemX:x,pontos:t.pontos,def:t,seguidores:null,orbita:null,
+    vel:t.vel*(Jogo.assistido?.72:1)
   };
   if(t.voa)e.baseY=y-t.h-(op.altura||0), e.y=e.baseY;
   if(tipo==='rotulo')e.aberto=true;
@@ -1278,9 +1433,11 @@ function criaInimigo(tipo,x,y,op){
 
 /* O Alfa nasce com sua plateia em volta */
 function criaAlfa(x,y,op){
+  op=op||{};
   const a=criaInimigo('alfa',x,y,op);
   a.seguidores=[];
   for(let i=0;i<3;i++){
+    /* com irmão: o do meio da roda é o Téo */
     const s=criaInimigo('seguidor',x,y,{});
     s.orbita={dono:a,ang:(i/3)*Math.PI*2,raio:62};
     a.seguidores.push(s);
@@ -1330,7 +1487,7 @@ function atualizaInimigo(e,dt){
 
   switch(e.tipo){
     case 'piada':{
-      e.vx=e.dir*t.vel;
+      e.vx=e.dir*e.vel;
       e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
       moveCorpo(e,dt);
       if(e.encostouParede)e.dir*=-1;
@@ -1348,7 +1505,7 @@ function atualizaInimigo(e,dt){
       }
       /* a tampa não pula de estado: ela gira */
       e.tampa=lerp(e.tampa,e.aberto?1:0,1-Math.pow(.004,dt));
-      e.vx=e.dir*(e.aberto?t.vel:t.vel*.45);
+      e.vx=e.dir*(e.aberto?e.vel:e.vel*.45);
       e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
       moveCorpo(e,dt);
       if(e.encostouParede)e.dir*=-1;
@@ -1393,7 +1550,7 @@ function atualizaInimigo(e,dt){
     }
     case 'alfa':{
       const plateia=plateiaViva(e);
-      e.vx=e.dir*(plateia?t.vel:t.vel*.5);
+      e.vx=e.dir*(plateia?e.vel:e.vel*.5);
       e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
       moveCorpo(e,dt);
       if(e.encostouParede)e.dir*=-1;
@@ -1417,7 +1574,7 @@ function atualizaInimigo(e,dt){
       }else{
         e.timer-=dt;
         e.dir=sign(jx-cx)||e.dir;
-        e.vx=e.dir*t.vel*(1+Math.sin(e.anim*8)*.1);
+        e.vx=e.dir*e.vel*(1+Math.sin(e.anim*8)*.1);
         /* de propósito: não olha a beirada */
         moveCorpo(e,dt);
         if(e.encostouParede)e.vx=0;
@@ -1439,7 +1596,7 @@ function atualizaInimigo(e,dt){
     case 'cobranca':{
       e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
       if(e.estado==='anda'){
-        e.vx=e.dir*t.vel;
+        e.vx=e.dir*e.vel;
         if(d<340&&Math.abs(jy-cy)<130){
           e.estado='mira';e.timer=.75;e.vx=0;
           e.dir=sign(jx-cx)||e.dir;
@@ -1472,7 +1629,7 @@ function atualizaInimigo(e,dt){
     /* --- A Turma: anda em bando e acelera quando um cai --- */
     case 'turma':{
       if(e.pressa>0)e.pressa-=dt;
-      const v=t.vel*(e.pressa>0?1.5:1);
+      const v=e.vel*(e.pressa>0?1.5:1);
       if(e.pressa>0&&d<420)e.dir=sign(jx-cx)||e.dir;
       e.vx=e.dir*v;
       e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
@@ -1485,22 +1642,22 @@ function atualizaInimigo(e,dt){
     /* --- O Bot: se multiplica se você demorar --- */
     case 'bot':{
       const alvo=d<520?jx-e.w/2:e.origemX;
-      e.x=aprox(e.x,alvo,t.vel*dt);
+      e.x=aprox(e.x,alvo,e.vel*dt);
       e.y=e.baseY+Math.sin(e.anim*2.6)*16;
       e.dir=sign(jx-cx)||e.dir;
       e.timer-=dt;
       if(e.timer<=0&&e.copias<2&&Mundo.inimigos.filter(o=>o.tipo==='bot'&&o.vivo).length<6){
-        e.timer=5;
-        e.copias++;
-        const c=criaInimigo('bot',e.x+rnd(-70,70),e.baseY+e.h,{});
-        c.baseY=e.baseY+rnd(-30,30);
-        c.y=c.baseY;
-        c.copias=1;
-        c.timer=6;
-        Mundo.inimigos.push(c);
-        Part.solta(cx,cy,12,[t.cor2,'#FFFFFF'],{vel:150,vida:.5,tam:4,grav:0});
-        Som.nota(700,.09,'square',.05,-200);
-        Part.texto(cx,e.y-6,'copiou','#7FC4FF');
+        const lugar=lugarLivre(e.x,e.baseY,t.w,t.h,80,40);
+        if(lugar){
+          e.timer=5;
+          e.copias++;
+          const c=criaInimigo('bot',lugar.x,lugar.y+t.h,{});
+          c.baseY=lugar.y;c.y=lugar.y;c.copias=1;c.timer=6;
+          Mundo.inimigos.push(c);
+          Part.solta(cx,cy,12,[t.cor2,'#FFFFFF'],{vel:150,vida:.5,tam:4,grav:0});
+          Som.nota(700,.09,'square',.05,-200);
+          Part.texto(cx,e.y-6,'copiou','#7FC4FF');
+        }else e.timer=1.5;          /* sem espaço livre: tenta de novo daqui a pouco */
       }
       break;
     }
@@ -1511,7 +1668,7 @@ function atualizaInimigo(e,dt){
       if(e.estado==='anda'){                       /* visível */
         e.solidez=aprox(e.solidez,1,dt*4);
         if(d<400)e.dir=sign(jx-cx)||e.dir;
-        e.vx=e.dir*t.vel;
+        e.vx=e.dir*e.vel;
         e.vy=Math.min(e.vy+GRAV*dt,GRAV_MAX);
         moveCorpo(e,dt);
         if(e.encostouParede)e.dir*=-1;
@@ -1524,9 +1681,12 @@ function atualizaInimigo(e,dt){
           Part.solta(cx,cy,1,[t.cor2],{vel:40,vida:.5,tam:3,grav:-20});
         if(e.timer<=0){
           e.estado='anda';e.timer=2.6;
-          /* reaparece perto do jogador, mas nunca em cima dele */
+          /* reaparece perto do jogador: nunca em cima dele, nunca dentro de parede */
           const lado=sign(cx-jx)||1;
-          e.x=clamp(jx+lado*rnd(110,190)-e.w/2,20,Mundo.larg-e.w-20);
+          const tentativa=clamp(jx+lado*rnd(110,190)-e.w/2,20,Mundo.larg-e.w-20);
+          const bom=lugarLivre(tentativa,e.y,e.w,e.h,60,20,true)||
+                    lugarLivre(e.x,e.y,e.w,e.h,180,30,true);
+          e.x=bom?bom.x:e.x;
           Part.solta(cx,cy,14,[t.cor,t.cor2],{vel:170,vida:.5,tam:5,grav:0});
           Som.nota(120,.2,'sawtooth',.08);
         }
@@ -1594,6 +1754,7 @@ function checaContato(e){
   if(Jog.invul<=0)Jog.leva(1,e.x+e.w/2);
 }
 
+/* Téo sai da roda. Não morre, não vira pontos: só senta e respira. */
 function machucaInimigo(e,dano){
   if(!e.vivo)return;
   e.vida-=dano;e.piscar=.16;
@@ -1626,10 +1787,10 @@ function machucaInimigo(e,dano){
 const ARENA={esq:4520,dir:5780};
 function criaChefe(x,chaoY){
   return {
-    x,y:chaoY-320,w:132,h:140,hCheio:140,hCaido:104,
-    chaoY,voo:chaoY-320,vida:6,vidaMax:6,
+    x,y:chaoY-330,w:150,h:162,hCheio:162,hCaido:112,
+    chaoY,voo:chaoY-330,vida:9,vidaMax:9,
     fase:1,timer:2.4,estado:'entrada',anim:0,piscar:0,vivo:true,
-    invul:0,dir:-1,onda:0
+    invul:0,dir:-1,anel:0,anelAlvo:0,marca:null,carga:0,tremeu:0,curou:0
   };
 }
 function atualizaChefe(b,dt){
@@ -1637,49 +1798,58 @@ function atualizaChefe(b,dt){
   b.anim+=dt;
   if(b.piscar>0)b.piscar-=dt;
   if(b.invul>0)b.invul-=dt;
+  if(b.curou>0)b.curou-=dt;
+  /* a roda das três voltas gira até a volta atual ficar em cima */
+  b.anel=lerp(b.anel,b.anelAlvo,1-Math.pow(.006,dt));
   const jx=Jog.x+Jog.w/2;
   const cx=b.x+b.w/2;
 
   const faseAntes=b.fase;
-  if(b.vida<=2)b.fase=3;
-  else if(b.vida<=4)b.fase=2;
+  if(b.vida<=3)b.fase=3;
+  else if(b.vida<=6)b.fase=2;
   if(b.fase!==faseAntes){
-    b.estado='troca';b.timer=1.6;b.invul=1.4;
-    b.h=b.hCheio;b.y=b.voo;
-    Cam.sacode(.85);Som.chefe();
+    b.estado='troca';b.timer=1.7;b.invul=1.5;
+    b.h=b.hCheio;b.y=b.voo;b.marca=null;
+    b.anelAlvo+=Math.PI*2/3;                 /* a roda gira: o ciclo virou */
+    Cam.sacode(.9);Som.chefe();
     const nomes={2:'VOLTA 2 — EXPLOSÃO',3:'VOLTA 3 — LUA DE MEL'};
     const ditos={2:'"Agora você vai ver."',3:'"Eu mudei. Foi só dessa vez."'};
     Interface.faixa(nomes[b.fase]+'  ·  '+ditos[b.fase]);
-    Part.solta(cx,b.y+b.h/2,40,['#C99BFF','#FF5470','#FFFFFF'],{vel:340,vida:.9,tam:8});
+    Part.solta(cx,b.y+b.h/2,44,['#C99BFF','#FF5470','#FFFFFF'],{vel:360,vida:1,tam:8});
   }
 
   b.timer-=dt;
 
   switch(b.estado){
     case 'entrada':
-      /* fica só rondando até a Manu pisar na arena */
       b.y=b.voo+Math.sin(b.anim*2)*16;
       if(Jog.x+Jog.w/2<ARENA.esq-30){b.timer=1.2;break;}
       if(b.timer<=0){
-        b.estado='ronda';b.timer=1.8;
+        b.estado='ronda';b.timer=1.5;
         Interface.faixa('O CICLO — VOLTA 1 · TENSÃO');
         Cam.sacode(.5);Som.chefe();
       }
       break;
+
     case 'troca':
       b.y=b.voo+Math.sin(b.anim*2)*16;
-      if(b.timer<=0){b.estado='ronda';b.timer=b.fase===1?1.8:(b.fase===2?1.2:1.5);}
+      if(b.timer<=0){b.estado='ronda';b.timer=b.fase===1?1.45:(b.fase===2?1:1.2);}
       break;
 
     case 'ronda':{
-      /* mantém distância e escolhe a hora de descer */
       const lado=cx>jx?1:-1;
-      const vel=b.fase===2?200:130;
-      const alvo=clamp(jx+lado*280-b.w/2,ARENA.esq,ARENA.dir-b.w);
+      const vel=b.fase===2?205:135;
+      const alvo=clamp(jx+lado*285-b.w/2,ARENA.esq,ARENA.dir-b.w);
       b.x=aprox(b.x,alvo,vel*dt);
       b.y=b.voo+Math.sin(b.anim*(b.fase===3?2.8:1.9))*22;
+      /* volta 1: leque de orbes. volta 3: presentes que parecem carinho */
+      if(b.fase===1&&b.timer<.9&&b.timer+dt>=.9){
+        for(let i=-2;i<=2;i++)
+          Mundo.projeteis.push({x:cx-10,y:b.y+b.h*.7,w:20,h:20,vx:i*92,vy:200,dono:'chefe',
+            dano:1,vida:3.4,raio:12,anim:0});
+        Som.nota(180,.25,'sawtooth',.1,-60);
+      }
       if(b.fase===3&&b.timer<1&&b.timer+dt>=1){
-        /* "presentes" que machucam */
         for(let i=0;i<3;i++){
           const a=-Math.PI/2+rnd(-.9,.9);
           Mundo.projeteis.push({x:cx-11,y:b.y+b.h,w:22,h:22,vx:Math.cos(a)*rnd(110,230),
@@ -1687,53 +1857,90 @@ function atualizaChefe(b,dt){
         }
         Som.nota(430,.2,'triangle',.08,-130);
       }
-      if(b.timer<=0){b.estado='mira';b.timer=.55;}
+      if(b.timer<=0){
+        /* da volta 2 em diante ele alterna baque e investida */
+        if(b.fase>=2&&Math.random()<.5){b.estado='prepara';b.timer=.7;}
+        else{b.estado='mira';b.timer=.62;b.marca=clamp(jx,ARENA.esq+40,ARENA.dir-40);}
+      }
       break;
     }
+
+    /* ---- baque: sobe, marca o chão e desaba ---- */
     case 'mira':{
-      /* sobe e telegrafa: dá pra sair de baixo */
-      b.x=aprox(b.x,clamp(jx-b.w/2,ARENA.esq,ARENA.dir-b.w),260*dt);
-      b.y=aprox(b.y,b.voo-70,300*dt);
+      b.x=aprox(b.x,clamp(b.marca-b.w/2,ARENA.esq,ARENA.dir-b.w),300*dt);
+      b.y=aprox(b.y,b.voo-80,340*dt);
+      b.marca=lerp(b.marca,clamp(jx,ARENA.esq+40,ARENA.dir-40),1-Math.pow(.02,dt));
       if(Math.random()<.5)
-        Part.solta(cx+rnd(-40,40),b.y+b.h,1,['#FF5470'],{vel:60,vida:.3,tam:4,grav:-140});
-      if(b.timer<=0){b.estado='baque';}
+        Part.solta(b.marca+rnd(-30,30),b.chaoY-4,1,['#FF5470'],{vel:70,vida:.35,tam:4,grav:-180});
+      if(b.timer<=0)b.estado='baque';
       break;
     }
     case 'baque':{
-      b.y+=1900*dt;
+      b.y+=2000*dt;
       if(b.y+b.h>=b.chaoY){
-        b.y=b.chaoY-b.hCaido;
-        b.h=b.hCaido;
-        b.estado='caido';
-        b.timer=b.fase===3?1.5:(b.fase===2?1.8:2.3);
-        Cam.sacode(1);
+        b.y=b.chaoY-b.hCaido;b.h=b.hCaido;
+        b.estado='caido';b.timer=b.fase===3?1.7:(b.fase===2?1.9:2.4);
+        b.marca=null;
+        Cam.sacode(1);Cam.soco(.05);
         Som.nota(70,.4,'sawtooth',.18,-25);
-        Part.solta(cx,b.chaoY,28,['#FF5470','#FFC53D'],{vel:340,vida:.7,tam:7,ang:-Math.PI/2});
-        Mundo.enfeites.push({tipo:'onda',x:cx,y:b.chaoY,r:12,max:260,vida:.5});
-        for(const s of[-1,1]){
-          Mundo.projeteis.push({x:cx,y:b.chaoY-28,w:28,h:28,vx:s*320,vy:0,dono:'chefe',
+        Part.solta(cx,b.chaoY,30,['#FF5470','#FFC53D'],{vel:350,vida:.75,tam:7,ang:-Math.PI/2});
+        Mundo.enfeites.push({tipo:'onda',x:cx,y:b.chaoY,r:12,max:280,vida:.5});
+        for(const sg of[-1,1])
+          Mundo.projeteis.push({x:cx,y:b.chaoY-28,w:28,h:28,vx:sg*330,vy:0,dono:'chefe',
             dano:1,vida:2.4,raio:15,rasteira:true,anim:0});
-        }
       }
       break;
     }
-    case 'caido':{
-      /* janela pra pisar na cabeça */
-      b.y=b.chaoY-b.hCaido+Math.sin(b.anim*22)*2;
-      if(b.timer<=0){
-        b.estado='sobe';b.h=b.hCheio;
+
+    /* ---- investida: atravessa a arena na horizontal, dá pra pular ---- */
+    case 'prepara':{
+      b.dir=sign(jx-cx)||b.dir;
+      b.y=aprox(b.y,b.chaoY-108,360*dt);
+      b.tremeu=Math.sin(b.anim*40)*4;
+      if(Math.random()<.6)
+        Part.solta(cx-b.dir*40,b.y+b.h*.6,1,['#FF5470','#FFC53D'],{vel:120,vida:.3,tam:4,grav:0,
+          ang:b.dir>0?Math.PI:0});
+      if(b.timer<=0){b.estado='investe';b.carga=1.5;Som.nota(120,.3,'sawtooth',.14,-40);}
+      break;
+    }
+    case 'investe':{
+      b.tremeu=0;
+      b.carga-=dt;
+      b.x+=b.dir*470*dt;
+      b.y=b.chaoY-108+Math.sin(b.anim*18)*3;
+      if(Math.random()<.8)
+        Part.solta(cx-b.dir*30,b.y+b.h*.7,1,['#FF5470'],{vel:90,vida:.35,tam:5,grav:60});
+      const bateu=b.x<=ARENA.esq||b.x>=ARENA.dir-b.w;
+      if(bateu||b.carga<=0){
+        b.x=clamp(b.x,ARENA.esq,ARENA.dir-b.w);
+        b.y=b.chaoY-b.hCaido;b.h=b.hCaido;
+        b.estado='caido';b.timer=2.5;      /* errou a investida: fica mais tempo exposto */
+        Cam.sacode(.9);Som.nota(80,.35,'sawtooth',.16,-30);
+        Part.solta(cx,b.y+b.h,24,['#FF5470','#C99BFF'],{vel:300,vida:.7,tam:6});
+        Mundo.enfeites.push({tipo:'onda',x:cx,y:b.chaoY,r:12,max:200,vida:.45});
       }
+      break;
+    }
+
+    case 'caido':{
+      b.y=b.chaoY-b.hCaido+Math.sin(b.anim*22)*2;
+      /* na lua de mel ele se recupera sozinho se você demorar */
+      if(b.fase===3&&b.timer<.7&&b.curou<=0&&b.vida<b.vidaMax&&Math.random()<.02){
+        b.vida=Math.min(b.vidaMax,b.vida+1);b.curou=1.4;
+        Part.texto(cx,b.y-12,'+1','#FF8FB0');
+        Interface.faixa('Ele se recupera no arrependimento. Presente não é mudança.');
+      }
+      if(b.timer<=0){b.estado='sobe';b.h=b.hCheio;}
       break;
     }
     case 'sobe':{
-      b.y=aprox(b.y,b.voo,460*dt);
-      if(Math.abs(b.y-b.voo)<4){b.estado='ronda';b.timer=b.fase===2?1.1:1.5;}
+      b.y=aprox(b.y,b.voo,620*dt);
+      if(Math.abs(b.y-b.voo)<4){b.estado='ronda';b.timer=b.fase===2?.95:1.25;}
       break;
     }
   }
   b.x=clamp(b.x,ARENA.esq,ARENA.dir-b.w);
 
-  /* contato: caído tem uma cabeça larga pra pisar; de pé, ele machuca */
   if(!Jog.vivo)return;
   if(b.estado==='caido'){
     const cabeca={x:b.x-8,y:b.y-46,w:b.w+16,h:82};
@@ -1758,7 +1965,13 @@ function machucaChefe(b,dano){
   if(b.vida<=0){
     b.vivo=false;
     Cam.sacode(1.2);
-    Part.solta(b.x+b.w/2,b.y+b.h/2,60,['#C99BFF','#FFC53D','#FFFFFF','#43E098'],{vel:420,vida:1.3,tam:9});
+    for(let i=0;i<10;i++){
+      const a=(i/10)*Math.PI*2;
+      Part.solta(b.x+b.w/2+Math.cos(a)*30,b.y+b.h/2+Math.sin(a)*36,6,
+        ['#C99BFF','#8C6BD1','#FFFFFF'],{vel:300,vida:1.4,tam:11,grav:520,ang:a});
+    }
+    Part.solta(b.x+b.w/2,b.y+b.h/2,40,['#FFC53D','#43E098','#FFFFFF'],{vel:420,vida:1.3,tam:8});
+    Part.texto(b.x+b.w/2,b.y+b.h/2,'não tinha ninguém atrás','#F4F1FF');
     Jog.ganha(2500);
     Jogo.venceChefe();
   }else{
@@ -1800,10 +2013,10 @@ const L={
     Mundo.solidos.push({x,y,w,h,tipo:'bloco',movel:true,ox:x,oy:y,
       ex:dx,ey:dy,alcance,vel:vel||60,t:0,dx:0,dy:0});
   },
-  quebra(x,y,w){Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',quebrando:true,caindo:false,sumiu:false,timer:0,volta:0});},
+  quebra(x,y,w){Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',quebrando:!Jogo.assistido,caindo:false,sumiu:false,timer:0,volta:0});},
   /* FASE 3 — o feed: some e volta no ritmo */
   pisca(x,y,w,defas,periodo){
-    Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',pisca:true,
+    Mundo.solidos.push({x,y,w,h:18,tipo:'bloco',pisca:!Jogo.assistido,
       defas:defas||0,periodo:periodo||2.4,ligado:true,t:0});
   },
   /* FASE 4 — elevador: só sobe enquanto tem alguém em cima */
@@ -1818,15 +2031,16 @@ const L={
   },
   /* micro-tutorial pintado no fundo */
   dica(x,y,titulo,linha){Mundo.dicas.push({x,y:y-150,titulo,linha,anim:rnd(0,6)});},
-  turma(x,y,n){criaTurma(x,y,n);},
+  turma(x,y,n){if(Jogo.assistido)return;criaTurma(x,y,n);},
   mola(x,y){Mundo.enfeites.push({tipo:'mola',x,y:y-18,w:46,h:18,carga:0});},
-  espinho(x,y,w){Mundo.perigos.push({tipo:'espinho',x,y:y-18,w,h:18});},
+  espinho(x,y,w){if(Jogo.assistido)return;Mundo.perigos.push({tipo:'espinho',x,y:y-18,w,h:18});},
   letra(i,x,y){criaItem('letra',x,y,i);},
   vida(x,y){criaItem('vida',x,y);},
-  inim(tipo,x,y,op){Mundo.inimigos.push(criaInimigo(tipo,x,y,op));},
-  alfa(x,y,op){criaAlfa(x,y,op);},
+  inim(tipo,x,y,op){if(Jogo.assistido)return;Mundo.inimigos.push(criaInimigo(tipo,x,y,op));},
+  alfa(x,y,op){if(Jogo.assistido)return;criaAlfa(x,y,op);},
   /* o muro é inimigo E parede: some quando racha */
   muro(x,y){
+    if(Jogo.assistido)return;          /* sem inimigo e sem parede: o caminho fica livre */
     const e=criaInimigo('muro',x,y);
     Mundo.inimigos.push(e);
     const s={x:e.x,y:e.y,w:e.w,h:e.h,tipo:'bloco',cor:'#4A3F5C',ehMuro:true};
@@ -1846,7 +2060,8 @@ const L={
   deco(tipo,x,y,w,h,cor){Mundo.enfeites.push({tipo,x,y,w,h,cor,anim:rnd(0,6)});},
   piso(x0,x1,y,buracos,alt){
     alt=alt||220;
-    const bs=(buracos||[]).slice().sort((a,b)=>a[0]-b[0]);
+    /* modo tranquilo: chão inteiro, sem vão nenhum */
+    const bs=Jogo.assistido?[]:(buracos||[]).slice().sort((a,b)=>a[0]-b[0]);
     let cur=x0;
     for(const b of bs){
       if(b[0]>cur)this.bloco(cur,y,b[0]-cur,alt);
@@ -1869,19 +2084,20 @@ function fase1(){
   for(let i=0;i<8;i++)L.deco('varal',380+i*640,S-300,150,4,'#FFD37A');
 
   L.npc(300,S,'vo');
+  L.npc(620,S,'teo1');      /* o irmão logo no começo: é ele que o jogo vai seguir */
   L.mural(500,S,M[0]);
   L.inim('piada',700,S,{dir:-1});
   L.passagem(870,712,150);
 
   L.bloco(1180,700,140,24);
   L.letra(0,1230,640);
-  L.inim('piada',1330,S,{dir:-1});
+  L.inim('piada',1150,S,{dir:-1});
   L.check(1400,S);
   L.mural(1490,S,M[1]);
 
   L.passagem(1550,706,170);
-  L.inim('rotulo',1740,S,{dir:1});      /* no chão firme, depois do vão */
-  L.npc(1800,S,'mae');
+  L.inim('rotulo',1820,S,{dir:1});      /* longe da beirada de pouso e do checkpoint */
+  L.npc(1800,S,'prof');
   L.bloco(1900,700,140,24);
   L.bloco(2090,610,140,24);
   L.letra(1,2140,548);
@@ -1891,7 +2107,7 @@ function fase1(){
   L.inim('cobranca',2680,S,{dir:-1});
   L.mural(2540,S,M[2]);
   L.check(2880,S);
-  L.npc(2980,S,'teo1');
+  L.npc(2980,S,'cida');
 
   /* tábuas que desabam, sobre o vão */
   L.quebra(3080,700,120);
@@ -1910,7 +2126,7 @@ function fase1(){
 
   L.passagem(4550,706,170);
   L.quebra(4800,690,120);
-  L.npc(4880,S,'cida');
+  L.npc(4880,S,'mae');
   L.bloco(5010,684,140,24);
   L.letra(3,5060,622);
   L.inim('piada',5160,S,{dir:1});
@@ -1940,14 +2156,15 @@ function fase2(){
   L.mural(1240,S,M[1]);
   L.inim('ciume',1300,S,{dir:-1});
 
-  L.npc(1700,S,'bia');
-  L.inim('rotulo',1900,S,{dir:-1});
+  L.npc(1640,S,'bia');
+  L.inim('rotulo',1820,S,{dir:-1});   /* longe do checkpoint 2050 e da beirada 1570 */
   L.bloco(1960,706,120,24);
   L.letra(1,2000,644);
 
   /* plataformas móveis sobre o vão largo */
+  L.check(2050,S);            /* o vão longo com plataformas móveis merece retorno próprio */
   L.movel(2110,716,150,22,1,0,210,88);
-  L.movel(2110,616,120,22,0,1,120,64);
+  L.movel(2150,500,120,22,0,1,90,64);   /* alto: sobra altura pra passar em pé embaixo */
   L.inim('piada',2560,S,{dir:-1});
   L.bloco(2560,700,150,24);
   L.vida(2610,640);
@@ -1955,15 +2172,16 @@ function fase2(){
   L.inim('ciume',2920,S,{dir:1});
 
   L.check(3320,S);
-  L.turma(3420,S,3);
+  L.turma(3600,S,3);
+  L.npc(2450,S,'agda');    /* orientadora do CIEE */
   L.npc(3600,S,'jorge');
   L.mola(3800,S);
   L.bloco(3940,582,150,24);   /* folga real para a mola */
   L.letra(2,3990,520);
   L.inim('rotulo',4020,S,{dir:-1});
 
-  L.movel(4090,716,160,22,1,0,240,104);
-  L.bloco(4400,700,150,24);
+  L.movel(4090,716,160,22,1,0,200,104);
+  L.bloco(4490,700,150,24);             /* fora do alcance da móvel */
   L.mural(4460,S,M[3]);
   L.inim('ciume',4560,S,{dir:1});
 
@@ -1974,8 +2192,8 @@ function fase2(){
   L.mural(5390,S,M[4]);
   L.movel(5440,716,170,22,1,0,190,96);
   L.letra(3,5520,650);
-  L.bloco(5700,690,150,24);
-  L.vida(5750,630);
+  L.bloco(5700,600,150,24);   /* alto o bastante: a Manu passa em pé por baixo */
+  L.vida(5750,540);
   L.saida(5860,S);
 }
 
@@ -2001,9 +2219,10 @@ function fase3(){
   L.mural(1450,S,M[1]);
 
   /* o feed pisca: travessia longa em ritmo */
-  L.pisca(1520,716,120,0,2.4);
-  L.pisca(1700,716,120,.8,2.4);
-  L.pisca(1880,716,120,1.6,2.4);
+  /* defasagens curtas: acendem quase juntas, então existe janela pra atravessar */
+  L.pisca(1520,716,120,0,3.2);
+  L.pisca(1700,716,120,.2,3.2);
+  L.pisca(1880,716,120,.4,3.2);
   L.inim('bot',1760,S,{altura:150});
 
   L.npc(2060,S,'kaue');
@@ -2022,11 +2241,13 @@ function fase3(){
   L.mola(3460,S);
   L.bloco(3500,592,150,24);   /* folga real para a mola */
   L.letra(2,3550,530);
-  L.pisca(3700,714,130,0,2.2);
-  L.pisca(3880,714,130,1.1,2.2);
+  L.pisca(3700,714,130,0,3);
+  L.pisca(3880,714,130,.2,3);
+  L.inim('comentario',3820,S,{altura:170});   /* o trecho estava vazio demais */
   L.bloco(4060,700,150,24);
   L.inim('piada',4180,S,{dir:-1});
   L.mural(4290,S,M[3]);
+  L.dica(4700,S,'ALGUÉM CONHECIDO','na roda do próximo Alfa');
 
   L.passagem(4390,720,180);
   L.inim('comentario',4620,S,{altura:120});
@@ -2034,8 +2255,8 @@ function fase3(){
   L.check(5100,S);
   L.npc(5180,S,'bia3');
 
-  L.pisca(5250,720,150,0,2.6);
-  L.pisca(5430,720,150,1.3,2.6);
+  L.pisca(5250,720,150,0,3);
+  L.pisca(5430,720,150,.2,3);
   L.letra(3,5300,654);
   L.inim('bot',5600,S,{altura:160});
   L.bloco(5760,712,150,24);
@@ -2070,6 +2291,7 @@ function fase4(){
   L.check(1480,S);
   L.npc(1560,S,'vizinha');
   L.inim('ciume',1740,S,{dir:-1});
+  L.inim('piada',1980,S,{dir:1});
   L.bloco(1900,720,150,24);
   L.letra(1,1950,658);
 
@@ -2079,7 +2301,7 @@ function fase4(){
   L.bloco(2620,506,160,24);
   L.vida(2670,446);
   L.mural(2760,S,M[2]);
-  L.inim('comentario',2860,S,{altura:130});
+  L.inim('comentario',3180,S,{altura:130});
   L.mola(2560,S);
   L.check(2890,S);                      /* antes do muro: dá pra repetir só a queda */
   L.muro(2960,S);
@@ -2087,6 +2309,7 @@ function fase4(){
   L.passagem(3070,726,190);
   L.npc(3380,S,'delegada');
   L.inim('ameaca',3560,S,{dir:1});
+  L.inim('rotulo',3760,S,{dir:-1});
   L.mural(3740,S,M[3]);
 
   L.bloco(3900,725,150,24);
@@ -2105,6 +2328,7 @@ function fase4(){
   L.inim('ameaca',5350,S,{dir:-1});
   L.letra(3,5150,660);
   L.inim('ciume',5480,S,{dir:1});
+  L.inim('comentario',5620,S,{altura:140});
   L.bloco(5760,722,150,24);
   L.vida(5810,662);
   L.saida(6020,S);
@@ -2166,10 +2390,12 @@ function fase5(){
   L.vida(4320,760);
   L.check(4380,S);
 
+  L.check(4620,S);            /* DENTRO da arena: morrer não devolve pra fora do portão */
   L.bloco(4700,700,180,24);
   L.bloco(5300,700,180,24);
   L.bloco(5000,566,190,24);
-  Mundo.chefe=criaChefe(5350,S);
+  if(Jogo.assistido)L.saida(5620,S);   /* sem chefe: a porta encerra a fase */
+  else Mundo.chefe=criaChefe(5350,S);
 }
 
 const CONSTRUTORES=[fase1,fase2,fase3,fase4,fase5];
@@ -2179,18 +2405,29 @@ function montaFase(n){
   Part.limpa();
   CONSTRUTORES[n-1]();
   /* altura do chão da fase: usada para escurecer o vão dos buracos */
-  Mundo.chaoY=Math.min.apply(null,Mundo.solidos.filter(s=>s.h>=100&&!s.ehPortao).map(s=>s.y));
+  /* linha do chão: só blocos LARGOS contam. Paredes altas e estreitas
+     (fundo da arena, muros, portão) faziam o horizonte subir e o subsolo
+     escuro cobrir a fase inteira. */
+  Mundo.chaoY=Math.min.apply(null,Mundo.solidos
+    .filter(s=>s.h>=100&&s.w>=150&&!s.ehPortao&&!s.ehMuro).map(s=>s.y));
   /* dicas do arquivo de conteúdo, coladas na altura do chão */
   const dd=DICAS[n]||[];
   for(const [dx,tit,lin] of dd)L.dica(dx,Mundo.chaoY,tit,lin);
-  /* dica e mural disputam a mesma parede: afasta quem ficou por cima */
+  /* Dica, mural e outra dica disputam a mesma parede. Em vez de empurrar
+     em laço (que fica preso entre duas restrições), procuro a posição
+     livre mais próxima da original. */
   for(const d of Mundo.dicas){
-    for(let volta=0;volta<8;volta++){
-      const m=Mundo.murais.find(m=>Math.abs((m.x+m.w/2)-d.x)<190);
-      if(!m)break;
-      d.x+=(d.x>=m.x+m.w/2)?200:-200;
-      d.x=clamp(d.x,140,Mundo.larg-140);
+    const alvo=d.x;
+    let melhor=null;
+    for(let passo=0;passo<=720&&melhor===null;passo+=90){
+      for(const lado of (passo?[-1,1]:[1])){
+        const x=clamp(alvo+lado*passo,150,Mundo.larg-150);
+        const bateMural=Mundo.murais.some(m=>Math.abs((m.x+m.w/2)-x)<185);
+        const bateDica=Mundo.dicas.some(o=>o!==d&&Math.abs(o.x-x)<340);
+        if(!bateMural&&!bateDica){melhor=x;break;}
+      }
     }
+    d.x=melhor===null?alvo:melhor;
   }
   Jog.novaFase(n);
   /* letras já coletadas não voltam a aparecer */
@@ -2205,6 +2442,15 @@ function montaFase(n){
 /* ============================================================
    14. CENÁRIO VIVO
    ============================================================ */
+/* Leva junto quem está em cima. Feito ANTES da física da Manu: assim,
+   quando ela vai checar colisão, já está na posição certa da plataforma.
+   Antes isso era feito depois, e ela ficava para trás nas beiradas. */
+function carrega(s){
+  if(!Jog.vivo||Jog.plataforma!==s)return;
+  if(s.dx)Jog.x+=s.dx;
+  if(s.dy)Jog.y+=s.dy;
+}
+
 function atualizaSolidos(dt){
   const T=Jogo.tempoTotal;
   for(const s of Mundo.solidos){
@@ -2212,7 +2458,7 @@ function atualizaSolidos(dt){
     if(s.pisca){
       const fase=((T+s.defas)%s.periodo)/s.periodo;
       const antes=s.ligado;
-      s.ligado=fase<.62;
+      s.ligado=fase<.68;   /* mais tempo aceso do que apagado */
       s.removido=!s.ligado;
       s.t=fase;
       if(antes&&!s.ligado&&Jog.plataforma===s)Jog.plataforma=null;
@@ -2225,13 +2471,18 @@ function atualizaSolidos(dt){
       const alvo=emCima?s.oy-s.curso:s.oy;
       const ny=aprox(s.y,alvo,s.vel*dt);
       s.dx=0;s.dy=ny-s.y;s.y=ny;
+      carrega(s);
       continue;
     }
     if(s.movel&&!s.elevador){
       s.t+=dt*(s.vel/Math.max(1,s.alcance));
-      const p=(Math.sin(s.t*Math.PI)+1)/2;
+      /* começa em 0 e vai a 1 e volta, com desaceleração nas pontas.
+         Com seno puro ela nascia no MEIO do trajeto e dava um salto
+         de 100px no primeiro quadro, derrubando quem estivesse em cima. */
+      const p=(1-Math.cos(s.t*Math.PI))/2;
       const nx=s.ox+s.ex*s.alcance*p, ny=s.oy+s.ey*s.alcance*p;
       s.dx=nx-s.x;s.dy=ny-s.y;s.x=nx;s.y=ny;
+      carrega(s);
     }
     if(s.quebrando){
       if(s.caindo&&!s.sumiu){
@@ -2330,6 +2581,11 @@ function atualizaCenario(dt){
         Som.bloqueado();
         Interface.faixa('Faltam '+(PALAVRA.length-Jogo.letras.size)+' letra(s) do CIEE','sol');
       }
+    }else if(pt.selado&&Jog.x+Jog.w<pt.x-10){
+      /* renasceu do lado de fora: reabre para não travar o jogo */
+      pt.selado=false;
+      pt.solido.removido=true;
+      Interface.faixa('O portão reabriu. Volte quando estiver pronta.','verde');
     }else if(!pt.selado&&Jog.x>pt.x+pt.w+130){
       pt.selado=true;
       pt.solido.removido=false;
@@ -2384,8 +2640,11 @@ function atualizaProjeteis(dt){
       let acertou=false;
       for(const e of Mundo.inimigos){
         if(!e.vivo||!bate(p,e))continue;
-        acertou=vozAtinge(e,p)||acertou;
-        if(!p.atravessa)break;
+        /* quem não pode ser atingido (o Téo, a Ameaça sumida) deixa a voz
+           passar em vez de engolir o tiro e virar escudo do que está atrás */
+        const consumiu=vozAtinge(e,p);
+        acertou=consumiu||acertou;
+        if(consumiu&&!p.atravessa)break;
       }
       const b=Mundo.chefe;
       if(b&&b.vivo&&bate(p,b)){
@@ -2404,6 +2663,12 @@ function atualizaProjeteis(dt){
 /* A voz funciona em quase tudo — mas cada inimigo tem sua guarda */
 function vozAtinge(e,p){
   const t=e.def;
+  /* Devolve TRUE se o tiro foi consumido. Quem não pode ser atingido
+     devolve FALSE, para não virar escudo do que está atrás. */
+  if(t.fantasma&&e.solidez<.6){
+    Part.texto(e.x+e.w/2,e.y-6,'atravessou','#C7BEE6');
+    return false;
+  }
   if(t.blindaFechado&&!e.aberto){
     Som.bloqueado();
     if(!e.avisou){e.avisou=true;Interface.faixa(t.recado,'sol');}
@@ -2454,7 +2719,6 @@ const Arte={
     g.translate(-Vista.larg/2,-Vista.alt/2);
     g.translate(-Math.round(Cam.ox),-Math.round(Cam.oy));
     this.paralaxe(g);
-    this.ambiente(g);
     this.murais(g);
     this.dicas(g);
     this.enfeites(g);
@@ -2467,49 +2731,67 @@ const Arte={
     this.inimigos(g);
     if(Mundo.chefe)this.chefe(g,Mundo.chefe);
     this.projeteis(g);
-    this.manu(g);
+    if(!Jogo.vitrine)this.manu(g);
     this.ondas(g);
     Part.desenha(g);
-    this.frente(g);
     g.restore();
-    this.hud(g);
+    this.vinheta(g);
+    if(!Jogo.vitrine){this.perigo(g);this.hud(g);}
   },
 
   ceu(g){
     const f=this.faseAtual;
-    const grad=g.createLinearGradient(0,0,0,Vista.cssA);
+    /* O degradê termina na LINHA DO HORIZONTE, não no rodapé da tela.
+       Antes a cor quente do amanhecer ficava escondida atrás do chão. */
+    const linha=clamp((Mundo.chaoY-Cam.oy)*Vista.escala,Vista.cssA*.42,Vista.cssA*1.25);
+    const grad=g.createLinearGradient(0,0,0,linha);
     grad.addColorStop(0,f.ceu[0]);
-    grad.addColorStop(.55,f.ceu[1]);
+    grad.addColorStop(.52,f.ceu[1]);
     grad.addColorStop(1,f.ceu[2]);
     g.fillStyle=grad;
     g.fillRect(0,0,Vista.cssL,Vista.cssA);
   },
 
-  /* Uma faixa de prédios/casas. Desenha silhuetas sólidas, espaçadas,
-     sem sobrepor — cada camada tem sua cor já misturada com o céu. */
-  faixaPredios(g,cor,veloc,baseY,larg,vao,altMin,altVar,semente,telhado){
-    g.fillStyle=cor;
+  /* Uma faixa de casario. Larguras e alturas variam por um embaralhamento
+     simples, então o olho não vê um padrão repetido passando — que é
+     justamente o que cansa a vista numa paralaxe. */
+  faixaPredios(g,cor,veloc,baseY,larg,vao,altMin,altVar,semente,telhado,detalhe){
     const off=Cam.ox*veloc;
     const passo=larg+vao;
-    const i0=Math.floor((off-larg)/passo);
-    const i1=i0+Math.ceil(Vista.larg/passo)+2;
+    const i0=Math.floor((off-larg*2)/passo);
+    const i1=i0+Math.ceil(Vista.larg/passo)+3;
+    const emb=i=>{const k=Math.sin(i*semente*.017)*43758.5;return k-Math.floor(k);};
+    g.fillStyle=cor;
     for(let i=i0;i<i1;i++){
-      const x=Cam.ox+(i*passo-off);
-      const h=altMin+((i*semente)%altVar);
+      const r1=emb(i), r2=emb(i+91), r3=emb(i+317);
+      const w=larg*(.62+r1*.86);
+      const x=Cam.ox+(i*passo-off)+r2*vao*.5;
+      const h=altMin+r3*altVar;
       const y=baseY-h;
       if(telhado==='casa'){
         g.beginPath();
-        g.moveTo(x-larg*.12,y);
-        g.lineTo(x+larg/2,y-larg*.28);
-        g.lineTo(x+larg*1.12,y);
+        g.moveTo(x-w*.13,y);
+        g.lineTo(x+w/2,y-w*(.2+r1*.14));
+        g.lineTo(x+w*1.13,y);
         g.closePath();g.fill();
-        g.fillRect(x,y,larg,h);
+        g.fillRect(x,y,w,h);
+        if(r2>.55){const cw=w*.22;g.fillRect(x+w*.62,y-w*(.2+r1*.14)-cw*1.1,cw,cw*1.1);}
       }else if(telhado==='torre'){
-        g.fillRect(x,y,larg,h);
-        g.fillRect(x+larg*.42,y-14-((i*7)%16),4,16);
-        g.fillRect(x+larg*.16,y-7,larg*.2,7);
+        g.fillRect(x,y,w,h);
+        if(r1>.4)g.fillRect(x+w*.44,y-16-r2*18,4,20+r2*18);
+        if(r3>.6)g.fillRect(x+w*.12,y-8,w*.26,8);
       }else{
-        g.fillRect(x,y,larg,h);
+        g.fillRect(x,y,w,h);
+        if(r3>.62){const cw=w*.2;g.fillRect(x+w*.58,y-cw,cw,cw);}
+      }
+      if(detalhe&&r2>.35){
+        g.save();
+        g.strokeStyle=cor;g.globalAlpha=.55;g.lineWidth=2;
+        g.beginPath();
+        g.moveTo(x,y+h*.22);
+        g.quadraticCurveTo(x+passo*.5,y+h*.22+16,x+passo,y+h*.16);
+        g.stroke();
+        g.restore();
       }
     }
   },
@@ -2517,33 +2799,48 @@ const Arte={
   paralaxe(g){
     const f=this.faseAtual;
     const ceu=f.ceu[2];
-    const base=Cam.oy+Vista.alt;
+    /* O casario nasce na LINHA DO CHÃO, não no rodapé da tela. Ancorado
+       na tela, ele ficava enterrado nas fases de mundo mais alto. */
+    const base=Mundo.chaoY+10;
     const perfil=(f.n===1||f.n===4)?'casa':(f.n===3?'torre':'plano');
-    /* três faixas, da mais distante para a mais próxima */
-    this.faixaPredios(g,this.mistura(ceu,f.detalhe,.16),.86,base-118,170,120,90,110,53,perfil);
-    this.faixaPredios(g,this.mistura(ceu,f.chao,.5),  .70,base-64, 150,96, 140,150,97,perfil);
-    /* névoa entre as camadas: sensação de distância */
-    const nv=g.createLinearGradient(0,base-300,0,base-40);
+
+    /* Cada faixa é misturada com o CÉU, não com a cor do chão: quanto mais
+       longe, mais ela some no ar. É o que tira o contraste que incomoda. */
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.22),0,base-124,180,130,90,120,53,perfil);
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.44),0,base-70, 158,104,140,160,97,perfil);
+
+    /* névoa entre as camadas */
+    const nv=g.createLinearGradient(0,base-330,0,base-30);
     nv.addColorStop(0,'rgba(0,0,0,0)');
-    nv.addColorStop(1,this.mistura(ceu,'#ffffff',.06));
-    g.save();g.globalAlpha=.5;g.fillStyle=nv;
-    g.fillRect(Cam.ox-10,base-300,Vista.larg+20,262);
+    nv.addColorStop(1,this.mistura(ceu,'#ffffff',.1));
+    g.save();g.globalAlpha=.62;g.fillStyle=nv;
+    g.fillRect(Cam.ox-10,base-330,Vista.larg+20,302);
     g.restore();
-    this.faixaPredios(g,this.mistura(ceu,f.chao,.78),.45,base-14,132,84,170,190,151,perfil);
-    /* janelas acesas na faixa da frente */
+
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.7),0,base-16,140,90,170,200,151,perfil,true);
+
+    /* janelas acesas, discretas e sem cintilar forte */
     g.save();
     g.fillStyle=f.detalhe;
-    g.globalAlpha=.22;
-    const off=Cam.ox*.45, passo=216;
-    const k0=Math.floor((off-132)/passo);
-    for(let i=k0;i<k0+Math.ceil(Vista.larg/passo)+2;i++){
-      const x=Cam.ox+(i*passo-off);
-      const h=170+((i*151)%190);
-      for(let r=0;r<Math.floor(h/62);r++)
-        for(let c=0;c<3;c++)
-          if((i+r*3+c)%4!==0)g.fillRect(x+16+c*38,base-14-h+26+r*62,22,26);
+    g.globalAlpha=.16;
+    const off=0, passo=230;
+    const k0=Math.floor((off-140)/passo);
+    const emb=i=>{const k=Math.sin(i*151*.017)*43758.5;return k-Math.floor(k);};
+    for(let i=k0;i<k0+Math.ceil(Vista.larg/passo)+3;i++){
+      const r1=emb(i), r3=emb(i+317);
+      const w=140*(.62+r1*.86);
+      const x=Cam.ox+(i*passo-off)+emb(i+91)*45;
+      const h=170+r3*200;
+      const cols=Math.max(1,Math.floor(w/44));
+      for(let r=0;r<Math.floor(h/64);r++)
+        for(let c=0;c<cols;c++){
+          const sem=(i*31+r*7+c*13);
+          if(sem%4===0)continue;
+          g.fillRect(x+12+c*44,base-16-h+28+r*64,20,24);
+        }
     }
     g.restore();
+
     /* subsolo: sem isso o buraco mostra o fundo claro e parece piso */
     const cy=Mundo.chaoY;
     if(cy<Cam.oy+Vista.alt){
@@ -2553,12 +2850,13 @@ const Arte={
       g.fillStyle=gr;
       g.fillRect(Cam.ox-10,cy,Vista.larg+20,Cam.oy+Vista.alt-cy+20);
     }
+
     if(f.n===3){
       /* grade digital da machosfera */
       g.save();
       g.globalAlpha=.12;
       g.strokeStyle=f.detalhe;g.lineWidth=1;
-      const pas=64, ox=Cam.ox*.3%pas, oy=Cam.oy*.3%pas;
+      const pas=64, ox=0, oy=0;
       for(let x=-ox;x<Vista.larg+pas;x+=pas){
         g.beginPath();g.moveTo(Cam.ox+x,Cam.oy);g.lineTo(Cam.ox+x,Cam.oy+Vista.alt);g.stroke();
       }
@@ -2742,7 +3040,7 @@ const Arte={
           g.fillStyle=this.mistura(f.ceu[2],'#000000',.42);
           g.fillRect(d.x,d.y,d.w,d.h);
           g.fillStyle=f.detalhe;
-          g.globalAlpha=.16+Math.sin(Jogo.tempoTotal*3+d.anim)*.07;
+          g.globalAlpha=.15+Math.sin(Jogo.tempoTotal*.5+d.anim)*.03;
           g.fillRect(d.x+6,d.y+6,d.w-12,d.h*.4);
           g.globalAlpha=.5;
           g.fillRect(d.x,d.y,d.w,3);
@@ -2751,12 +3049,12 @@ const Arte={
         }
         case 'bit':
           g.fillStyle=f.detalhe;
-          g.globalAlpha=.3+Math.sin(Jogo.tempoTotal*4+d.anim)*.25;
-          g.fillRect(d.x,d.y+Math.sin(Jogo.tempoTotal+d.anim)*10,d.w,d.h);
+          g.globalAlpha=.26;
+          g.fillRect(d.x,d.y,d.w,d.h);
           g.globalAlpha=1;
           break;
         case 'janelaAcesa':{
-          const tremula=.5+Math.sin(Jogo.tempoTotal*2.4+d.anim)*.28;
+          const tremula=.5+Math.sin(Jogo.tempoTotal*.4+d.anim)*.1;
           g.fillStyle='rgba(0,0,0,.4)';g.fillRect(d.x-4,d.y-4,d.w+8,d.h+8);
           g.globalAlpha=tremula;
           g.fillStyle=d.cor;g.fillRect(d.x,d.y,d.w,d.h);
@@ -2907,6 +3205,10 @@ const Arte={
   portao(g,s){
     const pt=Mundo.portao;
     const selado=pt&&pt.selado;
+    /* batente de pedra dos dois lados, como nas portas de fim de fase */
+    g.fillStyle=this.mistura(this.faseAtual.chao,'#000000',.5);
+    g.fillRect(s.x-12,s.y,12,s.h);
+    g.fillRect(s.x+s.w,s.y,12,s.h);
     g.fillStyle='#1B1038';
     g.fillRect(s.x,s.y,s.w,s.h);
     /* grades */
@@ -2970,42 +3272,100 @@ const Arte={
 
   saida(g){
     const s=Mundo.saida;
-    if(!s||s.x<Cam.ox-160||s.x>Cam.ox+Vista.larg+160)return;
+    if(!s||s.x<Cam.ox-200||s.x>Cam.ox+Vista.larg+200)return;
+    const f=this.faseAtual;
     const aberta=s.aberta;
-    const pulso=Math.sin(s.anim*2.6)*.5+.5;
+    const pu=Math.sin(s.anim*2.6)*.5+.5;
+    const cx=s.x+s.w/2, base=s.y+s.h;
+
+    /* --- luz que escapa da fresta --- */
     if(aberta){
-      g.globalAlpha=.24+pulso*.16;
-      g.fillStyle='#43E098';
-      g.beginPath();g.arc(s.x+s.w/2,s.y+s.h/2,72+pulso*10,0,Math.PI*2);g.fill();
+      const luz=g.createRadialGradient(cx,s.y+s.h*.45,10,cx,s.y+s.h*.45,150+pu*22);
+      luz.addColorStop(0,'rgba(255,229,150,.5)');
+      luz.addColorStop(.45,'rgba(255,197,61,.18)');
+      luz.addColorStop(1,'rgba(255,197,61,0)');
+      g.fillStyle=luz;
+      g.beginPath();g.arc(cx,s.y+s.h*.45,150+pu*22,0,Math.PI*2);g.fill();
+      /* facho no chão */
+      g.globalAlpha=.3+pu*.14;
+      g.fillStyle='#FFC53D';
+      g.beginPath();
+      g.moveTo(s.x+6,base);g.lineTo(s.x+s.w-6,base);
+      g.lineTo(s.x+s.w+42,base+22);g.lineTo(s.x-42,base+22);
+      g.closePath();g.fill();
       g.globalAlpha=1;
     }
-    const grad=g.createLinearGradient(s.x,s.y,s.x,s.y+s.h);
-    grad.addColorStop(0,aberta?'#43E098':'#5A5170');
-    grad.addColorStop(1,aberta?'#6D28D9':'#2E2740');
-    g.fillStyle=grad;
-    g.fillRect(s.x,s.y,s.w,s.h);
-    g.fillStyle=aberta?'rgba(255,255,255,.8)':'rgba(255,255,255,.3)';
-    g.fillRect(s.x,s.y,s.w,5);
+
+    /* --- batente de pedra --- */
+    const bx=s.x-13, bw=s.w+26;
+    g.fillStyle=this.mistura(f.chao,'#000000',.45);
+    g.fillRect(bx,s.y-16,bw,s.h+16);
+    g.fillStyle=this.mistura(f.chao,'#ffffff',.1);
+    g.fillRect(bx,s.y-16,bw,7);
+    /* pilastras */
+    g.fillStyle=this.mistura(f.chao,'#000000',.62);
+    g.fillRect(bx,s.y-9,11,s.h+9);
+    g.fillRect(bx+bw-11,s.y-9,11,s.h+9);
+    /* vão da porta */
+    g.fillStyle=aberta?'#1a1206':'#150C2C';
+    g.fillRect(s.x,s.y-4,s.w,s.h+4);
+
     if(aberta){
-      g.fillStyle='#120A2A';
-      g.font='700 13px system-ui,sans-serif';
+      /* luz de dentro, com degradê para o alto */
+      const dentro=g.createLinearGradient(0,base,0,s.y-4);
+      dentro.addColorStop(0,'#FFE8A8');
+      dentro.addColorStop(.55,'#FFC53D');
+      dentro.addColorStop(1,'rgba(255,197,61,.25)');
+      g.fillStyle=dentro;
+      g.fillRect(s.x+4,s.y,s.w-8,s.h);
+      /* silhueta de alguém esperando do outro lado */
+      g.fillStyle='rgba(30,16,58,.5)';
+      const bob=Math.sin(s.anim*1.6)*1.5;
+      g.beginPath();g.arc(cx,base-40+bob,8,0,Math.PI*2);g.fill();
+      g.fillRect(cx-9,base-32+bob,18,26);
+      /* partículas subindo na luz */
+      for(let i=0;i<5;i++){
+        const t=(s.anim*.5+i*.2)%1;
+        g.globalAlpha=(1-t)*.6;
+        g.fillStyle='#FFF3CE';
+        g.fillRect(s.x+9+((i*17)%(s.w-20)),base-t*s.h,3,3);
+      }
+      g.globalAlpha=1;
+      /* placa SEGUIR */
+      g.fillStyle='#160d2e';
+      g.fillRect(cx-30,s.y-30,60,20);
+      g.fillStyle='#FFC53D';
+      g.font='700 12px system-ui,sans-serif';
       g.textAlign='center';
-      g.fillText('SEGUIR',s.x+s.w/2,s.y+s.h/2+5);
+      g.fillText('SEGUIR',cx,s.y-16);
       g.textAlign='left';
     }else{
-      /* cadeado com as letras que faltam */
-      const cx=s.x+s.w/2, cy=s.y+s.h/2;
-      g.fillStyle='#C7BEE6';
-      g.fillRect(cx-11,cy-4,22,18);
-      g.strokeStyle='#C7BEE6';g.lineWidth=4;
-      g.beginPath();g.arc(cx,cy-4,7,Math.PI,0);g.stroke();
-      g.font='900 11px Arial Black,system-ui,sans-serif';
-      g.textAlign='center';
-      for(let i=0;i<PALAVRA.length;i++){
-        g.fillStyle=Jogo.letras.has(i)?'#FFC53D':'rgba(199,190,230,.35)';
-        g.fillText(PALAVRA[i],s.x+12+i*14,s.y-10);
+      /* fechada: duas folhas de madeira com as letras que faltam */
+      g.fillStyle='#2E2140';
+      g.fillRect(s.x+3,s.y,s.w/2-4,s.h-2);
+      g.fillRect(s.x+s.w/2+1,s.y,s.w/2-4,s.h-2);
+      g.fillStyle='rgba(0,0,0,.3)';
+      for(let i=1;i<4;i++){
+        g.fillRect(s.x+3,s.y+i*(s.h/4),s.w/2-4,3);
+        g.fillRect(s.x+s.w/2+1,s.y+i*(s.h/4),s.w/2-4,3);
       }
-      g.textAlign='left';
+      /* tranca com as quatro letras */
+      g.fillStyle='#160d2e';
+      g.fillRect(s.x-4,s.y+s.h*.42,s.w+8,30);
+      g.font='900 12px Arial Black,system-ui,sans-serif';
+      g.textAlign='center';g.textBaseline='middle';
+      for(let i=0;i<PALAVRA.length;i++){
+        const lx=s.x+9+i*((s.w-18)/3), ly=s.y+s.h*.42+15;
+        const tem=Jogo.letras.has(i);
+        g.fillStyle=tem?'#FFC53D':'#3A2C56';
+        g.fillRect(lx-7,ly-9,14,18);
+        g.fillStyle=tem?'#1b0733':'#6B5A8C';
+        g.fillText(PALAVRA[i],lx,ly+1);
+      }
+      g.textAlign='left';g.textBaseline='alphabetic';
+      /* aldrava */
+      g.strokeStyle='#6B5A8C';g.lineWidth=3;
+      g.beginPath();g.arc(cx,s.y+s.h*.72,7,0,Math.PI);g.stroke();
     }
   },
 
@@ -3165,6 +3525,24 @@ const Arte={
       const g2=n.falou?gesto*.4:gesto;
       this.membroEntre(g,cx+9,omb+2,cx+13+g2*3,omb+14-Math.abs(g2)*5,5.8,v.pele);
 
+      /* nome de quem é, quando você chega perto: sem isso ninguém sabe
+         que aquele ali é o irmão dela */
+      const dPerto=Math.abs((Jog.x+Jog.w/2)-cx);
+      if(dPerto<230&&FALAS[n.id]){
+        const nome=FALAS[n.id].quem.split('·')[0].trim();
+        const fade=clamp(1-(dPerto-120)/110,0,1);
+        g.save();
+        g.globalAlpha=fade;
+        g.font='700 12px system-ui,sans-serif';
+        g.textAlign='center';
+        const larg=g.measureText(nome).width+16;
+        g.fillStyle='rgba(18,10,42,.88)';
+        g.fillRect(cx-larg/2,cabY-rCab-42+bob,larg,17);
+        g.fillStyle='#F4F1FF';
+        g.fillText(nome,cx,cabY-rCab-30+bob);
+        g.textAlign='left';
+        g.restore();
+      }
       /* balão de conversa */
       if(!n.falou){
         const pu=Math.sin(n.anim*3)*.5+.5;
@@ -3233,6 +3611,12 @@ const Arte={
      serve para o jogo e para os retratos da Cartilha. */
   corpoInimigo(g,e){
     const pisca=e.piscar>0&&Math.floor(e.piscar*40)%2===0;
+    /* respiração: todo bicho infla e desincha de leve, cada um no seu tempo */
+    if(!e.semSombra&&e.vivo){
+      const r=1+Math.sin(e.anim*2.6+(e.origemX||0)*.01)*.035;
+      const cxr=e.x+e.w/2, byr=e.y+e.h;
+      g.translate(cxr,byr);g.scale(1/r,r);g.translate(-cxr,-byr);
+    }
     const c1=pisca?'#FFFFFF':e.def.cor;
     const c2=pisca?'#FFFFFF':e.def.cor2;
     const x=e.x,y=e.y,w=e.w,h=e.h,cx=x+w/2,cy=y+h/2;
@@ -3280,21 +3664,43 @@ const Arte={
           g.roundRect?g.roundRect(x,y,w,bh,13):g.rect(x,y,w,bh);
           g.fillStyle=c1;g.fill();
           g.strokeStyle='#7A3F0C';g.lineWidth=2.6;g.stroke();
-          /* "HÁ HÁ" escrito dentro, é isso que faz ler como piada */
+          /* olhinhos que acompanham a Manu */
+          const olh=clamp((Jog.x+Jog.w/2-cx)/90,-1,1);
+          for(const sg of[-1,1]){
+            g.fillStyle='#FFF6E6';
+            g.beginPath();g.arc(cx+sg*11,y+bh*.3,5.4,0,Math.PI*2);g.fill();
+            g.fillStyle='#5C2C06';
+            g.beginPath();g.arc(cx+sg*11+olh*2.4,y+bh*.3+.8,2.7,0,Math.PI*2);g.fill();
+          }
+          /* "HÁ HÁ" e a boca rindo */
           g.fillStyle=c2;
-          g.font='900 15px Arial Black,system-ui,sans-serif';
+          g.font='900 12px Arial Black,system-ui,sans-serif';
           g.textAlign='center';g.textBaseline='middle';
-          g.fillText('HÁ HÁ',cx,y+bh*.42+Math.abs(bal)*.5);
+          g.fillText('HÁ HÁ',cx,y+bh*.66+Math.abs(bal)*.4);
           g.textAlign='left';g.textBaseline='alphabetic';
-          /* boca rindo pequena embaixo do texto */
           g.fillStyle='#7A3F0C';
           g.beginPath();
-          g.ellipse(cx,y+bh*.76,8,3.4+Math.abs(bal)*.5,0,0,Math.PI*2);
+          g.ellipse(cx,y+bh*.87,7,2.6+Math.abs(bal)*.6,0,0,Math.PI*2);
           g.fill();
           g.restore();
           break;
         }
         case 'rotulo':{
+          /* dois olhinhos espiando de dentro quando a tampa abre */
+          if(e.tampa>.35){
+            g.save();
+            g.globalAlpha=Math.min(1,(e.tampa-.35)/.4);
+            g.fillStyle='#FFF6E6';
+            for(const sg of[-1,1]){
+              g.beginPath();g.arc(cx+sg*9,y+h*.42,4.6,0,Math.PI*2);g.fill();
+            }
+            g.fillStyle='#3A2410';
+            const oq=clamp((Jog.x+Jog.w/2-cx)/80,-1,1);
+            for(const sg of[-1,1]){
+              g.beginPath();g.arc(cx+sg*9+oq*1.8,y+h*.42+.5,2.2,0,Math.PI*2);g.fill();
+            }
+            g.restore();
+          }
           const ab=e.aberto, tp=e.tampa;
           /* caixa */
           g.fillStyle=c1;
@@ -3324,6 +3730,11 @@ const Arte={
           break;
         }
         case 'comentario':{
+          /* cursor de digitação piscando ao lado */
+          if(Math.floor(e.anim*2)%2===0){
+            g.fillStyle='rgba(244,241,255,.7)';
+            g.fillRect(cx+w*.32,y+h*.3,2.5,11);
+          }
           const mergulha=e.estado==='mergulha';
           const esticaY=mergulha?1.2:1, esticaX=mergulha?.85:1;
           g.save();
@@ -3400,9 +3811,26 @@ const Arte={
             g.fillText('sozinho',cx,y-8);
             g.textAlign='left';
           }
+          /* microfone: ele está sempre gravando */
+          g.save();
+          g.translate(cx+e.dir*(w*.5),y+h*.4);
+          g.rotate(e.dir*.4+Math.sin(e.anim*3)*.06);
+          g.fillStyle='#20202E';
+          g.fillRect(-3,-2,6,22);
+          g.fillStyle='#9A9AB8';
+          g.beginPath();g.ellipse(0,-8,7.5,9.5,0,0,Math.PI*2);g.fill();
+          g.fillStyle='rgba(0,0,0,.3)';
+          for(let i=-2;i<=2;i++)g.fillRect(-6.5,-11+i*3.5,13,1.4);
+          g.fillStyle='#FF5470';
+          g.beginPath();g.arc(0,3,2.2,0,Math.PI*2);g.fill();
+          g.restore();
           break;
         }
         case 'ciume':{
+          /* pulsação de coração, mais rápida quando persegue */
+          const bpm=e.estado==='cego'?9:4.2;
+          const pl=1+Math.abs(Math.sin(e.anim*bpm))*.07;
+          g.translate(cx,cy);g.scale(pl,pl);g.translate(-cx,-cy);
           const cego=e.estado==='cego';
           const pulsa=cego?1+Math.sin(e.anim*11)*.07:1;
           g.save();
@@ -3617,6 +4045,38 @@ const Arte={
       }
   },
 
+  /* Tira com o ciclo de corrida da Manu, em PNG. O menu anima essa tira
+     com steps() no CSS — é a própria personagem do jogo, correndo na capa. */
+  _folha:null,
+  folhaManu(alt){
+    if(this._folha)return this._folha;
+    try{
+      const N=10, esc=alt/72, larg=Math.round(50*esc);
+      const cv=document.createElement('canvas');
+      cv.width=larg*N;cv.height=alt;
+      const g=cv.getContext('2d');
+      const bak={};
+      ['x','y','vx','vy','dir','noChao','animCaminho','esticaX','esticaY','rabo',
+       'invul','vivo','vozCarga','quedaDe','piscar','semSombra'].forEach(k=>bak[k]=Jog[k]);
+      const poseBak=this._pose, tBak=Jogo.tempoTotal;
+      this._pose='corre';
+      Object.assign(Jog,{x:0,y:0,vx:330,vy:0,dir:1,noChao:true,esticaX:1,esticaY:1,
+        rabo:-10,invul:0,vivo:true,vozCarga:0,quedaDe:null,piscar:0,semSombra:true});
+      for(let i=0;i<N;i++){
+        Jog.animCaminho=(i/N)*(2*Math.PI/13);
+        Jogo.tempoTotal=1.2+i*.04;             /* longe do instante da piscada */
+        g.save();
+        g.translate(i*larg+larg/2,alt-3);
+        g.scale(esc,esc);
+        g.translate(-(Jog.x+Jog.w/2),-(Jog.y+Jog.h));
+        this.manu(g);
+        g.restore();
+      }
+      Object.assign(Jog,bak);this._pose=poseBak;Jogo.tempoTotal=tBak;
+      return this._folha={src:cv.toDataURL('image/png'),n:N,larg,alt};
+    }catch(e){return null;}
+  },
+
   /* Retrato de um inimigo em PNG, para a Cartilha. Fica em cache. */
   _retratos:{},
   retrato(tipo,lado){
@@ -3649,97 +4109,235 @@ const Arte={
 
   chefe(g,b){
     if(!b.vivo)return;
-    const cores={1:['#4A2A7A','#C99BFF'],2:['#8C2A3E','#FF5470'],3:['#8C4A6B','#FF8FB0']};
-    const [c1,c2]=cores[b.fase];
+    const CORES={1:['#4A2A7A','#C99BFF','#1E1038'],
+                 2:['#8C2A3E','#FF5470','#3A0E1A'],
+                 3:['#8C4A6B','#FF8FB0','#3A1626']};
+    const [c1,c2,esc]=CORES[b.fase];
     const caido=b.estado==='caido';
     const pisca=b.piscar>0&&Math.floor(b.piscar*40)%2===0;
     const cx=b.x+b.w/2, cy=b.y+b.h/2;
+    const tr=b.tremeu||0;
+
+    /* --- marca no chão antes do baque: dá pra sair de baixo --- */
+    if(b.marca!==null&&b.marca!==undefined){
+      const pu=Math.sin(Jogo.tempoTotal*16)*.5+.5;
+      g.save();
+      g.globalAlpha=.35+pu*.35;
+      g.strokeStyle='#FF5470';g.lineWidth=4;
+      g.beginPath();g.ellipse(b.marca,b.chaoY-3,58,14,0,0,Math.PI*2);g.stroke();
+      g.globalAlpha=.18+pu*.14;
+      g.fillStyle='#FF5470';
+      g.beginPath();g.ellipse(b.marca,b.chaoY-3,58,14,0,0,Math.PI*2);g.fill();
+      g.restore();
+    }
+
+    /* --- a roda das três voltas: é o ciclo, desenhado --- */
     g.save();
-    g.globalAlpha=(caido?.07:.16)+Math.sin(b.anim*3)*.04;
-    g.fillStyle=c2;
-    g.beginPath();g.arc(cx,cy,b.w*(caido?.5:.62),0,Math.PI*2);g.fill();
-    g.globalAlpha=1;
-    /* máscara */
+    g.translate(cx+tr,cy);
+    g.rotate(b.anel);
+    const R=b.w*.78;
+    for(let i=0;i<3;i++){
+      const a0=-Math.PI/2+i*(Math.PI*2/3)+.11;
+      const a1=a0+(Math.PI*2/3)-.22;
+      const ativa=i===(b.fase-1);
+      const passada=i<(b.fase-1);
+      g.beginPath();
+      g.arc(0,0,R,a0,a1);
+      /* volta já cumprida fica marcada: dá pra ver o ciclo andando */
+      g.strokeStyle=ativa?c2:(passada?'rgba(255,197,61,.5)':'rgba(199,190,230,.34)');
+      g.lineWidth=ativa?9:5;
+      g.stroke();
+      /* bolinha em cada emenda: mostra que são três voltas */
+      g.fillStyle=ativa?c2:(passada?'rgba(255,197,61,.6)':'rgba(199,190,230,.4)');
+      g.beginPath();g.arc(Math.cos(a0-.11)*R,Math.sin(a0-.11)*R,4.5,0,Math.PI*2);g.fill();
+      if(ativa){
+        const am=(a0+a1)/2;
+        g.beginPath();g.arc(Math.cos(am)*R,Math.sin(am)*R,8,0,Math.PI*2);g.fill();
+        g.fillStyle='#F4F1FF';
+        g.beginPath();g.arc(Math.cos(am)*R,Math.sin(am)*R,3.4,0,Math.PI*2);g.fill();
+      }
+    }
+    g.restore();
+
+    /* --- mãos de sombra durante os ataques --- */
+    if(!caido&&(b.estado==='mira'||b.estado==='prepara'||b.estado==='investe')){
+      g.save();
+      g.globalAlpha=.55;
+      g.fillStyle=esc;
+      for(const sg of[-1,1]){
+        const ex=cx+sg*(b.w*.52)+tr, ey=cy+Math.sin(b.anim*7+sg)*8;
+        g.beginPath();
+        g.ellipse(ex,ey,17,25,sg*.4,0,Math.PI*2);
+        g.fill();
+        for(let d=0;d<3;d++){
+          g.beginPath();
+          g.ellipse(ex+sg*(9+d*5),ey-16+d*11,5,13,sg*.7,0,Math.PI*2);
+          g.fill();
+        }
+      }
+      g.restore();
+    }
+
+    /* --- a máscara --- */
+    g.save();
+    g.translate(tr,0);
     g.beginPath();
-    g.moveTo(cx,b.y);
-    g.bezierCurveTo(b.x+b.w,b.y+10,b.x+b.w,b.y+b.h*.72,cx,b.y+b.h);
-    g.bezierCurveTo(b.x,b.y+b.h*.72,b.x,b.y+10,cx,b.y);
+    g.moveTo(cx,b.y);                                     /* topo */
+    g.bezierCurveTo(b.x+b.w*1.02,b.y+b.h*.12, b.x+b.w*.94,b.y+b.h*.52, b.x+b.w*.72,b.y+b.h*.78);
+    g.bezierCurveTo(b.x+b.w*.6,b.y+b.h*.95, b.x+b.w*.4,b.y+b.h*.95, b.x+b.w*.28,b.y+b.h*.78);
+    g.bezierCurveTo(b.x+b.w*.06,b.y+b.h*.52, b.x-b.w*.02,b.y+b.h*.12, cx,b.y);
     g.closePath();
     g.fillStyle=pisca?'#FFFFFF':(caido?'#6B5687':c1);
     g.fill();
-    g.strokeStyle=caido?'rgba(255,197,61,.9)':'rgba(12,8,26,.55)';
-    g.lineWidth=caido?4:3;
+    g.strokeStyle=caido?'#FFC53D':esc;
+    g.lineWidth=caido?5:4;
     g.stroke();
-    /* brilho de cima, dá volume */
+    /* volume: claro em cima, escuro embaixo */
     g.save();g.clip();
-    const bg=g.createLinearGradient(0,b.y,0,b.y+b.h);
-    bg.addColorStop(0,'rgba(255,255,255,.16)');
-    bg.addColorStop(.6,'rgba(255,255,255,0)');
-    g.fillStyle=bg;g.fillRect(b.x,b.y,b.w,b.h);
+    const vol=g.createLinearGradient(0,b.y,0,b.y+b.h);
+    vol.addColorStop(0,'rgba(255,255,255,.18)');
+    vol.addColorStop(.5,'rgba(255,255,255,0)');
+    vol.addColorStop(1,'rgba(0,0,0,.32)');
+    g.fillStyle=vol;g.fillRect(b.x-10,b.y,b.w+20,b.h);
+    /* maçãs do rosto */
+    g.strokeStyle='rgba(0,0,0,.18)';g.lineWidth=3;
+    for(const sg of[-1,1]){
+      g.beginPath();
+      g.moveTo(cx+sg*b.w*.3,b.y+b.h*.4);
+      g.quadraticCurveTo(cx+sg*b.w*.26,b.y+b.h*.58,cx+sg*b.w*.14,b.y+b.h*.68);
+      g.stroke();
+    }
     g.restore();
-    /* olhos */
-    const olhoY=b.y+b.h*.36;
+
+    /* --- rosto: cada volta tem o seu --- */
+    const oy=b.y+b.h*(caido?.4:.36);
     if(caido){
-      g.strokeStyle=c2;g.lineWidth=5;g.lineCap='round';
-      for(const s of[-1,1]){
+      g.strokeStyle='#FFC53D';g.lineWidth=6;g.lineCap='round';
+      for(const sg of[-1,1]){
         g.beginPath();
-        g.moveTo(cx+s*16,olhoY-6);g.lineTo(cx+s*36,olhoY+6);
-        g.moveTo(cx+s*16,olhoY+6);g.lineTo(cx+s*36,olhoY-6);
+        g.moveTo(cx+sg*17,oy-9);g.lineTo(cx+sg*37,oy+9);
+        g.moveTo(cx+sg*17,oy+9);g.lineTo(cx+sg*37,oy-9);
         g.stroke();
       }
-      /* seta de "pise aqui" */
-      const sobe=Math.sin(b.anim*8)*5;
+      g.strokeStyle='#FFC53D';g.lineWidth=6;
+      g.beginPath();g.arc(cx,b.y+b.h*.78,22,Math.PI+.3,-.3);g.stroke();
+      const sb=Math.sin(b.anim*9)*5;
       g.fillStyle='#FFC53D';
       g.beginPath();
-      g.moveTo(cx,b.y-14+sobe);g.lineTo(cx-11,b.y-30+sobe);g.lineTo(cx+11,b.y-30+sobe);
+      g.moveTo(cx,b.y-16+sb);g.lineTo(cx-12,b.y-34+sb);g.lineTo(cx+12,b.y-34+sb);
       g.closePath();g.fill();
-    }else{
-      g.fillStyle=pisca?'#120A2A':c2;
-      for(const s of[-1,1]){
+    }else if(b.fase===1){
+      /* TENSÃO: olhos em fenda, sobrancelha franzida, boca reta */
+      g.fillStyle=esc;
+      for(const sg of[-1,1]){
+        g.save();
+        g.translate(cx+sg*26,oy);g.rotate(sg*.26);
+        g.beginPath();g.ellipse(0,0,17,5,0,0,Math.PI*2);g.fill();
+        g.restore();
+      }
+      g.fillStyle=c2;
+      for(const sg of[-1,1]){
+        g.save();
+        g.translate(cx+sg*26,oy);g.rotate(sg*.26);
+        g.beginPath();g.ellipse(0,0,7,3.4,0,0,Math.PI*2);g.fill();
+        g.restore();
+      }
+      g.strokeStyle=esc;g.lineWidth=6;g.lineCap='round';
+      for(const sg of[-1,1]){
         g.beginPath();
-        g.moveTo(cx+s*14,olhoY-8);g.lineTo(cx+s*38,olhoY+2);g.lineTo(cx+s*14,olhoY+12);
+        g.moveTo(cx+sg*10,oy-16);g.lineTo(cx+sg*40,oy-9);
+        g.stroke();
+      }
+      g.strokeStyle=c2;g.lineWidth=5;
+      g.beginPath();g.moveTo(cx-24,b.y+b.h*.7);g.lineTo(cx+24,b.y+b.h*.7);g.stroke();
+    }else if(b.fase===2){
+      /* EXPLOSÃO: olhos arregalados e boca aberta com dentes */
+      for(const sg of[-1,1]){
+        g.fillStyle='#F4F1FF';
+        g.beginPath();g.arc(cx+sg*27,oy,14,0,Math.PI*2);g.fill();
+        g.fillStyle=esc;
+        g.beginPath();g.arc(cx+sg*27+sign(Jog.x-b.x)*3,oy+1,7,0,Math.PI*2);g.fill();
+      }
+      g.strokeStyle=esc;g.lineWidth=7;g.lineCap='round';
+      for(const sg of[-1,1]){
+        g.beginPath();
+        g.moveTo(cx+sg*11,oy-22);g.lineTo(cx+sg*44,oy-6);
+        g.stroke();
+      }
+      g.fillStyle=esc;
+      g.beginPath();
+      g.moveTo(cx-30,b.y+b.h*.63);
+      g.quadraticCurveTo(cx,b.y+b.h*.93,cx+30,b.y+b.h*.63);
+      g.quadraticCurveTo(cx,b.y+b.h*.72,cx-30,b.y+b.h*.63);
+      g.closePath();g.fill();
+      g.fillStyle='#F4F1FF';
+      for(let i=0;i<4;i++){
+        const tx=cx-22+i*15;
+        g.beginPath();
+        g.moveTo(tx,b.y+b.h*.665);g.lineTo(tx+7,b.y+b.h*.665);g.lineTo(tx+3.5,b.y+b.h*.73);
         g.closePath();g.fill();
       }
-    }
-    /* boca por fase */
-    g.strokeStyle=c2;g.lineWidth=5;g.lineCap='round';
-    g.beginPath();
-    if(caido){g.arc(cx,b.y+b.h*.82,20,Math.PI+.35,-.35);}
-    else if(b.fase===1){g.moveTo(cx-26,b.y+b.h*.68);g.lineTo(cx+26,b.y+b.h*.68);}
-    else if(b.fase===2){g.arc(cx,b.y+b.h*.6,26,.25,Math.PI-.25);}
-    else{g.arc(cx,b.y+b.h*.78,26,Math.PI+.3,-.3);}
-    g.stroke();
-    /* rachaduras */
-    const dano=1-b.vida/b.vidaMax;
-    if(dano>.12){
-      g.strokeStyle='rgba(255,255,255,.45)';g.lineWidth=2;
-      for(let i=0;i<Math.floor(dano*7);i++){
+    }else{
+      /* LUA DE MEL: olhos caídos de desculpa, sorriso largo e uma lágrima */
+      g.strokeStyle=esc;g.lineWidth=6;g.lineCap='round';
+      for(const sg of[-1,1]){
         g.beginPath();
-        g.moveTo(cx-30+i*13,b.y+14);
-        g.lineTo(cx-22+i*13,b.y+40+((i*17)%26));
+        g.arc(cx+sg*27,oy+4,14,Math.PI*1.08,Math.PI*1.92);
+        g.stroke();
+      }
+      g.fillStyle=c2;
+      for(const sg of[-1,1]){
+        g.beginPath();g.arc(cx+sg*27,oy+2,5,0,Math.PI*2);g.fill();
+      }
+      /* sobrancelhas subindo no meio: cara de "me perdoa" */
+      g.strokeStyle=esc;g.lineWidth=5;
+      for(const sg of[-1,1]){
+        g.beginPath();
+        g.moveTo(cx+sg*12,oy-20);g.lineTo(cx+sg*42,oy-12);
+        g.stroke();
+      }
+      g.strokeStyle=esc;g.lineWidth=6;
+      g.beginPath();g.arc(cx,b.y+b.h*.6,30,.3,Math.PI-.3);g.stroke();
+      /* lágrima */
+      const lg=(b.anim*40)%b.h*.3;
+      g.fillStyle='#8FD6FF';
+      g.beginPath();
+      g.ellipse(cx-27,oy+22+lg,4,7,0,0,Math.PI*2);g.fill();
+    }
+    /* rachaduras conforme apanha */
+    const dano=1-b.vida/b.vidaMax;
+    if(dano>.1){
+      g.strokeStyle='rgba(255,255,255,.42)';g.lineWidth=2.4;g.lineCap='round';
+      for(let i=0;i<Math.floor(dano*8);i++){
+        g.beginPath();
+        g.moveTo(cx-40+i*12,b.y+12);
+        g.lineTo(cx-32+i*12,b.y+40+((i*19)%34));
+        g.lineTo(cx-40+i*12,b.y+66+((i*13)%26));
         g.stroke();
       }
     }
     g.restore();
 
-    /* barra fixa no topo, só depois que a luta começa */
+    /* --- barra: três blocos, um por volta --- */
     if(b.estado==='entrada')return;
-    const lg=Math.min(Vista.larg*.6,540);
-    const bx=Cam.ox+(Vista.larg-lg)/2, by=Cam.oy+24;
-    g.fillStyle='rgba(18,10,42,.82)';
-    g.fillRect(bx-4,by-4,lg+8,26);
-    g.fillStyle='rgba(255,255,255,.14)';
-    g.fillRect(bx,by,lg,18);
-    g.fillStyle=c2;
-    g.fillRect(bx,by,lg*Math.max(0,b.vida/b.vidaMax),18);
-    for(let i=1;i<3;i++){
-      g.fillStyle='rgba(18,10,42,.85)';
-      g.fillRect(bx+lg*(i/3)-2,by,4,18);
+    const lg2=Math.min(Vista.larg*.6,540);
+    const bx=Cam.ox+(Vista.larg-lg2)/2, by=Cam.oy+24;
+    g.fillStyle='rgba(18,10,42,.9)';
+    g.fillRect(bx-5,by-5,lg2+10,30);
+    g.strokeStyle='#160d2e';g.lineWidth=3;
+    g.strokeRect(bx-5,by-5,lg2+10,30);
+    const porBloco=lg2/3;
+    for(let i=0;i<3;i++){
+      const cheio=clamp((b.vida-i*3)/3,0,1);
+      g.fillStyle='rgba(255,255,255,.1)';
+      g.fillRect(bx+i*porBloco+2,by,porBloco-4,20);
+      g.fillStyle=CORES[i+1][1];
+      g.fillRect(bx+i*porBloco+2,by,(porBloco-4)*cheio,20);
     }
     g.fillStyle='#F4F1FF';
     g.font='700 12px system-ui,sans-serif';
     g.textAlign='center';
-    g.fillText('O CICLO — '+['','TENSÃO','EXPLOSÃO','LUA DE MEL'][b.fase],bx+lg/2,by+13);
+    g.fillText('O CICLO — '+['','TENSÃO','EXPLOSÃO','LUA DE MEL'][b.fase],bx+lg2/2,by+14);
     g.textAlign='left';
   },
 
@@ -3838,7 +4436,7 @@ const Arte={
     const cx=p.x+p.w/2, base=p.y+p.h;
 
     /* sombra encolhe conforme ela sobe */
-    if(p.vivo){
+    if(p.vivo&&!p.semSombra){
       const alto=p.noChao?0:clamp((p.quedaDe!==null?p.y-p.quedaDe:70)/170,0,1);
       g.globalAlpha=.3-alto*.15;
       g.fillStyle='#000';
@@ -4057,6 +4655,37 @@ const Arte={
     }
   },
 
+  /* Vinheta vermelha quando a vida está no fim: dá pra sentir sem
+     precisar olhar para o crachá no canto. */
+  /* Escurece de leve os cantos: dá profundidade e ajuda a vista a
+     descansar no meio da tela, onde está a ação. */
+  vinheta(g){
+    const k='v'+Math.round(Vista.cssL)+'x'+Math.round(Vista.cssA);
+    if(this._vk!==k){
+      const gr=g.createRadialGradient(
+        Vista.cssL/2,Vista.cssA*.52,Math.min(Vista.cssL,Vista.cssA)*.42,
+        Vista.cssL/2,Vista.cssA*.52,Math.max(Vista.cssL,Vista.cssA)*.78);
+      gr.addColorStop(0,'rgba(0,0,0,0)');
+      gr.addColorStop(1,'rgba(6,3,16,.42)');
+      this._vg=gr;this._vk=k;
+    }
+    g.fillStyle=this._vg;
+    g.fillRect(0,0,Vista.cssL,Vista.cssA);
+  },
+
+  perigo(g){
+    if(!Jog.vivo||Jog.vida>1)return;
+    const pulso=.5+Math.sin(Jogo.tempoTotal*4.2)*.5;
+    const a=.16+pulso*.16;
+    const gr=g.createRadialGradient(
+      Vista.cssL/2,Vista.cssA/2,Math.min(Vista.cssL,Vista.cssA)*.32,
+      Vista.cssL/2,Vista.cssA/2,Math.max(Vista.cssL,Vista.cssA)*.72);
+    gr.addColorStop(0,'rgba(255,84,112,0)');
+    gr.addColorStop(1,'rgba(255,84,112,'+a.toFixed(3)+')');
+    g.fillStyle=gr;
+    g.fillRect(0,0,Vista.cssL,Vista.cssA);
+  },
+
   hud(g){
     if(this._margemTopo===null){
       const v=getComputedStyle(document.documentElement).getPropertyValue('--safe-t');
@@ -4155,44 +4784,180 @@ const Interface={
     $('#girar').classList.toggle('on',precisa);
   },
 
+  /* Anima um número de 0 até o valor: dá peso ao resultado. */
+  conta(el,alvo,dur){
+    if(!el)return;
+    const t0=Date.now(), d=dur||900;
+    const passo=()=>{
+      const k=Math.min(1,(Date.now()-t0)/d);
+      const suave=1-Math.pow(1-k,3);
+      el.textContent=Math.round(alvo*suave);
+      if(k<1)requestAnimationFrame(passo);
+    };
+    passo();
+  },
+
   menu(){
     const temSalvo=Jogo.faseMax>1;
-    const prog=Math.round((Jogo.vistos.size/ORDEM_MURAIS.length)*100);
-    $('#c-menu').innerHTML=`
-      <div class="rolar"><div class="menu-caixa">
-        <div class="marca"><span class="selo azul">CIEE</span><span class="selo">Bem Querer Mulher</span></div>
-        <h1 class="titulo">Se Liga<br><span class="lilas">Moçada</span></h1>
-        <div class="olho" style="margin-top:14px">O caminho da Manu</div>
-        <p class="sub">Nada aqui começa com um grito. Começa com a piada que todo mundo acha graça, com a tarefa que só sobra pra ela, com o "é só ciúme". Cinco fases atrás do caminho que a violência faz antes de virar violência.</p>
-        ${temSalvo?`<div class="cartao" style="margin-bottom:14px">
-          <div class="olho">Onde você parou</div>
-          <div style="display:flex;align-items:baseline;gap:12px;margin-top:10px;flex-wrap:wrap">
-            <span class="display" style="font-size:26px;color:var(--sol)">FASE ${Jogo.faseMax}</span>
-            <span style="color:var(--papel-2);font-size:13.5px">${esc(FASES[Jogo.faseMax-1].nome)} · ${esc(FASES[Jogo.faseMax-1].tema)}</span>
-          </div>
-          <div class="divisor"></div>
-          <div style="display:flex;gap:18px;font-size:12px;color:var(--papel-2);font-family:var(--mono);flex-wrap:wrap">
-            <span>CARTILHA ${prog}%</span><span>QUEM É QUEM ${Jogo.conhecidos.size}/12</span><span>${Jog.pontos} PTS</span>
-          </div>
-        </div>`:''}
-        <div class="menu-botoes">
-          <button class="btn" id="m-jogar">${temSalvo?'Continuar':'Começar a jornada'}</button>
-          ${temSalvo?'<button class="btn vazio" id="m-novo">Recomeçar do zero</button>':''}
-          <button class="btn roxo" id="m-cart">Cartilha e Quem é quem</button>
-          <button class="btn vazio" id="m-ajuda">Como se joga</button>
+    const prog=Math.round(Jogo.vistos.size/ORDEM_MURAIS.length*100);
+    const bichos=Math.round(Jogo.conhecidos.size/12*100);
+    const laco=`<svg viewBox="0 0 24 24"><path d="M12 21c-1.4-3-4.2-4.6-6.2-7C3.5 11.4 3.6 7.9 6 6.2 8 4.8 10.6 5.5 12 7.6c1.4-2.1 4-2.8 6-1.4 2.4 1.7 2.5 5.2.2 7.8-2 2.4-4.8 4-6.2 7z"/></svg>`;
+    /* a Manu da capa vem do mesmo código que desenha ela no jogo */
+    const f=Arte.folhaManu(300);
+    const heroi=f?`<div class="palco-heroi">
+        <i class="luz"></i><i class="piso"></i>
+        <div class="heroi" style="aspect-ratio:${(f.larg/f.alt).toFixed(3)}">
+          <img src="${f.src}" alt="Manu correndo"
+               style="width:${f.n*100}%;animation:correr .62s steps(${f.n}) infinite">
         </div>
-        <div class="aviso"><b>Antes de começar:</b> o jogo fala de machismo e de violência contra a mulher. Se algum tema te tocar de perto, o <b>Ligue 180</b> atende de graça, 24 horas, e aceita denúncia anônima. Emergência: <b>190</b>.</div>
+      </div>`:'<div class="palco-heroi"></div>';
+    /* fagulhas com tempos diferentes, para não pulsarem juntas */
+    let faiscas='<div class="faiscas">';
+    for(let i=0;i<9;i++)
+      faiscas+=`<i style="left:${6+i*10.5}%;animation-duration:${(9+i*1.7).toFixed(1)}s;animation-delay:${(i*1.3).toFixed(1)}s;
+        background:${i%3===0?'var(--sol)':(i%3===1?'var(--lilas-claro)':'var(--verde-claro)')}"></i>`;
+    faiscas+='</div>';
+
+    $('#c-menu').innerHTML=faiscas+`
+      <div class="rolar"><div class="menu-caixa">
+        <div class="menu-esq anima">
+          <div class="fita">${laco}<i></i></div>
+          <div class="marca"><span class="selo azul">CIEE</span><span class="selo">Bem Querer Mulher</span></div>
+          <h1 class="titulo">Se Liga<br><span class="lilas">Moçada</span></h1>
+          <div class="olho" style="margin-top:12px">O caminho da Manu</div>
+          <p class="sub">Nada aqui começa com um grito. Começa com a piada que todo mundo acha graça, com a tarefa que só sobra pra ela, com o "é só ciúme".</p>
+          <div class="menu-botoes">
+            <button class="btn" id="m-jogar">${temSalvo?'▶  Continuar':'▶  Começar a jornada'}</button>
+            <button class="btn roxo" id="m-cart">Cartilha e Quem é quem</button>
+            <div class="linha-btn">
+              <button class="btn vazio" id="m-fases">${temSalvo?'Fases e modo':'Modo tranquilo'}</button>
+              <button class="btn vazio" id="m-ajuda">Como se joga</button>
+            </div>
+            <button class="btn vazio" id="m-novo">${temSalvo?'Recomeçar do zero':'Créditos'}</button>
+          </div>
+          <div class="aviso"><b>Antes de começar:</b> o jogo fala de machismo e de violência contra a mulher. Se algum tema te tocar de perto, o <b>Ligue 180</b> atende de graça, 24 horas, e aceita denúncia anônima. Emergência: <b>190</b>.</div>
+        </div>
+        ${heroi}
+        <div class="cartao cartao-prog">
+          ${temSalvo?`
+            <div class="olho">Onde você parou</div>
+            <div style="display:flex;align-items:baseline;gap:10px;margin:11px 0 3px;flex-wrap:wrap">
+              <span class="display" style="font-size:clamp(21px,3.2vw,28px);color:var(--sol)">FASE ${Jogo.faseMax}</span>
+              <span style="color:var(--papel);font-size:13.5px;font-weight:600">${esc(FASES[Jogo.faseMax-1].nome)}</span>
+            </div>
+            <div style="color:var(--papel-2);font-size:12px">${esc(FASES[Jogo.faseMax-1].tema)}</div>
+            <div class="divisor"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+              <div>
+                <div class="olho" style="font-size:9.5px">Cartilha <b id="n-cart">0</b>%</div>
+                <div class="trilho"><span style="width:${prog}%"></span></div>
+              </div>
+              <div>
+                <div class="olho" style="font-size:9.5px">Quem é quem <b id="n-bich">0</b>%</div>
+                <div class="trilho"><span style="width:${bichos}%;animation-delay:.15s"></span></div>
+              </div>
+            </div>`:`
+            <div class="olho">Como funciona</div>
+            <p style="margin:12px 0 0;font-size:13px;color:var(--papel-2);line-height:1.6">
+              Ela anda, pula e usa a voz. Cada fase esconde as letras
+              <b style="color:var(--sol)">C</b> <b style="color:var(--sol)">I</b>
+              <b style="color:var(--sol)">E</b> <b style="color:var(--sol)">E</b> —
+              sem as quatro, a saída não abre.</p>`}
+        </div>
       </div></div>`;
     this.mostra('#c-menu');
+    if(temSalvo){this.conta($('#n-cart'),prog);this.conta($('#n-bich'),bichos,1100);}
     $('#m-jogar').onclick=()=>Jogo.iniciaFase(Jogo.faseMax);
-    if(temSalvo)$('#m-novo').onclick=()=>{Jogo.zera();Jogo.iniciaFase(1);};
     $('#m-cart').onclick=()=>this.cartilha(()=>this.menu());
+    $('#m-fases').onclick=()=>this.fases();
     $('#m-ajuda').onclick=()=>this.ajuda();
+    $('#m-novo').onclick=()=>{
+      if(temSalvo){Jogo.zera();Jogo.abreMenu();}
+      else this.creditos();
+    };
+  },
+
+  fases(){
+    const cartoes=FASES.map(f=>{
+      const aberta=Jogo.faseLiberada(f.n);
+      return `<button class="fase-card${aberta?'':' travado'}" ${aberta?`data-f="${f.n}"`:'disabled'}>
+        <span class="num">${f.n}</span>
+        <span class="txt"><b>${esc(f.nome)}</b><i>${aberta?esc(f.tema):'Ainda trancada'}</i></span>
+      </button>`;
+    }).join('');
+    $('#c-pausa').innerHTML=`
+      <div class="rolar"><div class="painel anima">
+        <div class="olho">Escolha por onde entrar</div>
+        <h2 class="sec">Fases</h2>
+        <p class="linha-fina">Dá pra voltar em qualquer fase já aberta — útil pra caçar letras, ler murais que ficaram pra trás ou mostrar uma parte específica pra alguém.</p>
+        <div class="fases-lista">${cartoes}</div>
+        <div class="cartao" style="margin:6px 0 14px">
+          <div class="olho">Modo tranquilo</div>
+          <p style="margin:10px 0 12px;font-size:13.5px;color:var(--papel-2);line-height:1.6">
+            Sete corações em vez de cinco, mais tempo de invencibilidade depois de apanhar e
+            cair num buraco não custa coração. A história é a mesma.</p>
+          <button class="btn ${Jogo.assistido?'verde':'vazio'}" id="f-assistido">${Jogo.assistido?'Modo tranquilo: LIGADO':'Ligar modo tranquilo'}</button>
+        </div>
+        <div class="cartao" style="margin:0 0 14px">
+          <div class="olho">Modo palestra</div>
+          <p style="margin:10px 0 12px;font-size:13.5px;color:var(--papel-2);line-height:1.6">
+            Abre as cinco fases de uma vez, para apresentar em sala sem precisar jogar até lá.
+            Sua progressão real continua guardada.</p>
+          <button class="btn ${Jogo.palestra?'roxo':'vazio'}" id="f-palestra">${Jogo.palestra?'Modo palestra: LIGADO':'Ligar modo palestra'}</button>
+        </div>
+        <div class="cartao" style="margin:0 0 14px">
+          <div class="olho">Menos movimento</div>
+          <p style="margin:10px 0 12px;font-size:13.5px;color:var(--papel-2);line-height:1.6">
+            Desliga o tremor da câmera, o zoom dos impactos e tudo o que se mexe no céu.
+            Use se a tela estiver incomodando.</p>
+          <button class="btn ${Jogo.menosMovimento?'verde':'vazio'}" id="f-movimento">${Jogo.menosMovimento?'Menos movimento: LIGADO':'Ligar menos movimento'}</button>
+        </div>
+        <button class="btn vazio" id="f-volta">Voltar</button>
+      </div></div>`;
+    this.mostra('#c-pausa');
+    document.querySelectorAll('#c-pausa .fase-card[data-f]').forEach(b=>{
+      b.onclick=()=>Jogo.iniciaFase(+b.dataset.f);
+    });
+    $('#f-assistido').onclick=()=>{Jogo.alternaAssistido();this.fases();};
+    $('#f-palestra').onclick=()=>{Jogo.palestra=!Jogo.palestra;Jogo.salva();this.fases();};
+    $('#f-movimento').onclick=()=>{Jogo.menosMovimento=!Jogo.menosMovimento;Jogo.salva();this.fases();};
+    $('#f-volta').onclick=()=>this.menu();
+  },
+
+  creditos(){
+    $('#c-pausa').innerHTML=`
+      <div class="rolar"><div class="painel anima">
+        <div class="olho">Sobre</div>
+        <h2 class="sec">De onde isso vem</h2>
+        <div class="cartao" style="margin:14px 0">
+          <div class="olho">Programa Bem Querer Mulher</div>
+          <p style="margin:12px 0 0;font-size:13.5px;color:var(--papel-2);line-height:1.65">
+            Criado em 2004 pelo INDES, atua em quatro frentes: acolher quem sofreu violência,
+            gerar autonomia financeira, prevenir com adolescentes e engajar a sociedade.
+            O pilar de prevenção é feito <b style="color:var(--papel)">em parceria com o CIEE</b> e
+            alcança cerca de <b style="color:var(--sol)">50 mil jovens por ano</b>.</p>
+        </div>
+        <p class="linha-fina">Os textos do jogo se apoiam na Lei Maria da Penha (11.340/2006), no Código Penal
+        (arts. 147-A, 147-B, 215-A e 216-A), em dados do IBGE sobre trabalho doméstico e nas definições
+        de machosfera publicadas pela ONU Mulheres.</p>
+        <div class="canais">
+          <h4>Se precisar de ajuda</h4>
+          <ul>
+            <li><b>180</b> — Central de Atendimento à Mulher. 24h, gratuita, anônima.</li>
+            <li><b>190</b> — emergência. Vale para quem presencia também.</li>
+            <li><b>bemquerermulher.org.br</b> — Programa Bem Querer Mulher.</li>
+          </ul>
+        </div>
+
+        <button class="btn" id="cr-volta">Voltar</button>
+      </div></div>`;
+    this.mostra('#c-pausa');
+    $('#cr-volta').onclick=()=>this.menu();
   },
 
   ajuda(){
     $('#c-pausa').innerHTML=`
-      <div class="rolar"><div class="painel">
+      <div class="rolar"><div class="painel anima">
         <div class="olho">Três botões, e só</div>
         <h2 class="sec">Como se joga</h2>
         <p class="linha-fina">A Manu anda, pula e usa a voz. Todo o resto é saber <b>onde</b> pisar, <b>de que altura</b> cair e <b>o que não dá pra enfrentar sozinha</b>.</p>
@@ -4224,13 +4989,13 @@ const Interface={
     const prox=FASES[fase];
     const f=FASES[fase-1];
     $('#c-fim').innerHTML=`
-      <div class="rolar"><div class="painel">
+      <div class="rolar"><div class="painel anima">
         <div class="olho">Fase ${fase} concluída</div>
         <h2 class="sec">${esc(f.nome)}</h2>
         <p class="linha-fina">${esc(f.resumo)}</p>
         <div class="placar">
           <div><div class="n">C·I·E·E</div><div class="r">completo</div></div>
-          <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
+          <div><div class="n" id="p-pts">0</div><div class="r">pontos</div></div>
           <div><div class="n">${Jogo.conhecidos.size}<span style="font-size:.5em">/12</span></div><div class="r">quem é quem</div></div>
         </div>
         ${prox?`<div class="cartao" style="margin:4px 0 16px">
@@ -4246,6 +5011,7 @@ const Interface={
         </div>
       </div></div>`;
     this.mostra('#c-fim');
+    this.conta($('#p-pts'),Jog.pontos,1100);
     $('#fim-cart').onclick=()=>this.cartilha(()=>this.fimDeFase(fase));
     $('#fim-prox').onclick=()=>{if(prox)Jogo.iniciaFase(prox.n);else Jogo.perguntaFinal();};
   },
@@ -4255,7 +5021,7 @@ const Interface={
     const q=PERGUNTA_FINAL;
     const letras=['A','B','C','D'];
     $('#c-quiz').innerHTML=`
-      <div class="rolar"><div class="quiz">
+      <div class="rolar"><div class="quiz anima">
         <div class="olho">Uma pergunta, só uma</div>
         <div class="pergunta">${esc(q.p)}</div>
         <div class="opcoes">${q.o.map((o,k)=>`<button class="opcao" data-k="${k}"><b>${letras[k]}</b>${esc(o)}</button>`).join('')}</div>
@@ -4282,12 +5048,12 @@ const Interface={
 
   final(acertou){
     $('#c-fim').innerHTML=`
-      <div class="rolar"><div class="painel">
+      <div class="rolar"><div class="painel anima">
         <div class="olho">Fim do caminho</div>
         <h1 class="titulo" style="font-size:clamp(28px,7vw,52px)">O ciclo<br><span class="lilas">se rompeu</span></h1>
         <p class="linha-fina" style="margin-top:16px;font-size:14.5px">A Manu não tinha superpoder nenhum. Andava, pulava e falava — e mesmo assim derrubou tudo, porque aprendeu <b>onde pisar</b>, <b>o que não dá pra enfrentar sozinha</b> e <b>quem procurar</b>. Fora do jogo funciona igual.</p>
         <div class="placar">
-          <div><div class="n">${Jog.pontos}</div><div class="r">pontos</div></div>
+          <div><div class="n" id="v-pts">0</div><div class="r">pontos</div></div>
           <div><div class="n">${Jogo.vistos.size}<span style="font-size:.5em">/${ORDEM_MURAIS.length}</span></div><div class="r">na cartilha</div></div>
           <div><div class="n">${Jogo.conhecidos.size}<span style="font-size:.5em">/12</span></div><div class="r">quem é quem</div></div>
         </div>
@@ -4302,15 +5068,20 @@ const Interface={
           </ul>
         </div>
         <p style="font-size:13px;color:var(--papel-2)">O Bem Querer Mulher atua desde 2004 em quatro frentes: acolher quem sofreu violência, gerar autonomia financeira, prevenir com adolescentes em parceria com o CIEE e engajar a sociedade.</p>
-        <button class="btn vazio" id="v-menu">Voltar ao início</button>
+        <div class="linha-btn">
+          <button class="btn roxo" id="v-cart">Cartilha completa</button>
+          <button class="btn vazio" id="v-menu">Voltar ao início</button>
+        </div>
       </div></div>`;
     this.mostra('#c-fim');
-    $('#v-menu').onclick=()=>{Jogo.estado='menu';this.menu();};
+    this.conta($('#v-pts'),Jog.pontos,1500);
+    $('#v-cart').onclick=()=>this.cartilha(()=>this.final(acertou));
+    $('#v-menu').onclick=()=>Jogo.abreMenu();
   },
 
   gameOver(){
     $('#c-fim').innerHTML=`
-      <div class="rolar"><div class="painel">
+      <div class="rolar"><div class="painel anima">
         <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].nome)}</div>
         <h2 class="sec">Dessa vez não deu</h2>
         <p class="linha-fina">Você volta no último ponto de retorno com a vida cheia. As letras que já pegou continuam com você.</p>
@@ -4325,12 +5096,12 @@ const Interface={
       </div></div>`;
     this.mostra('#c-fim');
     $('#go-tenta').onclick=()=>Jogo.iniciaFase(Jogo.fase);
-    $('#go-menu').onclick=()=>{Jogo.estado='menu';this.menu();};
+    $('#go-menu').onclick=()=>Jogo.abreMenu();
   },
 
   pausa(){
     $('#c-pausa').innerHTML=`
-      <div class="rolar"><div class="painel">
+      <div class="rolar"><div class="painel anima">
         <div class="olho">Fase ${Jogo.fase} · ${esc(FASES[Jogo.fase-1].nome)}</div>
         <h2 class="sec">Pausa</h2>
         <div class="cartao" style="margin:12px 0 4px">
@@ -4346,6 +5117,7 @@ const Interface={
         <div class="menu-botoes">
           <button class="btn verde" id="p-volta">Continuar jogando</button>
           <button class="btn roxo" id="p-cart">Abrir a cartilha</button>
+
           <div class="linha-btn">
             <button class="btn vazio" id="p-toque">${Jogo.toqueLigado?'Ocultar controles':'Mostrar controles'}</button>
             <button class="btn vazio" id="p-som">${Som.ligado?'Desligar som':'Ligar som'}</button>
@@ -4358,7 +5130,7 @@ const Interface={
     $('#p-cart').onclick=()=>this.cartilha(()=>this.pausa());
     $('#p-toque').onclick=()=>{Jogo.alternaToque();this.pausa();};
     $('#p-som').onclick=()=>{this.alternaSom();this.pausa();};
-    $('#p-menu').onclick=()=>{Jogo.estado='menu';this.menu();};
+    $('#p-menu').onclick=()=>Jogo.abreMenu();
   },
 
   /* Cartilha: tudo o que já apareceu em jogo, para reler com calma.
@@ -4376,7 +5148,7 @@ const Interface={
     }).join('');
     const conversas=Object.keys(FALAS).filter(id=>Jogo.ouvidos.has(id));
     $('#c-cartilha').innerHTML=`
-      <div class="rolar"><div class="cartilha">
+      <div class="rolar"><div class="cartilha anima">
         <div class="olho">${Jogo.vistos.size} de ${ORDEM_MURAIS.length} verbetes</div>
         <h2 class="sec">Cartilha</h2>
         <p class="linha-fina">Tudo o que os murais e as conversas mostraram fica guardado aqui — e nada disso pausou o jogo.</p>
@@ -4424,7 +5196,7 @@ const Interface={
   },
   cartilhaBichos(voltar){
     $('#c-cartilha').innerHTML=`
-      <div class="rolar"><div class="cartilha">
+      <div class="rolar"><div class="cartilha anima">
         <div class="olho">${Jogo.conhecidos.size} de 12 encontrados</div>
         <h2 class="sec">Quem é quem</h2>
         <p class="linha-fina">Cada criatura do jogo é uma coisa que existe fora dele. Aqui está o que cada uma representa.</p>
@@ -4471,10 +5243,14 @@ const Jogo={
   letrasFase:0,
   vistos:new Set(),          /* murais lidos, vão pra Cartilha */
   conhecidos:new Set(),      /* inimigos já encontrados */
+  assistido:false,              /* modo tranquilo */
   ouvidos:new Set(),         /* conversas já tidas */
   transicao:0,
   travaEntrada:0,
   congela:0,
+  vitrine:false,   /* cenário rodando atrás do menu */
+  palestra:false,  /* libera todas as fases para apresentação */
+  menosMovimento:false,  /* desliga tremor, zoom e o que se mexe no céu */
 
   inicia(){
     this.faseMax=clamp(Guarda.ler('faseMax',1),1,5);
@@ -4485,15 +5261,37 @@ const Jogo={
     if(Array.isArray(o))o.forEach(id=>{if(FALAS[id])this.ouvidos.add(id);});
     const b=Guarda.ler('conhecidos',[]);
     if(Array.isArray(b))b.forEach(id=>{if(BESTIARIO[id])this.conhecidos.add(id);});
+    this.assistido=!!Guarda.ler('assistido',false);
+    this.palestra=!!Guarda.ler('palestra',false);
+    this.menosMovimento=!!Guarda.ler('menosMovimento',false);
+    this.assistido=!!Guarda.ler('assistido',false);
     const toque=('ontouchstart' in window)||navigator.maxTouchPoints>0;
     this.toqueLigado=Guarda.ler('toque',toque);
     $('#b-som').style.opacity=Som.ligado?'1':'.42';
+    this.abreMenu();
+  },
+
+  /* O menu não é uma tela parada: monta uma fase de verdade e passeia
+     a câmera por ela, com inimigos andando e poeira no ar. */
+  abreMenu(){
     this.estado='menu';
+    this.vitrine=true;
+    const n=clamp(this.faseMax,1,5);
+    Arte.faseAtual=FASES[n-1];
+    montaFase(n);
+    Jog.x=-99999;Jog.vivo=true;
+    Cam.zoom=1;Cam.zoomAlvo=1;Cam.tremor=0;
+    /* começa onde tem gente e bicho, não num trecho vazio */
+    const pontos=Mundo.npcs.map(n=>n.x).concat(Mundo.inimigos.filter(e=>e.tipo!=='muro').map(e=>e.x));
+    const alvo=pontos.length?pick(pontos):Mundo.larg/3;
+    Cam.x=clamp(alvo-Vista.larg*.55,40,Math.max(40,Mundo.larg-Vista.larg-40));
+    this.vitrineY=0;
+    this.transicao=0;
     Interface.menu();
   },
   zera(){
     this.faseMax=1;this.ultimoCheck=null;
-    this.letras.clear();this.letrasFase=0;this.conhecidos.clear();
+    Guarda.gravar('teo',false);
     Jog.pontos=0;Jog.quedas=0;Jog.vida=4;
     Guarda.gravar('faseMax',1);Guarda.gravar('pontos',0);
   },
@@ -4503,7 +5301,20 @@ const Jogo={
     Guarda.gravar('vistos',[...this.vistos]);
     Guarda.gravar('ouvidos',[...this.ouvidos]);
     Guarda.gravar('conhecidos',[...this.conhecidos]);
+    Guarda.gravar('assistido',this.assistido);
+    Guarda.gravar('palestra',this.palestra);
+    Guarda.gravar('menosMovimento',this.menosMovimento);
+    Guarda.gravar('assistido',this.assistido);
   },
+
+  alternaAssistido(){
+    this.assistido=!this.assistido;
+    Jog.vidaMax=this.assistido?7:5;
+    Jog.vida=Math.min(Jog.vida,Jog.vidaMax);
+    if(this.assistido)Jog.vida=Jog.vidaMax;
+    this.salva();
+  },
+  faseLiberada(n){return this.palestra||n<=this.faseMax;},
 
   /* --- letras do CIEE --- */
   pegaLetra(i){
@@ -4519,6 +5330,9 @@ const Jogo={
       Interface.faixa('Letra '+PALAVRA[i]+' · faltam '+faltam,'sol');
     }
   },
+
+  /* O Téo fala enquanto você fica perto — em faixa, sem parar a partida. */
+
 
   /* --- primeiro encontro: apresenta a criatura sem parar o jogo --- */
   conhece(tipo){
@@ -4548,6 +5362,8 @@ const Jogo={
   },
 
   iniciaFase(n){
+    this.vitrine=false;
+    Jog.vidaMax=this.assistido?7:5;
     n=clamp(n,1,5);
     if(this.letrasFase!==n){this.letras=new Set();this.letrasFase=n;}
     this.fase=n;
@@ -4564,7 +5380,7 @@ const Jogo={
         Cam.segue(Jog,Mundo,0,true);
       }
     }
-    Jog.vida=Math.max(4,Jog.vida);
+    Jog.vida=Math.max(this.assistido?Jog.vidaMax:4,Jog.vida);
     this.estado='jogando';
     this.transicao=.55;
     this.travaEntrada=.25;
@@ -4647,6 +5463,31 @@ const Jogo={
     Interface.atualizaFaixa(dt);
     if(this.travaEntrada>0)this.travaEntrada-=dt;
     if(this.transicao>0)this.transicao-=dt;
+
+    /* vitrine do menu: cenário anda sozinho, sem jogabilidade */
+    if(this.vitrine&&this.estado==='menu'){
+      atualizaSolidos(dt);
+      for(const e of Mundo.inimigos){
+        if(!e.vivo&&e.morte<=0)continue;
+        if(e.tipo==='ameaca'||e.tipo==='bot')continue;   /* dependem do jogador */
+        if(e.x<Cam.x-300||e.x>Cam.x+Vista.larg+300)continue;
+        atualizaInimigo(e,dt);
+      }
+      for(const c of Mundo.checkpoints)c.anim+=dt;
+      for(const n of Mundo.npcs)n.anim+=dt;
+      for(const m of Mundo.murais)m.anim+=dt;
+      if(Mundo.saida)Mundo.saida.anim+=dt;
+      for(const it of Mundo.itens){it.anim+=dt;it.y=it.baseY+Math.sin(it.anim*2.6)*5;}
+      Part.atualiza(dt);
+      if(!Jogo.menosMovimento){
+        Cam.x+=22*dt;
+        const limite=Math.max(0,Mundo.larg-Vista.larg-40);
+        if(Cam.x>limite)Cam.x=40;
+      }
+      /* enquadra mais céu que chão, com uma respiração vertical lenta */
+      Cam.y=clamp(Mundo.chaoY-Vista.alt*.70,0,Math.max(0,Mundo.alt-Vista.alt));
+      return;
+    }
 
     if(this.estado==='dialogo'){
       if((Ent.qualquerNova||Ent.puloNovo)&&this.travaEntrada<=0&&this.dialogoPassa){
