@@ -594,9 +594,17 @@ const Cam={
     this.alvoX=p.x+p.w/2-Vista.larg/2+olhar;
     this.alvoY=p.y+p.h/2-Vista.alt*.56;
     const maxX=Math.max(0,mundo.larg-Vista.larg);
-    const maxY=Math.max(0,mundo.alt-Vista.alt);
+    /* O enquadramento é ancorado na LINHA DO CHÃO, não no fundo do mundo.
+       Antes, em telas altas, sobrava uma laje enorme de chão embaixo. */
+    const chao=mundo.chaoY||mundo.alt;
+    const rodape=chao+Math.min(160,Math.max(80,Vista.alt*.2));
+    let maxY=Math.min(mundo.alt-Vista.alt,rodape-Vista.alt);
+    /* e a linha do chão nunca passa de ~84% da altura da tela, senão em
+       telas muito altas a Manu fica espremida no rodapé */
+    maxY=Math.max(maxY,chao-Vista.alt*.84);
+    const minY=Math.min(0,maxY);
     this.alvoX=clamp(this.alvoX,0,maxX);
-    this.alvoY=Vista.alt>=mundo.alt?(mundo.alt-Vista.alt)/2:clamp(this.alvoY,0,maxY);
+    this.alvoY=clamp(this.alvoY,minY,maxY);
     if(instantaneo){this.x=this.alvoX;this.y=this.alvoY;}
     else{
       const k=1-Math.pow(.0006,dt);
@@ -833,6 +841,7 @@ const VISUAIS={
   delegada:{tipo:'adulta', pele:'#6B4426', cabelo:'#1A1016', roupa:'#3A4A78', roupa2:'#1E2A50', extra:'cracha'},
   farmacia:{tipo:'adulta', pele:'#C08858', cabelo:'#5A3220', roupa:'#F4F1FF', roupa2:'#C7BEE6', extra:'jaleco'},
 
+  agda:    {tipo:'adulta', pele:'#8C5A34', cabelo:'#2A1A12', roupa:'#1B4FD8', roupa2:'#12358F', extra:'cracha'},
   marcia:  {tipo:'adulta', pele:'#8C5A34', cabelo:'#2A1A12', roupa:'#C99BFF', roupa2:'#8B5FD1', extra:'cracha'},
   ciee:    {tipo:'adulta', pele:'#E8B78F', cabelo:'#3A3A46', roupa:'#1B4FD8', roupa2:'#12358F', extra:'cracha'},
   teo3:    {tipo:'jovem',  pele:'#E8B78F', cabelo:'#2A1A12', roupa:'#43E098', roupa2:'#1E8C5C', extra:''},
@@ -909,6 +918,11 @@ const FALAS={
     'A gente não pergunta em voz alta e não expõe ninguém. A gente liga 190 discretamente.',
     'Aqui a farmácia inteira sabe fazer isso.']},
 
+  agda:{quem:'Agda · orientadora do CIEE',t:[
+    'Oi, Manu! Sou a Agda, do CIEE. Passo aqui na escola uma vez por mês.',
+    'O CIEE é uma entidade sem fins lucrativos: a gente aproxima estudante e empresa e cuida pra que o primeiro emprego seja aprendizado de verdade, não exploração.',
+    'E não é só vaga, não. Tem curso gratuito, orientação, e programas como o Bem Querer Mulher, que fala exatamente disso que você tá enfrentando aí fora.',
+    'Emprego não conserta machismo. Mas dinheiro no próprio nome é uma das coisas que dá pra uma mulher escolher ir embora.']},
   marcia:{quem:'Márcia · assistente social',t:[
     'Chegou no lugar certo. Aqui é o Bem Querer Mulher, do INDES — existe desde 2004.',
     'São quatro frentes: acolher quem sofreu, gerar renda pra ela poder sair, prevenir com os jovens e cobrar da sociedade.',
@@ -1380,7 +1394,7 @@ const Jog={
    ============================================================ */
 const TIPOS={
   /* pisar em cima */
-  piada:{nome:'Foi Só Brincadeira',w:48,h:44,vida:1,vel:66,cor:'#E08A2E',cor2:'#FFF0D6',
+  piada:{nome:'Foi Só Brincadeira',w:52,h:52,vida:1,vel:66,cor:'#E08A2E',cor2:'#FFF0D6',
     pisavel:true,como:'pisar ou usar a voz',pontos:60},
   /* pisar, mas só com a tampa aberta */
   rotulo:{nome:'Lugar de Mulher',w:44,h:44,vida:2,vel:52,cor:'#8C6A44',cor2:'#D8A96A',
@@ -2181,6 +2195,10 @@ function fase2(){
 
   L.check(3320,S);
   L.turma(3600,S,3);
+<<<<<<< HEAD
+=======
+  L.npc(2450,S,'agda');    /* orientadora do CIEE */
+>>>>>>> c2552d61154bb8de482f17dd05e4b62a1038ca6a
   L.npc(3600,S,'jorge');
   L.mola(3800,S);
   L.bloco(3940,582,150,24);   /* folga real para a mola */
@@ -2726,7 +2744,10 @@ const Arte={
     g.translate(-Vista.larg/2,-Vista.alt/2);
     g.translate(-Math.round(Cam.ox),-Math.round(Cam.oy));
     this.paralaxe(g);
+<<<<<<< HEAD
     this.tempestade(g);
+=======
+>>>>>>> c2552d61154bb8de482f17dd05e4b62a1038ca6a
     this.murais(g);
     this.dicas(g);
     this.enfeites(g);
@@ -2742,8 +2763,11 @@ const Arte={
     if(!Jogo.vitrine)this.manu(g);
     this.ondas(g);
     Part.desenha(g);
+<<<<<<< HEAD
     this.clarao(g);
     this.tinta(g);
+=======
+>>>>>>> c2552d61154bb8de482f17dd05e4b62a1038ca6a
     g.restore();
     this.vinheta(g);
     if(!Jogo.vitrine){this.perigo(g);this.hud(g);}
@@ -2806,6 +2830,7 @@ const Arte={
     }
   },
 
+<<<<<<< HEAD
   ceuVivo(g){
     const f=this.faseAtual, cl=CLIMA[f.n]||{};
     /* 'menos movimento' congela o relógio do céu */
@@ -3013,6 +3038,52 @@ const Arte={
         }
     }
     g.restore();
+=======
+  paralaxe(g){
+    const f=this.faseAtual;
+    const ceu=f.ceu[2];
+    /* O casario nasce na LINHA DO CHÃO, não no rodapé da tela. Ancorado
+       na tela, ele ficava enterrado nas fases de mundo mais alto. */
+    const base=Mundo.chaoY+10;
+    const perfil=(f.n===1||f.n===4)?'casa':(f.n===3?'torre':'plano');
+
+    /* Cada faixa é misturada com o CÉU, não com a cor do chão: quanto mais
+       longe, mais ela some no ar. É o que tira o contraste que incomoda. */
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.22),0,base-124,180,130,90,120,53,perfil);
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.44),0,base-70, 158,104,140,160,97,perfil);
+
+    /* névoa entre as camadas */
+    const nv=g.createLinearGradient(0,base-330,0,base-30);
+    nv.addColorStop(0,'rgba(0,0,0,0)');
+    nv.addColorStop(1,this.mistura(ceu,'#ffffff',.1));
+    g.save();g.globalAlpha=.62;g.fillStyle=nv;
+    g.fillRect(Cam.ox-10,base-330,Vista.larg+20,302);
+    g.restore();
+
+    this.faixaPredios(g,this.mistura(ceu,f.chao,.7),0,base-16,140,90,170,200,151,perfil,true);
+
+    /* janelas acesas, discretas e sem cintilar forte */
+    g.save();
+    g.fillStyle=f.detalhe;
+    g.globalAlpha=.16;
+    const off=0, passo=230;
+    const k0=Math.floor((off-140)/passo);
+    const emb=i=>{const k=Math.sin(i*151*.017)*43758.5;return k-Math.floor(k);};
+    for(let i=k0;i<k0+Math.ceil(Vista.larg/passo)+3;i++){
+      const r1=emb(i), r3=emb(i+317);
+      const w=140*(.62+r1*.86);
+      const x=Cam.ox+(i*passo-off)+emb(i+91)*45;
+      const h=170+r3*200;
+      const cols=Math.max(1,Math.floor(w/44));
+      for(let r=0;r<Math.floor(h/64);r++)
+        for(let c=0;c<cols;c++){
+          const sem=(i*31+r*7+c*13);
+          if(sem%4===0)continue;
+          g.fillRect(x+12+c*44,base-16-h+28+r*64,20,24);
+        }
+    }
+    g.restore();
+>>>>>>> c2552d61154bb8de482f17dd05e4b62a1038ca6a
 
     /* subsolo: sem isso o buraco mostra o fundo claro e parece piso */
     const cy=Mundo.chaoY;
@@ -3024,6 +3095,7 @@ const Arte={
       g.fillRect(Cam.ox-10,cy,Vista.larg+20,Cam.oy+Vista.alt-cy+20);
     }
 
+<<<<<<< HEAD
     /* coloração: puxa a cena inteira para a luz da hora do dia */
     if(cl.tinta){
       g.save();
@@ -3032,12 +3104,14 @@ const Arte={
       g.restore();
     }
 
+=======
+>>>>>>> c2552d61154bb8de482f17dd05e4b62a1038ca6a
     if(f.n===3){
       /* grade digital da machosfera */
       g.save();
       g.globalAlpha=.12;
       g.strokeStyle=f.detalhe;g.lineWidth=1;
-      const pas=64, ox=Cam.ox*.3%pas, oy=Cam.oy*.3%pas;
+      const pas=64, ox=0, oy=0;
       for(let x=-ox;x<Vista.larg+pas;x+=pas){
         g.beginPath();g.moveTo(Cam.ox+x,Cam.oy);g.lineTo(Cam.ox+x,Cam.oy+Vista.alt);g.stroke();
       }
@@ -3792,6 +3866,12 @@ const Arte={
      serve para o jogo e para os retratos da Cartilha. */
   corpoInimigo(g,e){
     const pisca=e.piscar>0&&Math.floor(e.piscar*40)%2===0;
+    /* respiração: todo bicho infla e desincha de leve, cada um no seu tempo */
+    if(!e.semSombra&&e.vivo){
+      const r=1+Math.sin(e.anim*2.6+(e.origemX||0)*.01)*.035;
+      const cxr=e.x+e.w/2, byr=e.y+e.h;
+      g.translate(cxr,byr);g.scale(1/r,r);g.translate(-cxr,-byr);
+    }
     const c1=pisca?'#FFFFFF':e.def.cor;
     const c2=pisca?'#FFFFFF':e.def.cor2;
     const x=e.x,y=e.y,w=e.w,h=e.h,cx=x+w/2,cy=y+h/2;
@@ -3839,21 +3919,43 @@ const Arte={
           g.roundRect?g.roundRect(x,y,w,bh,13):g.rect(x,y,w,bh);
           g.fillStyle=c1;g.fill();
           g.strokeStyle='#7A3F0C';g.lineWidth=2.6;g.stroke();
-          /* "HÁ HÁ" escrito dentro, é isso que faz ler como piada */
+          /* olhinhos que acompanham a Manu */
+          const olh=clamp((Jog.x+Jog.w/2-cx)/90,-1,1);
+          for(const sg of[-1,1]){
+            g.fillStyle='#FFF6E6';
+            g.beginPath();g.arc(cx+sg*11,y+bh*.3,5.4,0,Math.PI*2);g.fill();
+            g.fillStyle='#5C2C06';
+            g.beginPath();g.arc(cx+sg*11+olh*2.4,y+bh*.3+.8,2.7,0,Math.PI*2);g.fill();
+          }
+          /* "HÁ HÁ" e a boca rindo */
           g.fillStyle=c2;
-          g.font='900 15px Arial Black,system-ui,sans-serif';
+          g.font='900 12px Arial Black,system-ui,sans-serif';
           g.textAlign='center';g.textBaseline='middle';
-          g.fillText('HÁ HÁ',cx,y+bh*.42+Math.abs(bal)*.5);
+          g.fillText('HÁ HÁ',cx,y+bh*.66+Math.abs(bal)*.4);
           g.textAlign='left';g.textBaseline='alphabetic';
-          /* boca rindo pequena embaixo do texto */
           g.fillStyle='#7A3F0C';
           g.beginPath();
-          g.ellipse(cx,y+bh*.76,8,3.4+Math.abs(bal)*.5,0,0,Math.PI*2);
+          g.ellipse(cx,y+bh*.87,7,2.6+Math.abs(bal)*.6,0,0,Math.PI*2);
           g.fill();
           g.restore();
           break;
         }
         case 'rotulo':{
+          /* dois olhinhos espiando de dentro quando a tampa abre */
+          if(e.tampa>.35){
+            g.save();
+            g.globalAlpha=Math.min(1,(e.tampa-.35)/.4);
+            g.fillStyle='#FFF6E6';
+            for(const sg of[-1,1]){
+              g.beginPath();g.arc(cx+sg*9,y+h*.42,4.6,0,Math.PI*2);g.fill();
+            }
+            g.fillStyle='#3A2410';
+            const oq=clamp((Jog.x+Jog.w/2-cx)/80,-1,1);
+            for(const sg of[-1,1]){
+              g.beginPath();g.arc(cx+sg*9+oq*1.8,y+h*.42+.5,2.2,0,Math.PI*2);g.fill();
+            }
+            g.restore();
+          }
           const ab=e.aberto, tp=e.tampa;
           /* caixa */
           g.fillStyle=c1;
@@ -3883,6 +3985,11 @@ const Arte={
           break;
         }
         case 'comentario':{
+          /* cursor de digitação piscando ao lado */
+          if(Math.floor(e.anim*2)%2===0){
+            g.fillStyle='rgba(244,241,255,.7)';
+            g.fillRect(cx+w*.32,y+h*.3,2.5,11);
+          }
           const mergulha=e.estado==='mergulha';
           const esticaY=mergulha?1.2:1, esticaX=mergulha?.85:1;
           g.save();
@@ -3959,9 +4066,26 @@ const Arte={
             g.fillText('sozinho',cx,y-8);
             g.textAlign='left';
           }
+          /* microfone: ele está sempre gravando */
+          g.save();
+          g.translate(cx+e.dir*(w*.5),y+h*.4);
+          g.rotate(e.dir*.4+Math.sin(e.anim*3)*.06);
+          g.fillStyle='#20202E';
+          g.fillRect(-3,-2,6,22);
+          g.fillStyle='#9A9AB8';
+          g.beginPath();g.ellipse(0,-8,7.5,9.5,0,0,Math.PI*2);g.fill();
+          g.fillStyle='rgba(0,0,0,.3)';
+          for(let i=-2;i<=2;i++)g.fillRect(-6.5,-11+i*3.5,13,1.4);
+          g.fillStyle='#FF5470';
+          g.beginPath();g.arc(0,3,2.2,0,Math.PI*2);g.fill();
+          g.restore();
           break;
         }
         case 'ciume':{
+          /* pulsação de coração, mais rápida quando persegue */
+          const bpm=e.estado==='cego'?9:4.2;
+          const pl=1+Math.abs(Math.sin(e.anim*bpm))*.07;
+          g.translate(cx,cy);g.scale(pl,pl);g.translate(-cx,-cy);
           const cego=e.estado==='cego';
           const pulsa=cego?1+Math.sin(e.anim*11)*.07:1;
           g.save();
@@ -4786,6 +4910,7 @@ const Arte={
     }
   },
 
+<<<<<<< HEAD
   /* Tinta da fase por cima de tudo, mais vinheta nas bordas.
      É o que faz o quadro parecer uma cena e não peças soltas. */
   tinta(g){
@@ -4805,6 +4930,8 @@ const Arte={
     g.fillRect(Cam.ox-10,Cam.oy-10,Vista.larg+20,Vista.alt+20);
   },
 
+=======
+>>>>>>> c2552d61154bb8de482f17dd05e4b62a1038ca6a
   /* Vinheta vermelha quando a vida está no fim: dá pra sentir sem
      precisar olhar para o crachá no canto. */
   /* Escurece de leve os cantos: dá profundidade e ajuda a vista a
